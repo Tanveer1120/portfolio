@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Portfolio Website — Build Your Student Portfolio in Minutes</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/templates.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg site-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-briefcase-fill" style="color: var(--accent-red);"></i>
+        <span>Personal Portfolio</span>
+        <span class="brand-badge">Free</span>
+      </a>
+
+      <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link active" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#features">Features</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#templates">Templates</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#how-it-works">How It Works</a>
+          </li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a href="/create" class="btn-red">
+              <i class="bi bi-magic"></i> Create Portfolio
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero-section">
+    <div class="hero-glow-bg"></div>
+    <div class="hero-glow-left"></div>
+
+    <div class="container">
+      <div class="row align-items-center">
+        <!-- Hero Text -->
+        <div class="col-lg-6 hero-content">
+          <div class="tag-pill red mb-3">
+            <i class="bi bi-lightning-charge-fill"></i> No Signup Required • 100% Free
+          </div>
+          
+          <h1 class="hero-title">
+            Build Your <span class="text-gradient-red">Professional Portfolio</span> in Minutes
+          </h1>
+          
+          <p class="hero-subtitle">
+            Create a stunning personal portfolio effortlessly. Add your details, choose a template, and let us build your professional identity.
+          </p>
+
+          <div class="d-flex flex-wrap gap-3 align-items-center">
+            <a href="/create" class="btn-red fs-6 py-3 px-4">
+              <i class="bi bi-plus-circle-fill"></i> Create My Portfolio
+            </a>
+            <a href="#templates" class="btn-outline-red fs-6 py-3 px-4">
+              <i class="bi bi-grid-fill"></i> Explore Templates
+            </a>
+          </div>
+
+          <!-- Hero Highlights / Stats -->
+          <div class="hero-stats">
+            <div class="hero-stat-item">
+              <h4>0</h4>
+              <p>Signups or Logins</p>
+            </div>
+            <div class="hero-stat-item">
+              <h4>4+</h4>
+              <p>Curated Templates</p>
+            </div>
+            <div class="hero-stat-item">
+              <h4>100%</h4>
+              <p>PDF Export Ready</p>
+            </div>
+            <div class="hero-stat-item">
+              <h4>&lt; 3 Min</h4>
+              <p>Average Build Time</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mockup Preview on Right Side -->
+        <div class="col-lg-6 mt-5 mt-lg-0">
+          <div class="mockup-wrapper">
+            <!-- Floating Badge Top Left -->
+            <div class="floating-badge badge-top-left">
+              <div class="floating-icon">
+                <i class="bi bi-file-earmark-pdf-fill"></i>
+              </div>
+              <div>
+                <strong class="d-block text-white" style="font-size:0.85rem;">One-Click PDF</strong>
+                <span style="font-size:0.75rem; color:#94a3b8;">High-DPI Print Ready</span>
+              </div>
+            </div>
+
+            <!-- Floating Badge Bottom Right -->
+            <div class="floating-badge badge-bottom-right">
+              <div class="floating-icon">
+                <i class="bi bi-phone-fill"></i>
+              </div>
+              <div>
+                <strong class="d-block text-white" style="font-size:0.85rem;">100% Responsive</strong>
+                <span style="font-size:0.75rem; color:#94a3b8;">Desktop, Tablet, Mobile</span>
+              </div>
+            </div>
+
+            <!-- Browser Mockup Window -->
+            <div class="mockup-card">
+              <div class="mockup-header">
+                <div class="window-dots">
+                  <span class="dot-red"></span>
+                  <span class="dot-yellow"></span>
+                  <span class="dot-green"></span>
+                </div>
+                <div class="mockup-address">portfolio.local/alex-vance</div>
+                <div style="font-size: 0.75rem; color: #64748b;"><i class="bi bi-shield-check"></i> Safe</div>
+              </div>
+
+              <div class="mockup-body">
+                <div class="mini-profile">
+                  <div class="mini-avatar">
+                    <i class="bi bi-person-fill"></i>
+                  </div>
+                  <div class="mini-info">
+                    <h5>Alex Vance</h5>
+                    <p>Computer Science &amp; Full Stack Engineer</p>
+                    <span style="font-size:0.75rem; color:#94a3b8;">UC Berkeley • Class of 2026</span>
+                  </div>
+                </div>
+
+                <div class="mini-badges">
+                  <span class="mini-badge"><i class="bi bi-check2"></i> React.js</span>
+                  <span class="mini-badge"><i class="bi bi-check2"></i> Python</span>
+                  <span class="mini-badge"><i class="bi bi-check2"></i> Node.js</span>
+                  <span class="mini-badge"><i class="bi bi-check2"></i> JavaScript</span>
+                  <span class="mini-badge"><i class="bi bi-check2"></i> SQL</span>
+                </div>
+
+                <div class="mini-projects">
+                  <div class="mini-project-card">
+                    <h6>StudySync Campus</h6>
+                    <span>Real-time collaborative study rooms with shared whiteboard.</span>
+                  </div>
+                  <div class="mini-project-card">
+                    <h6>AI Tutor Assistant</h6>
+                    <span>Smart exam prep assistant with automated quizzes.</span>
+                  </div>
+                </div>
+
+                <div class="mt-4 pt-3 border-top border-secondary border-opacity-25 d-flex justify-content-between align-items-center">
+                  <span style="font-size: 0.8rem; color: #94a3b8;"><i class="bi bi-check-circle-fill text-danger me-1"></i> Live Generated Preview</span>
+                  <a href="/create" class="btn-red py-1 px-3" style="font-size: 0.8rem;">
+                    Try It Now <i class="bi bi-arrow-right"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Features Section -->
+  <section id="features" class="section-padding" style="background: #0d0e13; border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Key Features</span>
+        <h2 class="section-title">Everything You Need To Stand Out</h2>
+        <p class="section-desc">Designed specifically for university students, fresh graduates, and career starters looking to showcase their achievements without code or complexity.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Feature 1 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-lightning-fill"></i>
+            </div>
+            <h3>Easy Portfolio Creation</h3>
+            <p>A simple step-by-step form guides you through adding personal details, academic history, projects, and skills in minutes.</p>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-palette2"></i>
+            </div>
+            <h3>Multiple Professional Templates</h3>
+            <p>Choose from 4 distinctly designed templates: Minimal Professional, Modern Dark, Creative Student, and Developer Portfolio.</p>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-code-slash"></i>
+            </div>
+            <h3>No Coding Required</h3>
+            <p>No HTML, CSS, or JavaScript required. Simply type your details into the guided form and your portfolio is styled automatically.</p>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-cpu-fill"></i>
+            </div>
+            <h3>Instant Portfolio Generation</h3>
+            <p>Generate your portfolio in real time. Switch between templates on the fly without ever re-entering your information.</p>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-file-earmark-pdf-fill"></i>
+            </div>
+            <h3>Download as PDF</h3>
+            <p>Export a clean, multi-page vector-quality PDF ready to attach to job applications, university internships, or professor emails.</p>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="col-md-6 col-lg-4">
+          <div class="feature-card">
+            <div class="feature-icon-wrapper">
+              <i class="bi bi-phone"></i>
+            </div>
+            <h3>Mobile Responsive</h3>
+            <p>Flawless layout across smartphones, tablets, laptops, and ultra-wide monitors with adaptive typography and spacing.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="section-padding">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Simple Process</span>
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-desc">Go from a blank page to a published personal portfolio in four simple steps.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Step 1 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-number">01</div>
+            <div class="step-icon">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+            <h4>Step 1: Enter Details</h4>
+            <p>Add your name, photo, bio, college education, technical skills, projects, and social handles.</p>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-number">02</div>
+            <div class="step-icon">
+              <i class="bi bi-palette"></i>
+            </div>
+            <h4>Step 2: Choose Template</h4>
+            <p>Select your favorite design theme from minimal, dark, creative, or developer aesthetics.</p>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-number">03</div>
+            <div class="step-icon">
+              <i class="bi bi-magic"></i>
+            </div>
+            <h4>Step 3: Generate Portfolio</h4>
+            <p>Click "Generate My Portfolio" to instantly build your responsive interactive portfolio site.</p>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="col-md-6 col-lg-3">
+          <div class="step-card">
+            <div class="step-number">04</div>
+            <div class="step-icon">
+              <i class="bi bi-download"></i>
+            </div>
+            <h4>Step 4: Download &amp; Share</h4>
+            <p>Save as a professional PDF, export standalone HTML, or print anytime.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-5">
+        <a href="/create" class="btn-red py-3 px-5 fs-6">
+          Start Building Now — Free <i class="bi bi-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Templates Section -->
+  <section id="templates" class="section-padding" style="background: #0d0e13; border-top: 1px solid var(--border-color);">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-tag">Design Catalog</span>
+        <h2 class="section-title">Choose From 4 Distinct Styles</h2>
+        <p class="section-desc">Each template features a completely different architectural layout, typography, and visual feel to match your unique personality.</p>
+      </div>
+
+      <div class="row g-4">
+        <!-- Template 1: Minimal Professional -->
+        <div class="col-md-6 col-lg-3">
+          <div class="template-card">
+            <div class="template-preview-img" style="background: #f8fafc;">
+              <span class="template-badge badge-dark" style="background:#111; color:#fff;">Editorial Light</span>
+              <div class="text-center p-3">
+                <i class="bi bi-file-earmark-richtext text-dark fs-1 mb-2"></i>
+                <div class="text-dark fw-bold" style="font-size:0.9rem;">Clean Editorial Grid</div>
+                <div class="text-muted" style="font-size:0.75rem;">White Canvas • Classic Serif/Sans</div>
+              </div>
+            </div>
+            <div class="template-details">
+              <h4>Minimal Professional</h4>
+              <p>Clean white background, sharp typography, structured timeline. Ideal for academic, consulting, and corporate roles.</p>
+              <div class="template-tags">
+                <span class="tag-pill">Light Canvas</span>
+                <span class="tag-pill">Classic Grid</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('minimal-professional')">
+                  <i class="bi bi-eye"></i> Preview
+                </button>
+                <a href="/create?template=minimal-professional" class="btn-red flex-grow-1 text-center justify-content-center">
+                  Use Style
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 2: Modern Dark -->
+        <div class="col-md-6 col-lg-3">
+          <div class="template-card">
+            <div class="template-preview-img" style="background: #0b0c10;">
+              <span class="template-badge badge-popular">Popular</span>
+              <div class="text-center p-3">
+                <i class="bi bi-moon-stars-fill text-danger fs-1 mb-2"></i>
+                <div class="text-white fw-bold" style="font-size:0.9rem;">Obsidian &amp; Crimson</div>
+                <div class="text-secondary" style="font-size:0.75rem;">Glassmorphism • Glowing Accents</div>
+              </div>
+            </div>
+            <div class="template-details">
+              <h4>Modern Dark</h4>
+              <p>Deep obsidian theme with glowing crimson accents, glass cards, and high contrast luxury aesthetic.</p>
+              <div class="template-tags">
+                <span class="tag-pill red">Dark Theme</span>
+                <span class="tag-pill">Glow Accents</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('modern-dark')">
+                  <i class="bi bi-eye"></i> Preview
+                </button>
+                <a href="/create?template=modern-dark" class="btn-red flex-grow-1 text-center justify-content-center">
+                  Use Style
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 3: Creative Student -->
+        <div class="col-md-6 col-lg-3">
+          <div class="template-card">
+            <div class="template-preview-img" style="background: linear-gradient(135deg, #1b0c10, #151124);">
+              <span class="template-badge badge-dark">Bold &amp; Dynamic</span>
+              <div class="text-center p-3">
+                <i class="bi bi-palette-fill fs-1 mb-2" style="color:#ff8c42;"></i>
+                <div class="text-white fw-bold" style="font-size:0.9rem;">Vibrant Gradients</div>
+                <div class="text-secondary" style="font-size:0.75rem;">Rounded Cards • Floating UI</div>
+              </div>
+            </div>
+            <div class="template-details">
+              <h4>Creative Student</h4>
+              <p>Dynamic gradient hero banner, curved pill badges, and creative layout for design, media, and tech students.</p>
+              <div class="template-tags">
+                <span class="tag-pill">Gradients</span>
+                <span class="tag-pill">Curved UI</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('creative-student')">
+                  <i class="bi bi-eye"></i> Preview
+                </button>
+                <a href="/create?template=creative-student" class="btn-red flex-grow-1 text-center justify-content-center">
+                  Use Style
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 4: Developer Portfolio -->
+        <div class="col-md-6 col-lg-3">
+          <div class="template-card">
+            <div class="template-preview-img" style="background: #0d1117;">
+              <span class="template-badge badge-dark">Code-Centric</span>
+              <div class="text-center p-3">
+                <i class="bi bi-terminal-fill fs-1 mb-2" style="color:#58a6ff;"></i>
+                <div class="text-white fw-bold" style="font-size:0.9rem;">Terminal &amp; Git</div>
+                <div class="text-secondary" style="font-size:0.75rem;">Fira Code • Command Prompts</div>
+              </div>
+            </div>
+            <div class="template-details">
+              <h4>Developer Portfolio</h4>
+              <p>Terminal aesthetic, syntax code blocks, Git repository cards, and monospace typography built for coders.</p>
+              <div class="template-tags">
+                <span class="tag-pill">Terminal</span>
+                <span class="tag-pill">Git Cards</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('developer-portfolio')">
+                  <i class="bi bi-eye"></i> Preview
+                </button>
+                <a href="/create?template=developer-portfolio" class="btn-red flex-grow-1 text-center justify-content-center">
+                  Use Style
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Banner -->
+  <section class="section-padding">
+    <div class="container">
+      <div class="cta-banner">
+        <h2>Ready to Build Your Professional Identity?</h2>
+        <p>No account required. Try our 1-click sample demo data or enter your own details right away.</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+          <a href="/create" class="btn-red py-3 px-5 fs-6">
+            <i class="bi bi-lightning-fill"></i> Create My Portfolio Free
+          </a>
+          <a href="/templates" class="btn-ghost-dark py-3 px-4 fs-6">
+            View All Templates
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="row g-4 justify-content-between">
+        <div class="col-lg-4">
+          <a href="/" class="footer-brand">
+            <i class="bi bi-briefcase-fill text-danger"></i>
+            <span>Personal Portfolio</span>
+          </a>
+          <p class="footer-desc mt-2">
+            The modern student portfolio builder. Create, customize, and export high-impact professional portfolios without coding or complicated signups.
+          </p>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-heading">Templates</h5>
+          <ul class="footer-links">
+            <li><a href="/create?template=minimal-professional">Minimal Professional</a></li>
+            <li><a href="/create?template=modern-dark">Modern Dark</a></li>
+            <li><a href="/create?template=creative-student">Creative Student</a></li>
+            <li><a href="/create?template=developer-portfolio">Developer Portfolio</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-lg-2">
+          <h5 class="footer-heading">Features</h5>
+          <ul class="footer-links">
+            <li><a href="#features">No Login Required</a></li>
+            <li><a href="#features">Instant Generator</a></li>
+            <li><a href="#features">PDF Export</a></li>
+            <li><a href="#features">Mobile Responsive</a></li>
+          </ul>
+        </div>
+
+        <div class="col-lg-3">
+          <h5 class="footer-heading">About Project</h5>
+          <p class="small text-secondary mb-2">Designed as a client-first, beginner-friendly portfolio generator for college students and graduates worldwide.</p>
+          <div class="d-flex gap-2 mt-3">
+            <a href="/create" class="btn-red btn-sm-custom">Open Builder</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div>&copy; 2026 Personal Portfolio Website. Free, Open &amp; Built for Students.</div>
+        <div>Engineered with Node.js, Express, HTML5, CSS3, &amp; Bootstrap 5.</div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Live Template Preview Modal -->
+  <div class="modal fade" id="templatePreviewModal" tabindex="-1" aria-labelledby="modalTemplateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header custom-modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalTemplateTitle">Template Preview</h5>
+          <div class="d-flex align-items-center gap-2">
+            <a id="modalUseTemplateBtn" href="/create" class="btn-red btn-sm-custom">
+              <i class="bi bi-check2"></i> Use This Template
+            </a>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body p-0" id="modalTemplateContainer" style="min-height: 500px; max-height: 80vh; overflow-y: auto;">
+          <!-- Rendered template preview injected here -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/templates.js"></script>
+  <script src="/js/generator.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>

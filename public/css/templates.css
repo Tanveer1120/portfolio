@@ -1,0 +1,915 @@
+/* ==========================================================================
+   PORTFOLIO TEMPLATES STYLESHEET
+   4 Distinct Professional Architectures:
+   1. Minimal Professional (Clean Editorial White, Black Serif/Sans Typography)
+   2. Modern Dark (Sleek Obsidian, Glowing Crimson Accents, Glassmorphism)
+   3. Creative Student (Vibrant Gradient Hero, Curved Floating Cards, Asymmetrical)
+   4. Developer Portfolio (IDE / Terminal aesthetics, Fira Code font, Git Commit Timeline)
+   ========================================================================== */
+
+/* Shared Base Reset for Rendered Portfolios */
+.portfolio-render-root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   TEMPLATE 1: MINIMAL PROFESSIONAL
+   - Crisp white canvas, elegant black typography, minimalist grid
+   - Thin geometric borders, refined red accent rules
+   ========================================================================== */
+.portfolio-template-minimal {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.65;
+}
+
+.portfolio-template-minimal * {
+  box-sizing: border-box;
+}
+
+.portfolio-template-minimal .min-nav {
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1.5rem 0;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.portfolio-template-minimal .min-nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portfolio-template-minimal .min-brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: #000000;
+}
+
+.portfolio-template-minimal .min-links {
+  display: flex;
+  gap: 1.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.portfolio-template-minimal .min-links a {
+  color: #4b5563;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.portfolio-template-minimal .min-links a:hover {
+  color: #e63946;
+}
+
+.portfolio-template-minimal .min-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Minimal Hero */
+.portfolio-template-minimal .min-hero {
+  padding: 5rem 0 4rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  display: flex;
+  align-items: center;
+  gap: 3.5rem;
+}
+
+.portfolio-template-minimal .min-avatar {
+  width: 170px;
+  height: 170px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+.portfolio-template-minimal .min-hero-text h1 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
+  color: #000000;
+  letter-spacing: -0.03em;
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-template-minimal .min-title {
+  font-size: 1.25rem;
+  color: #e63946;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.portfolio-template-minimal .min-bio {
+  color: #4b5563;
+  font-size: 1.05rem;
+  max-width: 650px;
+  margin-bottom: 1.5rem;
+}
+
+.portfolio-template-minimal .min-meta-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.88rem;
+  color: #6b7280;
+}
+
+.portfolio-template-minimal .min-meta-pills span {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+/* Minimal Section Structure */
+.portfolio-template-minimal .min-section {
+  padding: 4rem 0;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.portfolio-template-minimal .min-section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 2rem;
+  position: relative;
+  display: inline-block;
+}
+
+.portfolio-template-minimal .min-section-title::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 36px;
+  height: 3px;
+  background: #e63946;
+}
+
+/* Minimal Education & Experience Timeline */
+.portfolio-template-minimal .min-timeline-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  margin-bottom: 2.2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px dashed #e5e7eb;
+}
+
+.portfolio-template-minimal .min-timeline-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.portfolio-template-minimal .min-period {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.portfolio-template-minimal .min-content h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.portfolio-template-minimal .min-institution {
+  font-size: 0.95rem;
+  color: #e63946;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-template-minimal .min-content p {
+  color: #4b5563;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* Minimal Skills */
+.portfolio-template-minimal .min-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.portfolio-template-minimal .min-skill-tag {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1f2937;
+}
+
+/* Minimal Projects */
+.portfolio-template-minimal .min-projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 2rem;
+}
+
+.portfolio-template-minimal .min-project-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.75rem;
+  background: #ffffff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-template-minimal .min-project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+  border-color: #d1d5db;
+}
+
+.portfolio-template-minimal .min-project-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #000000;
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-template-minimal .min-project-card p {
+  color: #4b5563;
+  font-size: 0.9rem;
+  flex-grow: 1;
+  margin-bottom: 1.25rem;
+}
+
+.portfolio-template-minimal .min-project-tech {
+  font-size: 0.8rem;
+  color: #6b7280;
+  font-family: monospace;
+  margin-bottom: 1.25rem;
+}
+
+.portfolio-template-minimal .min-project-links {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.portfolio-template-minimal .min-project-links a {
+  color: #000000;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.portfolio-template-minimal .min-project-links a:hover {
+  color: #e63946;
+}
+
+/* Minimal Footer */
+.portfolio-template-minimal .min-footer {
+  padding: 3rem 0;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+.portfolio-template-minimal .min-social-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.portfolio-template-minimal .min-social-links a {
+  color: #111827;
+  font-size: 1.25rem;
+  transition: color 0.2s;
+}
+
+.portfolio-template-minimal .min-social-links a:hover {
+  color: #e63946;
+}
+
+/* ==========================================================================
+   TEMPLATE 2: MODERN DARK
+   - Deep obsidian (#0b0c10), glowing crimson (#ff3344), glass cards
+   - Neon borders, floating glow, high contrast luxury aesthetic
+   ========================================================================== */
+.portfolio-template-dark {
+  background-color: #0b0c10 !important;
+  color: #e2e8f0 !important;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  line-height: 1.6;
+}
+
+.portfolio-template-dark * {
+  box-sizing: border-box;
+}
+
+.portfolio-template-dark .dark-nav {
+  background: rgba(11, 12, 16, 0.85);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  padding: 1.2rem 0;
+}
+
+.portfolio-template-dark .dark-nav-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.portfolio-template-dark .dark-brand {
+  font-family: 'Outfit', sans-serif;
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.portfolio-template-dark .dark-brand-dot {
+  width: 8px;
+  height: 8px;
+  background: #ff3344;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #ff3344;
+}
+
+.portfolio-template-dark .dark-links {
+  display: flex;
+  gap: 1.8rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.portfolio-template-dark .dark-links a {
+  color: #94a3b8;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.portfolio-template-dark .dark-links a:hover {
+  color: #ff3344;
+}
+
+.portfolio-template-dark .dark-container {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Dark Hero */
+.portfolio-template-dark .dark-hero {
+  padding: 6rem 0 5rem 0;
+  position: relative;
+}
+
+.portfolio-template-dark .dark-hero-glow {
+  position: absolute;
+  top: 10%;
+  right: 5%;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255, 51, 68, 0.15) 0%, rgba(11, 12, 16, 0) 70%);
+  pointer-events: none;
+  filter: blur(50px);
+}
+
+.portfolio-template-dark .dark-hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  align-items: center;
+  gap: 3rem;
+  position: relative;
+  z-index: 2;
+}
+
+.portfolio-template-dark .dark-greeting {
+  display: inline-block;
+  background: rgba(255, 51, 68, 0.12);
+  color: #ff4d5a;
+  border: 1px solid rgba(255, 51, 68, 0.3);
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+}
+
+.portfolio-template-dark .dark-hero-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 3.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  margin-bottom: 0.8rem;
+}
+
+.portfolio-template-dark .dark-hero-subtitle {
+  font-size: 1.35rem;
+  color: #ff3344;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.portfolio-template-dark .dark-hero-bio {
+  color: #94a3b8;
+  font-size: 1.05rem;
+  line-height: 1.7;
+  margin-bottom: 2rem;
+}
+
+.portfolio-template-dark .dark-hero-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.portfolio-template-dark .dark-avatar-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.portfolio-template-dark .dark-avatar {
+  width: 250px;
+  height: 250px;
+  border-radius: 24px;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 51, 68, 0.25);
+  position: relative;
+  z-index: 2;
+}
+
+/* Dark Section */
+.portfolio-template-dark .dark-section {
+  padding: 5rem 0;
+}
+
+.portfolio-template-dark .dark-section-title-wrap {
+  margin-bottom: 3rem;
+}
+
+.portfolio-template-dark .dark-section-tag {
+  color: #ff3344;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.portfolio-template-dark .dark-section-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+/* Dark Cards */
+.portfolio-template-dark .dark-card {
+  background: #14161f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1.8rem;
+  transition: all 0.25s ease;
+}
+
+.portfolio-template-dark .dark-card:hover {
+  border-color: rgba(255, 51, 68, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 51, 68, 0.15);
+}
+
+.portfolio-template-dark .dark-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1.5rem;
+}
+
+.portfolio-template-dark .dark-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Dark Skills */
+.portfolio-template-dark .dark-skill-pill {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.6rem 1.1rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  color: #f1f5f9;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.portfolio-template-dark .dark-skill-pill:hover {
+  border-color: #ff3344;
+  background: rgba(255, 51, 68, 0.1);
+  color: #ffffff;
+}
+
+.portfolio-template-dark .dark-skill-pill .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ff3344;
+}
+
+/* Dark Footer */
+.portfolio-template-dark .dark-footer {
+  background: #07080b;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 4rem 0 2rem 0;
+  text-align: center;
+}
+
+.portfolio-template-dark .dark-footer-socials {
+  display: flex;
+  justify-content: center;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.portfolio-template-dark .dark-social-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #14161f;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  transition: all 0.2s;
+}
+
+.portfolio-template-dark .dark-social-btn:hover {
+  background: #ff3344;
+  border-color: #ff3344;
+  box-shadow: 0 0 15px rgba(255, 51, 68, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   TEMPLATE 3: CREATIVE STUDENT
+   - Vibrant gradient accents, rounded pill design, creative portfolio layout
+   - Playful yet professional cards, floating avatar with colorful ring
+   ========================================================================== */
+.portfolio-template-creative {
+  background-color: #0f1016 !important;
+  color: #e2e8f0 !important;
+  font-family: 'Outfit', sans-serif;
+  line-height: 1.6;
+}
+
+.portfolio-template-creative * {
+  box-sizing: border-box;
+}
+
+.portfolio-template-creative .creative-hero {
+  background: linear-gradient(135deg, #1b0c10 0%, #0f1016 50%, #151124 100%);
+  padding: 6rem 0 5rem 0;
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.portfolio-template-creative .creative-hero-content {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.portfolio-template-creative .creative-avatar-box {
+  width: 140px;
+  height: 140px;
+  margin: 0 auto 1.5rem auto;
+  position: relative;
+}
+
+.portfolio-template-creative .creative-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  padding: 4px;
+  background: linear-gradient(135deg, #ff3344, #ff8c42, #b91c1c);
+  box-shadow: 0 10px 30px rgba(255, 51, 68, 0.3);
+}
+
+.portfolio-template-creative .creative-hero h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #ffffff 40%, #ff8a93 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.portfolio-template-creative .creative-badge-title {
+  display: inline-block;
+  background: linear-gradient(90deg, #ff3344, #e63946);
+  color: #ffffff;
+  padding: 0.35rem 1.2rem;
+  border-radius: 999px;
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
+}
+
+.portfolio-template-creative .creative-bio {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #cbd5e1;
+  font-size: 1.15rem;
+  max-width: 700px;
+  margin: 0 auto 2rem auto;
+}
+
+.portfolio-template-creative .creative-container {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 4rem 1.5rem;
+}
+
+.portfolio-template-creative .creative-card {
+  background: #171822;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2.2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.portfolio-template-creative .creative-card-badge {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #ff6b77;
+}
+
+.portfolio-template-creative .creative-section-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* ==========================================================================
+   TEMPLATE 4: DEVELOPER PORTFOLIO
+   - Terminal & IDE aesthetic, Fira Code font, command prompt headers
+   - Code badge tags, Git commit styled timeline, project status indicators
+   ========================================================================== */
+.portfolio-template-developer {
+  background-color: #0d1117 !important;
+  color: #c9d1d9 !important;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  line-height: 1.6;
+}
+
+.portfolio-template-developer * {
+  box-sizing: border-box;
+}
+
+.portfolio-template-developer .dev-window-bar {
+  background: #161b22;
+  border-bottom: 1px solid #30363d;
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+
+.portfolio-template-developer .dev-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.portfolio-template-developer .dev-dots span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.portfolio-template-developer .dot-red { background: #ff5555; }
+.portfolio-template-developer .dot-yellow { background: #ffb86c; }
+.portfolio-template-developer .dot-green { background: #50fa7b; }
+
+.portfolio-template-developer .dev-prompt-header {
+  color: #8b949e;
+  font-size: 0.85rem;
+}
+
+.portfolio-template-developer .dev-container {
+  max-width: 1050px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem;
+}
+
+.portfolio-template-developer .dev-terminal-box {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  padding: 2rem;
+  margin-bottom: 2.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.portfolio-template-developer .dev-prompt-line {
+  color: #ff5555;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.portfolio-template-developer .dev-hero-grid {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.portfolio-template-developer .dev-avatar {
+  width: 130px;
+  height: 130px;
+  border-radius: 6px;
+  border: 2px solid #ff5555;
+  object-fit: cover;
+}
+
+.portfolio-template-developer .dev-name {
+  font-size: 2.4rem;
+  color: #58a6ff;
+  font-weight: 800;
+  margin-bottom: 0.25rem;
+}
+
+.portfolio-template-developer .dev-role {
+  color: #7ee787;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.portfolio-template-developer .dev-comment {
+  color: #8b949e;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+
+.portfolio-template-developer .dev-badge-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.portfolio-template-developer .dev-badge {
+  background: #21262d;
+  border: 1px solid #30363d;
+  color: #58a6ff;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+}
+
+.portfolio-template-developer .dev-badge.red {
+  color: #ff7b72;
+  border-color: rgba(255, 123, 114, 0.3);
+}
+
+.portfolio-template-developer .dev-project-card {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 6px;
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+
+.portfolio-template-developer .dev-project-card:hover {
+  border-color: #58a6ff;
+}
+
+.portfolio-template-developer .dev-project-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.portfolio-template-developer .dev-repo-name {
+  color: #58a6ff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.portfolio-template-developer .dev-repo-name:hover {
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   PRINT & PDF HIGH FIDELITY RULES
+   - Ensure clean multi-page pagination, no cutoffs, high resolution
+   ========================================================================== */
+@media print {
+  body, html {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+
+  .portfolio-template-dark,
+  .portfolio-template-creative,
+  .portfolio-template-developer {
+    background-color: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  /* Make sure text and titles remain dark & crisp in print */
+  .portfolio-template-dark .dark-card,
+  .portfolio-template-creative .creative-card,
+  .portfolio-template-developer .dev-terminal-box,
+  .portfolio-template-developer .dev-project-card {
+    background: #ffffff !important;
+    border: 1px solid #d1d5db !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  .portfolio-template-dark .dark-hero-title,
+  .portfolio-template-dark .dark-section-title,
+  .portfolio-template-creative .creative-hero h1,
+  .portfolio-template-developer .dev-name {
+    color: #000000 !important;
+    -webkit-text-fill-color: initial !important;
+  }
+
+  .no-print,
+  .preview-toolbar,
+  .site-navbar,
+  .site-footer {
+    display: none !important;
+  }
+
+  .portfolio-render-root {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+}

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Your Portfolio — Step-by-Step Builder</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/form.css">
+  <link rel="stylesheet" href="/css/templates.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg site-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-briefcase-fill" style="color: var(--accent-red);"></i>
+        <span>Personal Portfolio</span>
+        <span class="brand-badge">Builder</span>
+      </a>
+
+      <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/templates">Templates</a>
+          </li>
+          <li class="nav-item ms-lg-3">
+            <a href="/preview" class="btn-ghost-dark btn-sm-custom">
+              <i class="bi bi-eye"></i> View Current Portfolio
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Builder Main Container -->
+  <div class="builder-container">
+    
+    <!-- Topbar / Quick Action Controls -->
+    <div class="builder-topbar">
+      <div class="builder-title-group">
+        <h1>Portfolio Builder</h1>
+        <p>Fill out the details below. All progress is saved automatically in your browser.</p>
+      </div>
+
+      <div class="builder-quick-actions align-items-center">
+        <div id="autoSaveStatus" class="autosave-pill" style="opacity: 0.7; transition: opacity 0.3s;">
+          <i class="bi bi-cloud-check-fill"></i> Auto-saved
+        </div>
+        <button type="button" id="fillDemoBtn" class="btn-ghost-dark btn-sm-custom" title="Fill with sample student data for instant testing">
+          <i class="bi bi-magic text-warning"></i> Fill Sample Data
+        </button>
+        <button type="button" id="clearFormBtn" class="btn-ghost-dark btn-sm-custom text-danger border-danger border-opacity-25" title="Reset form">
+          <i class="bi bi-trash"></i> Reset
+        </button>
+      </div>
+    </div>
+
+    <!-- Multi-Step Progress Tracker Card -->
+    <div class="wizard-progress-card">
+      <div class="wizard-progress-bar-fill"></div>
+      <ol class="wizard-steps">
+        <li class="wizard-step-item active" data-step="1">
+          <div class="step-circle">1</div>
+          <span class="step-label">Personal</span>
+        </li>
+        <li class="wizard-step-item" data-step="2">
+          <div class="step-circle">2</div>
+          <span class="step-label">Education</span>
+        </li>
+        <li class="wizard-step-item" data-step="3">
+          <div class="step-circle">3</div>
+          <span class="step-label">Skills</span>
+        </li>
+        <li class="wizard-step-item" data-step="4">
+          <div class="step-circle">4</div>
+          <span class="step-label">Projects</span>
+        </li>
+        <li class="wizard-step-item" data-step="5">
+          <div class="step-circle">5</div>
+          <span class="step-label">Certifications</span>
+        </li>
+        <li class="wizard-step-item" data-step="6">
+          <div class="step-circle">6</div>
+          <span class="step-label">Experience</span>
+        </li>
+        <li class="wizard-step-item" data-step="7">
+          <div class="step-circle">7</div>
+          <span class="step-label">Theme &amp; Finish</span>
+        </li>
+      </ol>
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- STEP 1: PERSONAL INFORMATION -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel active" data-step="1">
+      <div class="step-header">
+        <h2><i class="bi bi-person-badge-fill text-danger"></i> Personal Information</h2>
+        <p>Tell the world who you are and introduce your professional background.</p>
+      </div>
+
+      <!-- Avatar Upload Box -->
+      <div class="avatar-upload-container">
+        <div class="avatar-preview-box">
+          <i class="bi bi-person avatar-placeholder-icon" id="photoPlaceholder"></i>
+          <img id="photoPreview" alt="Profile preview">
+        </div>
+        <div class="avatar-upload-info flex-grow-1">
+          <h5>Profile Photograph</h5>
+          <p>Upload a clear photo (JPG, PNG or WebP, up to 5MB). If omitted, an automatic monogram avatar will be used.</p>
+          <div class="avatar-action-btns">
+            <label for="photoInput" class="btn-red btn-sm-custom mb-0 cursor-pointer">
+              <i class="bi bi-upload"></i> Upload Image
+            </label>
+            <input type="file" id="photoInput" accept="image/png, image/jpeg, image/webp" class="d-none">
+            <button type="button" id="removePhotoBtn" class="btn-ghost-dark btn-sm-custom" style="display:none;">
+              <i class="bi bi-x"></i> Remove
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" class="form-control" placeholder="e.g. Alex Vance" required>
+          <div class="field-error-msg">Please enter your full name.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="title">Professional Title / Headline <span class="required">*</span></label>
+          <input type="text" id="title" class="form-control" placeholder="e.g. Computer Science Student | Aspiring Software Engineer" required>
+          <div class="field-error-msg">Please enter your professional title.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="email">Email Address <span class="required">*</span></label>
+          <div class="input-icon-group">
+            <i class="bi bi-envelope"></i>
+            <input type="email" id="email" class="form-control" placeholder="e.g. alex@university.edu" required>
+          </div>
+          <div class="field-error-msg">Please enter a valid email address.</div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="phone">Phone Number (optional)</label>
+          <div class="input-icon-group">
+            <i class="bi bi-telephone"></i>
+            <input type="tel" id="phone" class="form-control" placeholder="e.g. +1 (555) 234-5678">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="location">Location / City (optional)</label>
+          <div class="input-icon-group">
+            <i class="bi bi-geo-alt"></i>
+            <input type="text" id="location" class="form-control" placeholder="e.g. San Francisco, CA">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="dob">Date of Birth (optional)</label>
+          <div class="input-icon-group">
+            <i class="bi bi-calendar3"></i>
+            <input type="date" id="dob" class="form-control">
+          </div>
+        </div>
+
+        <div class="col-12">
+          <label class="form-label" for="about">About Me / Short Introduction</label>
+          <textarea id="about" class="form-control" rows="4" placeholder="Write a brief professional summary about your academic passions, technical interests, and what drives you..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 2: EDUCATION DETAILS -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="2">
+      <div class="step-header">
+        <h2><i class="bi bi-mortarboard-fill text-danger"></i> Education Details</h2>
+        <p>Add your degrees, college or high school achievements. You can add multiple institutions.</p>
+      </div>
+
+      <div id="educationContainer">
+        <!-- Dynamic education items injected here -->
+      </div>
+
+      <button type="button" id="addEduBtn" class="btn-add-repeater mt-3">
+        <i class="bi bi-plus-circle"></i> Add Another Education Entry
+      </button>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 3: TECHNICAL SKILLS -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="3">
+      <div class="step-header">
+        <h2><i class="bi bi-code-slash text-danger"></i> Technical Skills</h2>
+        <p>Highlight your programming languages, frameworks, developer tools, and libraries.</p>
+      </div>
+
+      <!-- Quick Add Popular Pills -->
+      <div class="quick-skills-container">
+        <span class="quick-skills-title">Click to quick-add common skills:</span>
+        <div class="quick-skill-pills">
+          <button type="button" class="quick-skill-btn" data-skill="HTML5"><i class="bi bi-plus"></i> HTML5</button>
+          <button type="button" class="quick-skill-btn" data-skill="CSS3"><i class="bi bi-plus"></i> CSS3</button>
+          <button type="button" class="quick-skill-btn" data-skill="JavaScript"><i class="bi bi-plus"></i> JavaScript</button>
+          <button type="button" class="quick-skill-btn" data-skill="React.js"><i class="bi bi-plus"></i> React.js</button>
+          <button type="button" class="quick-skill-btn" data-skill="Node.js"><i class="bi bi-plus"></i> Node.js</button>
+          <button type="button" class="quick-skill-btn" data-skill="Python"><i class="bi bi-plus"></i> Python</button>
+          <button type="button" class="quick-skill-btn" data-skill="Java"><i class="bi bi-plus"></i> Java</button>
+          <button type="button" class="quick-skill-btn" data-skill="C++"><i class="bi bi-plus"></i> C++</button>
+          <button type="button" class="quick-skill-btn" data-skill="SQL"><i class="bi bi-plus"></i> SQL</button>
+          <button type="button" class="quick-skill-btn" data-skill="MongoDB"><i class="bi bi-plus"></i> MongoDB</button>
+          <button type="button" class="quick-skill-btn" data-skill="Git & GitHub"><i class="bi bi-plus"></i> Git &amp; GitHub</button>
+          <button type="button" class="quick-skill-btn" data-skill="Bootstrap 5"><i class="bi bi-plus"></i> Bootstrap 5</button>
+          <button type="button" class="quick-skill-btn" data-skill="Docker"><i class="bi bi-plus"></i> Docker</button>
+        </div>
+      </div>
+
+      <!-- Custom Skill Input Form -->
+      <div class="card p-3 mb-4" style="background:#0e1118; border:1px solid rgba(255,255,255,0.08); border-radius:14px;">
+        <label class="form-label">Add Custom Skill</label>
+        <div class="row g-2 align-items-center">
+          <div class="col-md-6">
+            <input type="text" id="customSkillName" class="form-control" placeholder="e.g. TypeScript, Express, PyTorch, Figma">
+          </div>
+          <div class="col-md-4">
+            <select id="customSkillLevel" class="form-select">
+              <option value="Advanced">Advanced / Expert</option>
+              <option value="Intermediate" selected>Intermediate / Proficient</option>
+              <option value="Beginner">Beginner / Exploring</option>
+            </select>
+          </div>
+          <div class="col-md-2">
+            <button type="button" id="addSkillBtn" class="btn-red w-100 justify-content-center">
+              <i class="bi bi-plus-lg"></i> Add
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Added Skills List Grid -->
+      <label class="form-label">Selected Skills for Your Portfolio:</label>
+      <div class="skills-list-grid" id="skillsGrid">
+        <!-- Added skills will render here -->
+      </div>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 4: PROJECTS -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="4">
+      <div class="step-header">
+        <h2><i class="bi bi-folder-fill text-danger"></i> Projects Showcase</h2>
+        <p>Showcase web apps, mobile tools, research papers, or open source repositories you built.</p>
+      </div>
+
+      <div id="projectsContainer">
+        <!-- Dynamic projects injected here -->
+      </div>
+
+      <button type="button" id="addProjBtn" class="btn-add-repeater mt-3">
+        <i class="bi bi-plus-circle"></i> Add Another Project
+      </button>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 5: CERTIFICATIONS & ACHIEVEMENTS -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="5">
+      <div class="step-header">
+        <h2><i class="bi bi-patch-check-fill text-danger"></i> Certifications &amp; Achievements</h2>
+        <p>Highlight your verified online credentials, hackathon awards, or competition certificates.</p>
+      </div>
+
+      <div id="certsContainer">
+        <!-- Dynamic certifications injected here -->
+      </div>
+
+      <button type="button" id="addCertBtn" class="btn-add-repeater mt-3">
+        <i class="bi bi-plus-circle"></i> Add Certificate / Honor
+      </button>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 6: EXPERIENCE & INTERNSHIPS -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="6">
+      <div class="step-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <h2><i class="bi bi-briefcase-fill text-danger"></i> Work Experience &amp; Internships</h2>
+            <p>Internships, student clubs, teaching assistantships, or freelance work.</p>
+          </div>
+          <span class="badge bg-secondary opacity-75">Optional for Students</span>
+        </div>
+      </div>
+
+      <div id="experienceContainer">
+        <!-- Dynamic experience entries injected here -->
+      </div>
+
+      <button type="button" id="addExpBtn" class="btn-add-repeater mt-3">
+        <i class="bi bi-plus-circle"></i> Add Experience Entry
+      </button>
+    </section>
+
+    <!-- ============================================================== -->
+    <!-- STEP 7: SOCIAL MEDIA & TEMPLATE SELECTION -->
+    <!-- ============================================================== -->
+    <section class="form-step-panel" data-step="7">
+      <div class="step-header">
+        <h2><i class="bi bi-palette-fill text-danger"></i> Social Links &amp; Choose Design Template</h2>
+        <p>Link your social profiles and choose a theme to generate your final portfolio.</p>
+      </div>
+
+      <!-- Social Media Inputs -->
+      <h5 class="text-white mb-3" style="font-size:1.1rem;"><i class="bi bi-share me-2 text-danger"></i> Social Profiles (Optional)</h5>
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <label class="form-label" for="socialGithub">GitHub Profile URL</label>
+          <div class="input-icon-group">
+            <i class="bi bi-github"></i>
+            <input type="url" id="socialGithub" class="form-control" placeholder="https://github.com/username">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label" for="socialLinkedin">LinkedIn Profile URL</label>
+          <div class="input-icon-group">
+            <i class="bi bi-linkedin"></i>
+            <input type="url" id="socialLinkedin" class="form-control" placeholder="https://linkedin.com/in/username">
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="socialInstagram">Instagram URL</label>
+          <div class="input-icon-group">
+            <i class="bi bi-instagram"></i>
+            <input type="url" id="socialInstagram" class="form-control" placeholder="https://instagram.com/username">
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="socialWebsite">Personal Website / Blog</label>
+          <div class="input-icon-group">
+            <i class="bi bi-globe"></i>
+            <input type="url" id="socialWebsite" class="form-control" placeholder="https://mywebsite.com">
+          </div>
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label" for="socialTwitter">Twitter / X Handle</label>
+          <div class="input-icon-group">
+            <i class="bi bi-twitter-x"></i>
+            <input type="url" id="socialTwitter" class="form-control" placeholder="https://x.com/username">
+          </div>
+        </div>
+      </div>
+
+      <!-- Template Selection Grid -->
+      <h5 class="text-white mt-4 mb-2" style="font-size:1.1rem;"><i class="bi bi-layout-text-window me-2 text-danger"></i> Select Your Portfolio Template</h5>
+      <p class="text-secondary small mb-3">You can also switch templates instantly later in the live preview mode.</p>
+
+      <div class="template-radio-grid">
+        <!-- Template 1 -->
+        <div class="template-radio-card" data-template="minimal-professional">
+          <input type="radio" name="selectedTemplateRadio" value="minimal-professional" id="tmpl-min">
+          <div class="template-radio-thumbnail" style="background:#ffffff; color:#000;">
+            <i class="bi bi-file-earmark-text"></i>
+          </div>
+          <div class="template-radio-info">
+            <h5>Minimal Professional</h5>
+            <p>Clean white editorial canvas, crisp black text.</p>
+          </div>
+        </div>
+
+        <!-- Template 2 (Default Selected) -->
+        <div class="template-radio-card selected" data-template="modern-dark">
+          <input type="radio" name="selectedTemplateRadio" value="modern-dark" id="tmpl-dark" checked>
+          <div class="template-radio-thumbnail" style="background:#0b0c10; color:#ff3344;">
+            <i class="bi bi-moon-stars-fill"></i>
+          </div>
+          <div class="template-radio-info">
+            <h5>Modern Dark</h5>
+            <p>Obsidian dark theme, glowing crimson accents.</p>
+          </div>
+        </div>
+
+        <!-- Template 3 -->
+        <div class="template-radio-card" data-template="creative-student">
+          <input type="radio" name="selectedTemplateRadio" value="creative-student" id="tmpl-creative">
+          <div class="template-radio-thumbnail" style="background:linear-gradient(135deg, #1f0d14, #141124); color:#ff8c42;">
+            <i class="bi bi-palette-fill"></i>
+          </div>
+          <div class="template-radio-info">
+            <h5>Creative Student</h5>
+            <p>Vibrant gradients, rounded cards, playful yet sleek.</p>
+          </div>
+        </div>
+
+        <!-- Template 4 -->
+        <div class="template-radio-card" data-template="developer-portfolio">
+          <input type="radio" name="selectedTemplateRadio" value="developer-portfolio" id="tmpl-dev">
+          <div class="template-radio-thumbnail" style="background:#0d1117; color:#58a6ff;">
+            <i class="bi bi-terminal-fill"></i>
+          </div>
+          <div class="template-radio-info">
+            <h5>Developer Portfolio</h5>
+            <p>Terminal aesthetic, Git logs, monospace vibe.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Wizard Footer Action Buttons -->
+    <div class="wizard-footer-actions">
+      <button type="button" id="prevBtn" class="btn-ghost-dark py-2 px-4">
+        <i class="bi bi-arrow-left"></i> Previous Step
+      </button>
+      
+      <div class="d-flex gap-2">
+        <button type="button" id="nextBtn" class="btn-red py-2 px-4">
+          Next Step <i class="bi bi-arrow-right"></i>
+        </button>
+
+        <button type="button" id="generateBtn" class="btn-red py-2 px-4" style="display: none;">
+          <i class="bi bi-magic"></i> Generate My Portfolio
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/templates.js"></script>
+  <script src="/js/generator.js"></script>
+  <script src="/js/form.js"></script>
+</body>
+</html>

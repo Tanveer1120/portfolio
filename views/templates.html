@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portfolio Templates — Choose Your Look</title>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Bootstrap 5 CSS & Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/templates.css">
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg site-navbar">
+    <div class="container">
+      <a class="navbar-brand" href="/">
+        <i class="bi bi-briefcase-fill" style="color: var(--accent-red);"></i>
+        <span>Personal Portfolio</span>
+        <span class="brand-badge">Templates</span>
+      </a>
+
+      <button class="navbar-toggler text-white border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain">
+        <i class="bi bi-list fs-2"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link active" href="/templates">Templates</a></li>
+          <li class="nav-item"><a class="nav-link" href="/#features">Features</a></li>
+          <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+            <a href="/create" class="btn-red">
+              <i class="bi bi-magic"></i> Create Portfolio
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Templates Header -->
+  <header class="py-5 text-center" style="background: radial-gradient(circle at 50% 30%, rgba(230, 57, 70, 0.12) 0%, rgba(10, 11, 14, 0) 70%);">
+    <div class="container">
+      <span class="section-tag">Curated Designs</span>
+      <h1 class="hero-title mb-3" style="font-size: 2.8rem;">Professional Portfolio Templates</h1>
+      <p class="section-desc max-w-600 mx-auto">
+        Every template is built with distinct typography, CSS layout hierarchies, and color accents. Preview any template live before starting.
+      </p>
+    </div>
+  </header>
+
+  <!-- Gallery Grid -->
+  <section class="section-padding pt-2">
+    <div class="container">
+      <div class="row g-4">
+        <!-- Template 1: Minimal Professional -->
+        <div class="col-lg-6">
+          <div class="template-card h-100">
+            <div class="template-preview-img" style="background:#ffffff; height:240px;">
+              <span class="template-badge badge-dark" style="background:#000; color:#fff;">Editorial White</span>
+              <div class="text-center p-4">
+                <i class="bi bi-file-earmark-richtext-fill text-dark display-4 mb-2"></i>
+                <h4 class="text-dark fw-bold mb-1">Minimal Professional</h4>
+                <p class="text-muted small mb-0">Clean Grid • Sharp Typography • Refined Spacing</p>
+              </div>
+            </div>
+            <div class="template-details">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="mb-0">Minimal Professional</h3>
+                <span class="tag-pill">Light Canvas</span>
+              </div>
+              <p>
+                Inspired by modern editorial journals and Swiss graphic design. Features an elegant white background, bold sans/serif headers, and structured timelines. Perfect for academic resumes, corporate internships, finance, and consulting applications.
+              </p>
+              <div class="template-tags mb-3">
+                <span class="tag-pill">Academic</span>
+                <span class="tag-pill">Print Optimized</span>
+                <span class="tag-pill">Fastest Load</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('minimal-professional')">
+                  <i class="bi bi-eye"></i> Live Preview
+                </button>
+                <a href="/create?template=minimal-professional" class="btn-red flex-grow-1 text-center justify-content-center">
+                  <i class="bi bi-check2"></i> Select Template
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 2: Modern Dark -->
+        <div class="col-lg-6">
+          <div class="template-card h-100">
+            <div class="template-preview-img" style="background:#0b0c10; height:240px;">
+              <span class="template-badge badge-popular">Most Popular</span>
+              <div class="text-center p-4">
+                <i class="bi bi-moon-stars-fill text-danger display-4 mb-2"></i>
+                <h4 class="text-white fw-bold mb-1">Modern Dark</h4>
+                <p class="text-secondary small mb-0">Obsidian Theme • Crimson Glow • Glassmorphism</p>
+              </div>
+            </div>
+            <div class="template-details">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="mb-0">Modern Dark</h3>
+                <span class="tag-pill red">SaaS Luxury</span>
+              </div>
+              <p>
+                A sleek obsidian dark theme designed to match premium tech products. Features glowing neon badges, rounded glass cards, and high-contrast crimson accents. Tailored for software engineers, product designers, and tech enthusiasts.
+              </p>
+              <div class="template-tags mb-3">
+                <span class="tag-pill red">Dark Aesthetic</span>
+                <span class="tag-pill">Glass Cards</span>
+                <span class="tag-pill">Interactive Hover</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('modern-dark')">
+                  <i class="bi bi-eye"></i> Live Preview
+                </button>
+                <a href="/create?template=modern-dark" class="btn-red flex-grow-1 text-center justify-content-center">
+                  <i class="bi bi-check2"></i> Select Template
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 3: Creative Student -->
+        <div class="col-lg-6">
+          <div class="template-card h-100">
+            <div class="template-preview-img" style="background:linear-gradient(135deg, #1b0c10 0%, #151124 100%); height:240px;">
+              <span class="template-badge badge-dark">Bold &amp; Dynamic</span>
+              <div class="text-center p-4">
+                <i class="bi bi-palette-fill display-4 mb-2" style="color:#ff8c42;"></i>
+                <h4 class="text-white fw-bold mb-1">Creative Student</h4>
+                <p class="text-secondary small mb-0">Vibrant Gradients • Curved Pills • Floating Badges</p>
+              </div>
+            </div>
+            <div class="template-details">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="mb-0">Creative Student</h3>
+                <span class="tag-pill">Design &amp; Media</span>
+              </div>
+              <p>
+                Expressive, bold, and modern. Built with a rich gradient hero section, rounded pill tags, and colorful badge containers. Excellent for multimedia artists, UI/UX designers, marketing interns, and creative students.
+              </p>
+              <div class="template-tags mb-3">
+                <span class="tag-pill">Playful</span>
+                <span class="tag-pill">Colorful Gradients</span>
+                <span class="tag-pill">High Impact</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('creative-student')">
+                  <i class="bi bi-eye"></i> Live Preview
+                </button>
+                <a href="/create?template=creative-student" class="btn-red flex-grow-1 text-center justify-content-center">
+                  <i class="bi bi-check2"></i> Select Template
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Template 4: Developer Portfolio -->
+        <div class="col-lg-6">
+          <div class="template-card h-100">
+            <div class="template-preview-img" style="background:#0d1117; height:240px;">
+              <span class="template-badge badge-dark" style="color:#58a6ff;">Developer First</span>
+              <div class="text-center p-4">
+                <i class="bi bi-terminal-fill display-4 mb-2" style="color:#58a6ff;"></i>
+                <h4 class="text-white fw-bold mb-1">Developer Portfolio</h4>
+                <p class="text-secondary small mb-0">Fira Code • Terminal Windows • Git Commit Log</p>
+              </div>
+            </div>
+            <div class="template-details">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="mb-0">Developer Portfolio</h3>
+                <span class="tag-pill">IDE Aesthetic</span>
+              </div>
+              <p>
+                Inspired by UNIX command-line shells, VS Code, and GitHub repositories. Renders your bio as JSON, your skills as bash commands, and your projects as commit cards. Ideal for backend engineers, system developers, and open source contributors.
+              </p>
+              <div class="template-tags mb-3">
+                <span class="tag-pill">Terminal Theme</span>
+                <span class="tag-pill">Git Commits</span>
+                <span class="tag-pill">Monospace</span>
+              </div>
+              <div class="template-actions mt-auto">
+                <button type="button" class="btn-ghost-dark flex-grow-1" onclick="openTemplatePreview('developer-portfolio')">
+                  <i class="bi bi-eye"></i> Live Preview
+                </button>
+                <a href="/create?template=developer-portfolio" class="btn-red flex-grow-1 text-center justify-content-center">
+                  <i class="bi bi-check2"></i> Select Template
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Live Template Preview Modal -->
+  <div class="modal fade" id="templatePreviewModal" tabindex="-1" aria-labelledby="modalTemplateTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content custom-modal-content">
+        <div class="modal-header custom-modal-header d-flex justify-content-between align-items-center">
+          <h5 class="modal-title fw-bold" id="modalTemplateTitle">Template Preview</h5>
+          <div class="d-flex align-items-center gap-2">
+            <a id="modalUseTemplateBtn" href="/create" class="btn-red btn-sm-custom">
+              <i class="bi bi-check2"></i> Use This Template
+            </a>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+        </div>
+        <div class="modal-body p-0" id="modalTemplateContainer" style="min-height: 500px; max-height: 80vh; overflow-y: auto;">
+          <!-- Preview inserted dynamically -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer mt-5">
+    <div class="container text-center">
+      <p class="mb-2">&copy; 2026 Personal Portfolio Website. Free, Open &amp; Built for Students.</p>
+      <a href="/create" class="btn-red btn-sm-custom">Create Your Portfolio Now</a>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="/js/templates.js"></script>
+  <script src="/js/generator.js"></script>
+  <script src="/js/main.js"></script>
+</body>
+</html>
