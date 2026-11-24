@@ -799,3 +799,378 @@
     break-after: avoid !important;
   }
 }
+
+/* ==========================================================================
+   EXECUTIVE TWO-COLUMN A4 PDF DOCUMENT ARCHITECTURE
+   Strictly adheres to the reference two-column dark-sidebar layout.
+   A4 Dimensions: 210mm x 297mm (794px x 1123px at 96 DPI)
+   ========================================================================== */
+
+.executive-pdf-wrapper {
+  width: 794px;
+  min-height: 1123px;
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  box-sizing: border-box;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1E293B;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Left Sidebar: 36% width, dark charcoal background */
+.executive-pdf-sidebar {
+  width: 280px;
+  min-width: 280px;
+  max-width: 280px;
+  background-color: #1E2228;
+  color: #FFFFFF;
+  padding: 34px 20px 30px 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+}
+
+.executive-pdf-candidate-name {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 1.25;
+  margin-bottom: 5px;
+}
+
+.executive-pdf-candidate-title {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  color: #93C5FD;
+  text-align: center;
+  margin-bottom: 22px;
+}
+
+.executive-pdf-photo-container {
+  width: 136px;
+  height: 136px;
+  border-radius: 50%;
+  border: 3.5px solid #FFFFFF;
+  margin: 0 auto 24px auto;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
+  background-color: #2D333B;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.executive-pdf-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+}
+
+/* Sidebar Section Headers */
+.executive-pdf-sidebar-sec-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  padding-bottom: 7px;
+  margin-top: 18px;
+  margin-bottom: 12px;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+.executive-pdf-sidebar-icon-circle {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #FFFFFF;
+  color: #1E2228;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.executive-pdf-sidebar-icon-circle svg {
+  width: 12px;
+  height: 12px;
+  stroke: #1E2228;
+  fill: none;
+}
+
+.executive-pdf-sidebar-title {
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #FFFFFF;
+}
+
+/* Contact Rows */
+.executive-pdf-contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 9.8px;
+  color: #E2E8F0;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+.executive-pdf-contact-item svg {
+  width: 12px;
+  height: 12px;
+  color: #94A3B8;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.executive-pdf-contact-link {
+  color: #E2E8F0;
+  text-decoration: none;
+}
+
+/* Education in Sidebar */
+.executive-pdf-edu-card {
+  margin-bottom: 11px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.executive-pdf-edu-inst {
+  font-size: 11px;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  line-height: 1.3;
+  margin-bottom: 2px;
+}
+
+.executive-pdf-edu-degree {
+  font-size: 9.5px;
+  color: #CBD5E1;
+  line-height: 1.35;
+  margin-bottom: 2px;
+}
+
+.executive-pdf-edu-meta {
+  font-size: 9px;
+  color: #94A3B8;
+  font-weight: 500;
+}
+
+.executive-pdf-edu-course {
+  font-size: 8.8px;
+  color: #94A3B8;
+  margin-top: 2px;
+  line-height: 1.3;
+}
+
+/* Skills Badges */
+.executive-pdf-skills-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.executive-pdf-skill-badge {
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2.5px 7px;
+  border-radius: 3px;
+  display: inline-block;
+  line-height: 1.3;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+/* Languages List */
+.executive-pdf-lang-item,
+.executive-pdf-hobby-item {
+  font-size: 9.8px;
+  color: #E2E8F0;
+  margin-bottom: 4px;
+  line-height: 1.35;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.executive-pdf-bullet {
+  color: #93C5FD;
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* Right Main Content: 64% width, clean white */
+.executive-pdf-main {
+  width: 514px;
+  flex-grow: 1;
+  background-color: #FFFFFF;
+  color: #1E293B;
+  padding: 34px 28px 30px 28px;
+  box-sizing: border-box;
+}
+
+/* Main Section Headers */
+.executive-pdf-main-sec-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 7px;
+  margin-top: 18px;
+  margin-bottom: 13px;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+.executive-pdf-main-sec-header:first-of-type {
+  margin-top: 0;
+}
+
+.executive-pdf-main-icon-circle {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: #1E2228;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.executive-pdf-main-icon-circle svg {
+  width: 13px;
+  height: 13px;
+  stroke: #FFFFFF;
+  fill: none;
+}
+
+.executive-pdf-main-title {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #1E2228;
+}
+
+/* About Me Paragraph */
+.executive-pdf-about-text {
+  font-size: 9.8px;
+  line-height: 1.6;
+  color: #334155;
+  margin-bottom: 14px;
+  text-align: justify;
+}
+
+/* Experience / Project Entry Cards */
+.executive-pdf-card {
+  margin-bottom: 12px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.executive-pdf-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
+.executive-pdf-card-role {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0F172A;
+  text-transform: uppercase;
+  line-height: 1.3;
+}
+
+.executive-pdf-card-date {
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+.executive-pdf-card-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: #2563EB;
+  margin-bottom: 3px;
+}
+
+.executive-pdf-card-desc {
+  font-size: 9.5px;
+  line-height: 1.52;
+  color: #475569;
+}
+
+/* Project Tech Pills */
+.executive-pdf-tech-pill {
+  background-color: #F1F5F9;
+  color: #1E293B;
+  border: 1px solid #CBD5E1;
+  font-size: 8.5px;
+  font-weight: 600;
+  padding: 1.5px 5.5px;
+  border-radius: 3px;
+  display: inline-block;
+  margin-right: 3px;
+  margin-bottom: 3px;
+  line-height: 1.3;
+}
+
+.executive-pdf-link-btn {
+  color: #2563EB;
+  font-size: 9.2px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-right: 10px;
+}
+
+/* Multi-Page & Print Protection */
+.pdf-page-break-avoid {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+#executive-pdf-print-root {
+  display: none;
+}
+
+@media print {
+  #executive-pdf-print-root {
+    display: block !important;
+    width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  body:has(#executive-pdf-print-root) .a4-viewport-container,
+  body:has(#executive-pdf-print-root) .preview-control-bar,
+  body:has(#executive-pdf-print-root) .site-navbar,
+  body:has(#executive-pdf-print-root) .site-footer,
+  body:has(#executive-pdf-print-root) #emptyState {
+    display: none !important;
+  }
+}
