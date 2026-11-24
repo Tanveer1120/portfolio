@@ -1,6 +1,6 @@
 # Personal Portfolio Website — Student Portfolio Generator
 
-A complete, modern, responsive web application designed to help students, fresh graduates, and career starters create their own professional personal portfolio without needing programming knowledge, registration, or logins.
+A modern, responsive web application designed to help university students, fresh graduates, and career starters generate and export professional personal portfolios without programming knowledge, registration, or login.
 
 ---
 
@@ -8,109 +8,72 @@ A complete, modern, responsive web application designed to help students, fresh 
 
 - **No Registration or Login Required**: Open the app and begin creating immediately.
 - **100% Free**: No subscriptions, paywalls, or gated features.
-- **Instant 1-Click Demo Fill**: Students can click *"Fill Sample Data"* to explore a fully-populated engineering portfolio instantly.
-- **Auto-Saving**: Real-time form persistence using browser `LocalStorage`. Never lose entered progress.
-- **Multi-Step Guided Form**:
-  1. Personal Information & Profile Photo Upload (with base64 offline preview & fallback avatars)
-  2. Dynamic Education Details (multiple entries, degrees, CGPA/percentage)
-  3. Technical Skills Manager (quick-add popular tech pills + custom skill level tags)
-  4. Dynamic Projects Showcase (live links, GitHub repository links, tech tags)
-  5. Certifications & Achievements (issuing organization, year, verification links)
-  6. Work Experience & Internships (optional for students)
-  7. Social Media Links & Template Selection
-- **4 Distinct Professional Templates**:
-  1. **Minimal Professional**: Clean white canvas, crisp black typography, structured editorial grid.
-  2. **Modern Dark**: Obsidian dark theme (`#0b0c10`), crimson neon accents (`#ff3344`), glass cards.
-  3. **Creative Student**: Vibrant gradient headers, curved pill tags, playful yet polished.
-  4. **Developer Portfolio**: Terminal and IDE inspired theme, Fira Code font, Git commit showcase.
-- **Live Preview & In-Place Template Switcher**: Preview the generated portfolio and switch templates on the fly without re-entering data.
-- **Export Options**:
-  - **Download as PDF**: Clean vector-quality multi-page PDF generation via `html2pdf.js`.
-  - **Print Friendly**: Optimized `@media print` rules.
-  - **Standalone HTML Export**: Download a self-contained `.html` file ready to open in any browser or upload to GitHub Pages / Netlify.
-  - **JSON Data Backup**: Export and back up your portfolio data.
+- **Academic Category Selection**: Tailor-made for Computer Science/IT, Engineering, BCA/MCA, BBA/MBA, BCom/MCom, BSc/MSc, BA/MA, and other degrees.
+- **Corporate Minimal Design System**: Clean corporate palette (Primary Navy `#14243A`, Professional Blue `#2563EB`, Light Background `#F5F7FA`, Main Text `#263238`), crisp typography (Inter, Roboto), subtle shadows, and zero emojis/childish graphics.
+- **Mandatory Back Button Navigation**:
+  - Visible on the bottom-left of every single step.
+  - Paired with Continue on the bottom-right.
+  - Zero data loss during backward and forward navigation.
+  - Full browser History API support.
+- **Complete 11 Student Portfolio Sections**:
+  1. Personal Information & Headshot Photo Upload
+  2. Career Objective & Aspirations
+  3. Education Details (Multiple degrees, CGPA, coursework)
+  4. Technical & Professional Skills (Categorized for technical and non-technical tracks)
+  5. Projects Showcase (Problem statements, solutions, contribution, repo and demo URLs)
+  6. Internships & Professional Experience (Optional for freshers)
+  7. Certifications & Credentials
+  8. Academic & Professional Achievements
+  9. Workshops & Technical Training
+  10. Extracurricular Activities & Leadership
+  11. Additional Information (Languages, hobbies, publications, references)
+- **5 Genuine Professional Templates**:
+  1. **Corporate Professional**: Navy headings, structured sections, placement drive standard.
+  2. **Modern Minimal**: Editorial layout with generous whitespace and subtle dividers.
+  3. **Developer Portfolio**: Code-centric stack layout with GitHub repository and live deployment links.
+  4. **Academic Portfolio**: Education first, detailed coursework, honors, and publications.
+  5. **Professional Creative**: Two-column executive layout with informative sidebar.
+- **Critical: Multi-Page A4 PDF Generation**:
+  - Calibrated to exact A4 portrait dimensions (210mm x 297mm).
+  - 15mm standard margins with vector-quality text.
+  - Page-break protection on cards and sections.
+  - Multi-page pagination (1 page for short, 2 pages for medium, 3+ for long).
+  - Native print formatting with `@media print`.
 
 ---
 
 ## 🛠️ Technology Stack
 
-- **Frontend**: HTML5, CSS3, Modern JavaScript (ES6+), Bootstrap 5.3.3, Bootstrap Icons, Google Fonts (Outfit, Inter, Plus Jakarta Sans, Fira Code), `html2pdf.js`.
-- **Backend**: Node.js, Express.js, CORS.
-- **Storage**: Browser `LocalStorage` (zero database dependencies needed for the initial version).
+- **Frontend**: HTML5, CSS3, Modern JavaScript (ES6+), Bootstrap 5.3.3, Clean SVG Icons (Lucide-style), Google Fonts (Inter, Roboto Mono), `html2pdf.js`.
+- **Backend**: Node.js (v20 LTS), Express.js, CORS.
+- **Storage**: Client-side `LocalStorage`.
 
 ---
 
-## 📂 Project Structure
+## 🚀 How to Run Locally
 
-```
-personal-portfolio-website/
-├── public/
-│   ├── css/
-│   │   ├── style.css         # Global SaaS styling, Black/White/Red theme, components
-│   │   ├── form.css          # Multi-step wizard, repeater cards, upload preview
-│   │   └── templates.css     # 4 distinct portfolio template CSS designs & print rules
-│   ├── js/
-│   │   ├── main.js           # Homepage mockup interactions, template preview modal
-│   │   ├── form.js           # Multi-step controller, repeaters, validation, draft saver
-│   │   ├── generator.js      # Core portfolio generator, PDF export, HTML exporter
-│   │   └── templates.js      # Template definitions, layout dispatchers, XSS escaping
-│   ├── images/               # Project images and assets
-│   └── uploads/
-├── views/
-│   ├── index.html            # Homepage: Hero, Features, How It Works, Templates showcase
-│   ├── create.html           # 7-Step portfolio creation wizard
-│   ├── templates.html        # Templates showcase & live preview gallery
-│   └── preview.html          # Portfolio viewer, template switcher & PDF download
-├── server.js                 # Express server & demo data API
-├── package.json              # Project dependencies & scripts
-└── README.md                 # Documentation
-```
-
----
-
-## 🚀 How to Run the Project Locally
-
-### Prerequisites
-- Node.js (v18 or higher recommended)
-- npm (Node Package Manager)
-
-### Installation Steps
-
-1. **Clone or navigate to the project directory**:
-   ```bash
-   cd "personal-portfolio-website"
-   ```
-
-2. **Install dependencies**:
+1. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. **Start the application**:
+2. **Start the application**:
    ```bash
    npm start
    ```
 
-4. **Open in your browser**:
-   Navigate to:
+3. **Run the automated test suite**:
+   ```bash
+   npm test
    ```
-   http://localhost:3000
-   ```
 
----
-
-## 📄 Available Routes
-
-| Route | Description |
-|---|---|
-| `http://localhost:3000/` | Homepage with hero mockup, features, template cards, and FAQ |
-| `http://localhost:3000/create` | 7-Step Portfolio Creation Wizard |
-| `http://localhost:3000/templates` | Interactive Templates Showcase & Live Preview Modal |
-| `http://localhost:3000/preview` | Live Generated Portfolio with PDF download & Template Switcher |
-| `http://localhost:3000/api/demo-data` | API endpoint serving sample student demo profile |
-| `http://localhost:3000/api/health` | Server health check endpoint |
+4. **Open in browser**:
+   - Homepage: `http://localhost:3000/`
+   - Form Builder: `http://localhost:3000/create`
+   - Template Catalog: `http://localhost:3000/templates`
+   - Live Preview: `http://localhost:3000/preview`
 
 ---
 
 ## 📝 License
-MIT License. Free to use for students, educators, and developers worldwide.
+MIT License. Free and open for students and educators worldwide.

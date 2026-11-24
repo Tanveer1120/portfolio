@@ -1,137 +1,161 @@
 /**
- * Portfolio Form & Wizard Controller
- * Multi-step wizard, dynamic repeater fields, validation, and LocalStorage draft saving.
+ * Student Portfolio Form Controller
+ * 12-Step Architecture with Category Selection, Dynamic Repeaters,
+ * Mandatory Back Button Navigation System, and Data Loss Prevention.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Wizard State
-  let currentStep = 1;
-  const totalSteps = 7;
-  let skillsList = [];
-  let avatarBase64 = '';
+  // Wizard Steps (0: Category Selection, 1-11: Sections, 12: Template Selection)
+  let currentStep = 0;
+  const totalSteps = 12;
+  let selectedCategory = 'Computer Science / IT';
+  let selectedTemplate = 'corporate-professional';
+  let profilePhotoBase64 = '';
+
+  // Step Labels for Header Pill List
+  const stepTitles = [
+    'Category',
+    'Personal Info',
+    'Career Objective',
+    'Education',
+    'Skills',
+    'Projects',
+    'Experience',
+    'Certifications',
+    'Achievements',
+    'Workshops',
+    'Extracurricular',
+    'Additional Info',
+    'Template'
+  ];
 
   // DOM Elements
   const stepPanels = document.querySelectorAll('.form-step-panel');
-  const stepItems = document.querySelectorAll('.wizard-step-item');
-  const progressBarFill = document.querySelector('.wizard-progress-bar-fill');
-  const prevBtn = document.getElementById('prevBtn');
-  const nextBtn = document.getElementById('nextBtn');
-  const generateBtn = document.getElementById('generateBtn');
-  const autoSaveStatus = document.getElementById('autoSaveStatus');
+  const stepperProgressFill = document.getElementById('stepperProgressFill');
+  const stepperStepIndicator = document.getElementById('stepperStepIndicator');
+  const stepperCategoryPill = document.getElementById('stepperCategoryPill');
+  const stepperPillsList = document.getElementById('stepperPillsList');
+  const autoSaveBadge = document.getElementById('autoSaveBadge');
 
-  // Containers for repeaters
+  // Containers for Repeaters
   const educationContainer = document.getElementById('educationContainer');
   const projectsContainer = document.getElementById('projectsContainer');
-  const certsContainer = document.getElementById('certsContainer');
   const experienceContainer = document.getElementById('experienceContainer');
-  const skillsGrid = document.getElementById('skillsGrid');
+  const certsContainer = document.getElementById('certsContainer');
+  const achievementsContainer = document.getElementById('achievementsContainer');
+  const workshopsContainer = document.getElementById('workshopsContainer');
+  const extracurricularsContainer = document.getElementById('extracurricularsContainer');
 
-  // Profile Photo Elements
-  const photoInput = document.getElementById('photoInput');
-  const photoPreview = document.getElementById('photoPreview');
-  const photoPlaceholder = document.getElementById('photoPlaceholder');
+  // Photo Upload Elements
+  const photoFileInput = document.getElementById('photoFileInput');
+  const photoPreviewImg = document.getElementById('photoPreviewImg');
+  const photoPlaceholderSvg = document.getElementById('photoPlaceholderSvg');
   const removePhotoBtn = document.getElementById('removePhotoBtn');
 
-  // Quick Action Buttons
-  const fillDemoBtn = document.getElementById('fillDemoBtn');
-  const clearFormBtn = document.getElementById('clearFormBtn');
+  // Category Cards
+  const categoryCards = document.querySelectorAll('.category-choice-card');
 
-  // Template radios
-  const templateCards = document.querySelectorAll('.template-radio-card');
+  // Template Cards
+  const templateCards = document.querySelectorAll('.template-picker-card');
 
-  // ==========================================
-  // 1. STEP NAVIGATION & PROGRESS
-  // ==========================================
-  function updateWizardUI() {
-    // Show active panel
+  // =========================================================================
+  // 1. STEP NAVIGATION & UI CONTROLLER
+  // =========================================================================
+  function renderStep(stepIndex, pushHistory = true) {
+    currentStep = stepIndex;
+
+    // Show active step panel
     stepPanels.forEach(panel => {
-      const step = parseInt(panel.getAttribute('data-step'), 10);
-      if (step === currentStep) {
+      const pStep = parseInt(panel.getAttribute('data-step'), 10);
+      if (pStep === currentStep) {
         panel.classList.add('active');
       } else {
         panel.classList.remove('active');
       }
     });
 
-    // Update step circles & labels
-    stepItems.forEach(item => {
-      const step = parseInt(item.getAttribute('data-step'), 10);
-      item.classList.remove('active', 'completed');
-      if (step === currentStep) {
-        item.classList.add('active');
-      } else if (step < currentStep) {
-        item.classList.add('completed');
-      }
-    });
-
-    // Progress bar fill percentage
-    if (progressBarFill) {
-      const percent = ((currentStep - 1) / (totalSteps - 1)) * 100;
-      progressBarFill.style.width = `${percent}%`;
+    // Update progress bar
+    if (stepperProgressFill) {
+      const pct = Math.round((currentStep / totalSteps) * 100);
+      stepperProgressFill.style.width = `${pct}%`;
     }
 
-    // Toggle button visibility
-    if (prevBtn) {
-      prevBtn.style.visibility = currentStep === 1 ? 'hidden' : 'visible';
+    if (stepperStepIndicator) {
+      stepperStepIndicator.textContent = `Step ${currentStep} of ${totalSteps}: ${stepTitles[currentStep] || ''}`;
     }
 
-    if (currentStep === totalSteps) {
-      if (nextBtn) nextBtn.style.display = 'none';
-      if (generateBtn) generateBtn.style.display = 'inline-flex';
-    } else {
-      if (nextBtn) nextBtn.style.display = 'inline-flex';
-      if (generateBtn) generateBtn.style.display = 'none';
+    if (stepperCategoryPill) {
+      stepperCategoryPill.textContent = selectedCategory;
     }
 
-    // Scroll smoothly to top of form
-    const formTop = document.querySelector('.wizard-progress-card');
-    if (formTop) {
-      formTop.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    // Update pill buttons
+    renderStepperPills();
+
+    // Scroll to top of builder
+    const topBar = document.querySelector('.builder-topbar');
+    if (topBar) {
+      topBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // Browser History API integration for reliable Back/Forward navigation
+    if (pushHistory) {
+      history.pushState({ step: currentStep }, `Step ${currentStep}`, `?step=${currentStep}`);
     }
   }
 
-  // Step item click to navigate (only to completed or current steps)
-  stepItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const targetStep = parseInt(item.getAttribute('data-step'), 10);
-      if (targetStep < currentStep || validateStep(currentStep)) {
-        currentStep = targetStep;
-        updateWizardUI();
-      }
+  function renderStepperPills() {
+    if (!stepperPillsList) return;
+    stepperPillsList.innerHTML = '';
+    stepTitles.forEach((title, idx) => {
+      const li = document.createElement('li');
+      li.className = `stepper-pill-item ${idx === currentStep ? 'active' : (idx < currentStep ? 'completed' : '')}`;
+      li.innerHTML = `<span>${idx}.</span> ${title}`;
+      li.addEventListener('click', () => {
+        if (idx < currentStep || validateCurrentStep()) {
+          saveDraft();
+          renderStep(idx);
+        }
+      });
+      stepperPillsList.appendChild(li);
     });
+  }
+
+  // Handle Browser Back and Forward buttons (Popstate)
+  window.addEventListener('popstate', (e) => {
+    if (e.state && typeof e.state.step === 'number') {
+      renderStep(e.state.step, false);
+    }
   });
 
-  // Next & Previous buttons
-  if (nextBtn) {
-    nextBtn.addEventListener('click', () => {
-      if (validateStep(currentStep)) {
-        if (currentStep < totalSteps) {
-          currentStep++;
-          updateWizardUI();
-          saveDraftToStorage();
-        }
+  // Global Next / Continue Handler
+  window.navigateNext = function() {
+    if (validateCurrentStep()) {
+      saveDraft();
+      if (currentStep < totalSteps) {
+        renderStep(currentStep + 1);
       }
-    });
-  }
+    }
+  };
 
-  if (prevBtn) {
-    prevBtn.addEventListener('click', () => {
-      if (currentStep > 1) {
-        currentStep--;
-        updateWizardUI();
-      }
-    });
-  }
+  // Global Back Handler
+  window.navigateBack = function() {
+    saveDraft();
+    if (currentStep > 0) {
+      renderStep(currentStep - 1);
+    } else {
+      window.location.href = '/';
+    }
+  };
 
-  // ==========================================
+  // =========================================================================
   // 2. VALIDATION
-  // ==========================================
-  function validateStep(step) {
+  // =========================================================================
+  function validateCurrentStep() {
     let isValid = true;
 
-    if (step === 1) {
+    // Step 1: Personal Information Validation
+    if (currentStep === 1) {
       const fullName = document.getElementById('fullName');
-      const title = document.getElementById('title');
       const email = document.getElementById('email');
 
       if (!fullName || !fullName.value.trim()) {
@@ -139,13 +163,6 @@ document.addEventListener('DOMContentLoaded', () => {
         isValid = false;
       } else {
         markValid(fullName);
-      }
-
-      if (!title || !title.value.trim()) {
-        markInvalid(title, 'Please enter your professional title / degree.');
-        isValid = false;
-      } else {
-        markValid(title);
       }
 
       if (!email || !email.value.trim() || !validateEmail(email.value.trim())) {
@@ -160,15 +177,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function markInvalid(input, msg) {
+    if (!input) return;
     input.classList.add('is-invalid');
-    let errorElem = input.nextElementSibling;
-    if (errorElem && errorElem.classList.contains('field-error-msg')) {
-      errorElem.textContent = msg;
+    const err = input.nextElementSibling;
+    if (err && err.classList.contains('field-error-msg')) {
+      err.textContent = msg;
     }
     input.focus();
   }
 
   function markValid(input) {
+    if (!input) return;
     input.classList.remove('is-invalid');
   }
 
@@ -176,31 +195,35 @@ document.addEventListener('DOMContentLoaded', () => {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
-  // Clear validation error on input
-  document.querySelectorAll('.form-control').forEach(input => {
-    input.addEventListener('input', () => {
-      input.classList.remove('is-invalid');
-      saveDraftToStorage();
+  // =========================================================================
+  // 3. CATEGORY SELECTION (STEP 0)
+  // =========================================================================
+  categoryCards.forEach(card => {
+    card.addEventListener('click', () => {
+      categoryCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      selectedCategory = card.getAttribute('data-category') || 'General';
+      if (stepperCategoryPill) stepperCategoryPill.textContent = selectedCategory;
+      saveDraft();
     });
   });
 
-  // ==========================================
-  // 3. PROFILE PHOTO HANDLER
-  // ==========================================
-  if (photoInput) {
-    photoInput.addEventListener('change', (e) => {
+  // =========================================================================
+  // 4. PROFILE PHOTO UPLOADER
+  // =========================================================================
+  if (photoFileInput) {
+    photoFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
       if (file) {
         if (file.size > 5 * 1024 * 1024) {
-          alert('Image size exceeds 5MB. Please choose a smaller image.');
+          alert('Image size exceeds 5MB. Please choose a smaller photo.');
           return;
         }
-
         const reader = new FileReader();
-        reader.onload = function(event) {
-          avatarBase64 = event.target.result;
-          displayAvatar(avatarBase64);
-          saveDraftToStorage();
+        reader.onload = function(evt) {
+          profilePhotoBase64 = evt.target.result;
+          displayAvatar(profilePhotoBase64);
+          saveDraft();
         };
         reader.readAsDataURL(file);
       }
@@ -208,343 +231,358 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function displayAvatar(src) {
-    if (photoPreview && photoPlaceholder) {
-      photoPreview.src = src;
-      photoPreview.style.display = 'block';
-      photoPlaceholder.style.display = 'none';
+    if (photoPreviewImg && photoPlaceholderSvg) {
+      photoPreviewImg.src = src;
+      photoPreviewImg.style.display = 'block';
+      photoPlaceholderSvg.style.display = 'none';
       if (removePhotoBtn) removePhotoBtn.style.display = 'inline-flex';
     }
   }
 
   if (removePhotoBtn) {
     removePhotoBtn.addEventListener('click', () => {
-      avatarBase64 = '';
-      if (photoInput) photoInput.value = '';
-      if (photoPreview) {
-        photoPreview.src = '';
-        photoPreview.style.display = 'none';
+      profilePhotoBase64 = '';
+      if (photoFileInput) photoFileInput.value = '';
+      if (photoPreviewImg) {
+        photoPreviewImg.src = '';
+        photoPreviewImg.style.display = 'none';
       }
-      if (photoPlaceholder) photoPlaceholder.style.display = 'block';
+      if (photoPlaceholderSvg) photoPlaceholderSvg.style.display = 'block';
       removePhotoBtn.style.display = 'none';
-      saveDraftToStorage();
+      saveDraft();
     });
   }
 
-  // ==========================================
-  // 4. EDUCATION REPEATER
-  // ==========================================
+  // =========================================================================
+  // 5. DYNAMIC REPEATERS (EDUCATION, PROJECTS, EXPERIENCE, ETC.)
+  // =========================================================================
+
+  // Education Repeater
   window.addEducationEntry = function(data = {}) {
     const id = Date.now() + Math.random().toString(36).substring(2, 6);
     const div = document.createElement('div');
-    div.className = 'repeater-card';
+    div.className = 'repeater-card-item';
     div.id = `edu-${id}`;
     div.innerHTML = `
-      <div class="repeater-header">
-        <div class="repeater-title"><i class="bi bi-mortarboard"></i> Education Entry</div>
-        <button type="button" class="btn-remove-entry" onclick="removeEducationEntry('${id}')">
-          <i class="bi bi-trash"></i> Remove
-        </button>
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          Education Entry
+        </span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('edu-${id}')">Remove</button>
       </div>
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">Institution / College Name <span class="required">*</span></label>
-          <input type="text" class="form-control edu-institution" placeholder="e.g. Stanford University" value="${data.institution || ''}" required>
+          <input type="text" class="form-control edu-institution" placeholder="e.g. University of California, Berkeley" value="${PortfolioTemplates.escapeHtml(data.institution || '')}" required>
         </div>
         <div class="col-md-6">
           <label class="form-label">Degree / Course <span class="required">*</span></label>
-          <input type="text" class="form-control edu-degree" placeholder="e.g. Bachelor of Technology" value="${data.degree || ''}" required>
+          <input type="text" class="form-control edu-degree" placeholder="e.g. Bachelor of Science in Computer Science" value="${PortfolioTemplates.escapeHtml(data.degree || '')}" required>
         </div>
         <div class="col-md-4">
           <label class="form-label">Department / Branch</label>
-          <input type="text" class="form-control edu-department" placeholder="e.g. Computer Science" value="${data.department || ''}">
+          <input type="text" class="form-control edu-department" placeholder="e.g. Computer Science & Engineering" value="${PortfolioTemplates.escapeHtml(data.department || '')}">
         </div>
-        <div class="col-md-3">
-          <label class="form-label">Start Year</label>
-          <input type="text" class="form-control edu-start" placeholder="e.g. 2022" value="${data.startYear || ''}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Graduation Year</label>
-          <input type="text" class="form-control edu-grad" placeholder="e.g. 2026" value="${data.gradYear || ''}">
+        <div class="col-md-4">
+          <label class="form-label">University / Board Name</label>
+          <input type="text" class="form-control edu-university" placeholder="e.g. State University System" value="${PortfolioTemplates.escapeHtml(data.universityName || '')}">
         </div>
         <div class="col-md-2">
-          <label class="form-label">CGPA / %</label>
-          <input type="text" class="form-control edu-score" placeholder="e.g. 3.9 / 92%" value="${data.score || ''}">
+          <label class="form-label">Start Year</label>
+          <input type="text" class="form-control edu-start" placeholder="e.g. 2022" value="${PortfolioTemplates.escapeHtml(data.startYear || '')}">
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Grad Year</label>
+          <input type="text" class="form-control edu-grad" placeholder="e.g. 2026" value="${PortfolioTemplates.escapeHtml(data.gradYear || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">CGPA / Percentage</label>
+          <input type="text" class="form-control edu-score" placeholder="e.g. 3.92 / 4.00 or 92%" value="${PortfolioTemplates.escapeHtml(data.score || '')}">
+        </div>
+        <div class="col-md-8">
+          <label class="form-label">Relevant Coursework</label>
+          <input type="text" class="form-control edu-coursework" placeholder="e.g. Data Structures, Algorithms, DBMS, Operating Systems" value="${PortfolioTemplates.escapeHtml(data.coursework || '')}">
         </div>
       </div>
     `;
     educationContainer.appendChild(div);
-
-    div.querySelectorAll('input').forEach(input => {
-      input.addEventListener('input', saveDraftToStorage);
-    });
+    attachInputListeners(div);
   };
 
-  window.removeEducationEntry = function(id) {
-    const elem = document.getElementById(`edu-${id}`);
-    if (elem) {
-      elem.remove();
-      saveDraftToStorage();
-    }
-  };
-
-  const addEduBtn = document.getElementById('addEduBtn');
-  if (addEduBtn) {
-    addEduBtn.addEventListener('click', () => window.addEducationEntry());
-  }
-
-  // ==========================================
-  // 5. TECHNICAL SKILLS MANAGER
-  // ==========================================
-  const customSkillName = document.getElementById('customSkillName');
-  const customSkillLevel = document.getElementById('customSkillLevel');
-  const addSkillBtn = document.getElementById('addSkillBtn');
-
-  function renderSkills() {
-    if (!skillsGrid) return;
-    skillsGrid.innerHTML = '';
-    skillsList.forEach((skill, index) => {
-      const item = document.createElement('div');
-      item.className = 'skill-tag-item';
-      item.innerHTML = `
-        <div class="skill-tag-info">
-          <i class="bi bi-code-slash" style="color:var(--accent-red);"></i>
-          <span class="skill-tag-name">${PortfolioTemplates.escapeHtml(skill.name)}</span>
-          ${skill.level ? `<span class="skill-tag-level">${PortfolioTemplates.escapeHtml(skill.level)}</span>` : ''}
-        </div>
-        <button type="button" class="btn-delete-skill" onclick="removeSkill(${index})" title="Remove skill">
-          <i class="bi bi-x-lg"></i>
-        </button>
-      `;
-      skillsGrid.appendChild(item);
-    });
-  }
-
-  window.addSkill = function(name, level = 'Proficient', category = 'General') {
-    if (!name || !name.trim()) return;
-    const trimmed = name.trim();
-    // Avoid duplicate names
-    if (!skillsList.some(s => s.name.toLowerCase() === trimmed.toLowerCase())) {
-      skillsList.push({ name: trimmed, level, category });
-      renderSkills();
-      saveDraftToStorage();
-    }
-  };
-
-  window.removeSkill = function(index) {
-    skillsList.splice(index, 1);
-    renderSkills();
-    saveDraftToStorage();
-  };
-
-  if (addSkillBtn && customSkillName) {
-    addSkillBtn.addEventListener('click', () => {
-      const name = customSkillName.value.trim();
-      const level = customSkillLevel ? customSkillLevel.value : 'Proficient';
-      if (name) {
-        window.addSkill(name, level);
-        customSkillName.value = '';
-        customSkillName.focus();
-      }
-    });
-
-    customSkillName.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        addSkillBtn.click();
-      }
-    });
-  }
-
-  // Quick skill pills
-  document.querySelectorAll('.quick-skill-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const skillName = btn.getAttribute('data-skill');
-      if (skillName) {
-        window.addSkill(skillName, 'Proficient');
-      }
-    });
-  });
-
-  // ==========================================
-  // 6. PROJECTS REPEATER
-  // ==========================================
+  // Projects Repeater
   window.addProjectEntry = function(data = {}) {
     const id = Date.now() + Math.random().toString(36).substring(2, 6);
     const div = document.createElement('div');
-    div.className = 'repeater-card';
+    div.className = 'repeater-card-item';
     div.id = `proj-${id}`;
     div.innerHTML = `
-      <div class="repeater-header">
-        <div class="repeater-title"><i class="bi bi-folder-fill" style="color:var(--accent-red);"></i> Project Details</div>
-        <button type="button" class="btn-remove-entry" onclick="removeProjectEntry('${id}')">
-          <i class="bi bi-trash"></i> Remove
-        </button>
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+          Project Details
+        </span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('proj-${id}')">Remove</button>
       </div>
       <div class="row g-3">
         <div class="col-md-6">
           <label class="form-label">Project Name <span class="required">*</span></label>
-          <input type="text" class="form-control proj-name" placeholder="e.g. AI-Powered Campus Assistant" value="${data.name || ''}" required>
+          <input type="text" class="form-control proj-name" placeholder="e.g. Campus Peer Collaboration Portal" value="${PortfolioTemplates.escapeHtml(data.name || '')}" required>
         </div>
         <div class="col-md-6">
           <label class="form-label">Technologies Used</label>
-          <input type="text" class="form-control proj-tech" placeholder="e.g. React, Node.js, Express, MongoDB" value="${data.technologies || ''}">
+          <input type="text" class="form-control proj-tech" placeholder="e.g. React, Node.js, PostgreSQL, Docker" value="${PortfolioTemplates.escapeHtml(data.technologies || '')}">
         </div>
         <div class="col-12">
-          <label class="form-label">Project Description <span class="required">*</span></label>
-          <textarea class="form-control proj-desc" rows="3" placeholder="Briefly explain what the project does, key features, and your contribution...">${data.description || ''}</textarea>
+          <label class="form-label">Project Description</label>
+          <textarea class="form-control proj-desc" rows="2" placeholder="Brief high-level summary of what the project does...">${PortfolioTemplates.escapeHtml(data.description || '')}</textarea>
         </div>
         <div class="col-md-6">
-          <label class="form-label">Live Project URL (optional)</label>
-          <div class="input-icon-group">
-            <i class="bi bi-link-45deg"></i>
-            <input type="url" class="form-control proj-live" placeholder="https://myproject.com" value="${data.projectUrl || ''}">
-          </div>
+          <label class="form-label">Problem Statement</label>
+          <input type="text" class="form-control proj-problem" placeholder="What core academic or practical problem was addressed?" value="${PortfolioTemplates.escapeHtml(data.problemStatement || '')}">
         </div>
         <div class="col-md-6">
-          <label class="form-label">GitHub Repository URL (optional)</label>
-          <div class="input-icon-group">
-            <i class="bi bi-github"></i>
-            <input type="url" class="form-control proj-github" placeholder="https://github.com/username/project" value="${data.githubUrl || ''}">
-          </div>
+          <label class="form-label">Solution &amp; Engineering Outcome</label>
+          <input type="text" class="form-control proj-solution" placeholder="How did your solution solve the problem?" value="${PortfolioTemplates.escapeHtml(data.solution || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Student's Contribution</label>
+          <input type="text" class="form-control proj-contrib" placeholder="e.g. Architected database schemas and designed API routes" value="${PortfolioTemplates.escapeHtml(data.contribution || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Project Duration</label>
+          <input type="text" class="form-control proj-duration" placeholder="e.g. 3 Months (Spring 2024)" value="${PortfolioTemplates.escapeHtml(data.duration || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">GitHub Repository URL</label>
+          <input type="url" class="form-control proj-github" placeholder="https://github.com/username/project" value="${PortfolioTemplates.escapeHtml(data.githubUrl || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Live Demo / Deployment URL</label>
+          <input type="url" class="form-control proj-live" placeholder="https://project-demo.com" value="${PortfolioTemplates.escapeHtml(data.liveUrl || '')}">
         </div>
       </div>
     `;
     projectsContainer.appendChild(div);
-
-    div.querySelectorAll('input, textarea').forEach(input => {
-      input.addEventListener('input', saveDraftToStorage);
-    });
+    attachInputListeners(div);
   };
 
-  window.removeProjectEntry = function(id) {
-    const elem = document.getElementById(`proj-${id}`);
-    if (elem) {
-      elem.remove();
-      saveDraftToStorage();
-    }
-  };
-
-  const addProjBtn = document.getElementById('addProjBtn');
-  if (addProjBtn) {
-    addProjBtn.addEventListener('click', () => window.addProjectEntry());
-  }
-
-  // ==========================================
-  // 7. CERTIFICATIONS REPEATER
-  // ==========================================
-  window.addCertEntry = function(data = {}) {
+  // Experience Repeater (Optional for freshers)
+  window.addExperienceEntry = function(data = {}) {
     const id = Date.now() + Math.random().toString(36).substring(2, 6);
     const div = document.createElement('div');
-    div.className = 'repeater-card';
-    div.id = `cert-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header">
-        <div class="repeater-title"><i class="bi bi-patch-check-fill" style="color:#10b981;"></i> Certificate Entry</div>
-        <button type="button" class="btn-remove-entry" onclick="removeCertEntry('${id}')">
-          <i class="bi bi-trash"></i> Remove
-        </button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Certificate / Honor Name</label>
-          <input type="text" class="form-control cert-name" placeholder="e.g. AWS Certified Cloud Practitioner" value="${data.name || ''}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Issuing Organization</label>
-          <input type="text" class="form-control cert-org" placeholder="e.g. Amazon Web Services / Coursera" value="${data.organization || ''}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Year of Issue</label>
-          <input type="text" class="form-control cert-year" placeholder="e.g. 2024" value="${data.year || ''}">
-        </div>
-        <div class="col-md-8">
-          <label class="form-label">Credential Verification URL (optional)</label>
-          <div class="input-icon-group">
-            <i class="bi bi-patch-check"></i>
-            <input type="url" class="form-control cert-url" placeholder="https://credential-verify.org/id" value="${data.url || ''}">
-          </div>
-        </div>
-      </div>
-    `;
-    certsContainer.appendChild(div);
-
-    div.querySelectorAll('input').forEach(input => {
-      input.addEventListener('input', saveDraftToStorage);
-    });
-  };
-
-  window.removeCertEntry = function(id) {
-    const elem = document.getElementById(`cert-${id}`);
-    if (elem) {
-      elem.remove();
-      saveDraftToStorage();
-    }
-  };
-
-  const addCertBtn = document.getElementById('addCertBtn');
-  if (addCertBtn) {
-    addCertBtn.addEventListener('click', () => window.addCertEntry());
-  }
-
-  // ==========================================
-  // 8. EXPERIENCE REPEATER (OPTIONAL)
-  // ==========================================
-  window.addExpEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card';
+    div.className = 'repeater-card-item';
     div.id = `exp-${id}`;
     div.innerHTML = `
-      <div class="repeater-header">
-        <div class="repeater-title"><i class="bi bi-briefcase-fill" style="color:#58a6ff;"></i> Experience / Internship</div>
-        <button type="button" class="btn-remove-entry" onclick="removeExpEntry('${id}')">
-          <i class="bi bi-trash"></i> Remove
-        </button>
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          Experience / Internship Entry
+        </span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('exp-${id}')">Remove</button>
       </div>
       <div class="row g-3">
         <div class="col-md-6">
-          <label class="form-label">Company / Organization Name</label>
-          <input type="text" class="form-control exp-company" placeholder="e.g. Google Developers Student Club" value="${data.company || ''}">
+          <label class="form-label">Organization / Company Name</label>
+          <input type="text" class="form-control exp-org" placeholder="e.g. Vanguard Systems / University Lab" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
         </div>
         <div class="col-md-6">
           <label class="form-label">Position / Role</label>
-          <input type="text" class="form-control exp-pos" placeholder="e.g. Web Development Lead / Intern" value="${data.position || ''}">
+          <input type="text" class="form-control exp-pos" placeholder="e.g. Software Development Intern / Teaching Assistant" value="${PortfolioTemplates.escapeHtml(data.position || '')}">
         </div>
-        <div class="col-md-12">
-          <label class="form-label">Duration / Period</label>
-          <input type="text" class="form-control exp-duration" placeholder="e.g. May 2024 - August 2024 (3 months)" value="${data.duration || ''}">
+        <div class="col-md-4">
+          <label class="form-label">Experience Type</label>
+          <select class="form-select exp-type">
+            <option value="Internship" ${data.experienceType === 'Internship' ? 'selected' : ''}>Internship</option>
+            <option value="Part-Time / Full-Time" ${data.experienceType === 'Part-Time / Full-Time' ? 'selected' : ''}>Part-Time / Full-Time</option>
+            <option value="Teaching Assistantship" ${data.experienceType === 'Teaching Assistantship' ? 'selected' : ''}>Teaching Assistantship</option>
+            <option value="Research Assistantship" ${data.experienceType === 'Research Assistantship' ? 'selected' : ''}>Research Assistantship</option>
+            <option value="Freelance Project" ${data.experienceType === 'Freelance Project' ? 'selected' : ''}>Freelance Project</option>
+          </select>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Start Date</label>
+          <input type="text" class="form-control exp-start" placeholder="e.g. June 2024" value="${PortfolioTemplates.escapeHtml(data.startDate || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">End Date</label>
+          <input type="text" class="form-control exp-end" placeholder="e.g. August 2024 or Present" value="${PortfolioTemplates.escapeHtml(data.endDate || '')}">
         </div>
         <div class="col-12">
-          <label class="form-label">Description & Contributions</label>
-          <textarea class="form-control exp-desc" rows="3" placeholder="Describe responsibilities, achievements, and impact...">${data.description || ''}</textarea>
+          <label class="form-label">Core Responsibilities</label>
+          <textarea class="form-control exp-resp" rows="2" placeholder="Detail tasks, engineering responsibilities, and methodologies used...">${PortfolioTemplates.escapeHtml(data.responsibilities || '')}</textarea>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Key Achievements / Metrics</label>
+          <input type="text" class="form-control exp-achieve" placeholder="e.g. Boosted portal loading speed by 25% across 1,000 daily users" value="${PortfolioTemplates.escapeHtml(data.achievements || '')}">
         </div>
       </div>
     `;
     experienceContainer.appendChild(div);
-
-    div.querySelectorAll('input, textarea').forEach(input => {
-      input.addEventListener('input', saveDraftToStorage);
-    });
+    attachInputListeners(div);
   };
 
-  window.removeExpEntry = function(id) {
-    const elem = document.getElementById(`exp-${id}`);
+  // Certifications Repeater
+  window.addCertEntry = function(data = {}) {
+    const id = Date.now() + Math.random().toString(36).substring(2, 6);
+    const div = document.createElement('div');
+    div.className = 'repeater-card-item';
+    div.id = `cert-${id}`;
+    div.innerHTML = `
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">Certification</span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('cert-${id}')">Remove</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Certification Name</label>
+          <input type="text" class="form-control cert-name" placeholder="e.g. AWS Certified Cloud Practitioner" value="${PortfolioTemplates.escapeHtml(data.name || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Issuing Organization</label>
+          <input type="text" class="form-control cert-org" placeholder="e.g. Amazon Web Services / Meta" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Issue Date</label>
+          <input type="text" class="form-control cert-date" placeholder="e.g. July 2024" value="${PortfolioTemplates.escapeHtml(data.issueDate || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Credential ID</label>
+          <input type="text" class="form-control cert-id" placeholder="e.g. AWS-CCP-123456" value="${PortfolioTemplates.escapeHtml(data.credentialId || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Credential URL</label>
+          <input type="url" class="form-control cert-url" placeholder="https://verify.certificate.org" value="${PortfolioTemplates.escapeHtml(data.credentialUrl || '')}">
+        </div>
+      </div>
+    `;
+    certsContainer.appendChild(div);
+    attachInputListeners(div);
+  };
+
+  // Achievements Repeater
+  window.addAchievementEntry = function(data = {}) {
+    const id = Date.now() + Math.random().toString(36).substring(2, 6);
+    const div = document.createElement('div');
+    div.className = 'repeater-card-item';
+    div.id = `ach-${id}`;
+    div.innerHTML = `
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">Achievement / Honor</span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('ach-${id}')">Remove</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Achievement Title</label>
+          <input type="text" class="form-control ach-title" placeholder="e.g. First Place — Inter-University Hackathon 2024" value="${PortfolioTemplates.escapeHtml(data.title || '')}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Date</label>
+          <input type="text" class="form-control ach-date" placeholder="e.g. April 2024" value="${PortfolioTemplates.escapeHtml(data.date || '')}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Organization / Body</label>
+          <input type="text" class="form-control ach-org" placeholder="e.g. IEEE Student Chapter" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <input type="text" class="form-control ach-desc" placeholder="Briefly describe the context and recognition..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
+        </div>
+      </div>
+    `;
+    achievementsContainer.appendChild(div);
+    attachInputListeners(div);
+  };
+
+  // Workshops Repeater
+  window.addWorkshopEntry = function(data = {}) {
+    const id = Date.now() + Math.random().toString(36).substring(2, 6);
+    const div = document.createElement('div');
+    div.className = 'repeater-card-item';
+    div.id = `ws-${id}`;
+    div.innerHTML = `
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">Workshop &amp; Training</span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('ws-${id}')">Remove</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Workshop / Training Name</label>
+          <input type="text" class="form-control ws-name" placeholder="e.g. Microservices Architecture Intensive" value="${PortfolioTemplates.escapeHtml(data.name || '')}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Organization / Host</label>
+          <input type="text" class="form-control ws-org" placeholder="e.g. Google Developer Group" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">Date</label>
+          <input type="text" class="form-control ws-date" placeholder="e.g. November 2023" value="${PortfolioTemplates.escapeHtml(data.date || '')}">
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <input type="text" class="form-control ws-desc" placeholder="Key competencies covered..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
+        </div>
+      </div>
+    `;
+    workshopsContainer.appendChild(div);
+    attachInputListeners(div);
+  };
+
+  // Extracurriculars Repeater
+  window.addExtracurricularEntry = function(data = {}) {
+    const id = Date.now() + Math.random().toString(36).substring(2, 6);
+    const div = document.createElement('div');
+    div.className = 'repeater-card-item';
+    div.id = `extra-${id}`;
+    div.innerHTML = `
+      <div class="repeater-header-bar">
+        <span class="repeater-title-text">Activity / Leadership</span>
+        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('extra-${id}')">Remove</button>
+      </div>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label">Activity Title</label>
+          <input type="text" class="form-control extra-title" placeholder="e.g. President, Computer Science Society" value="${PortfolioTemplates.escapeHtml(data.title || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label">Category</label>
+          <select class="form-select extra-cat">
+            <option value="Leadership" ${data.category === 'Leadership' ? 'selected' : ''}>Leadership</option>
+            <option value="Student Clubs" ${data.category === 'Student Clubs' ? 'selected' : ''}>Student Clubs</option>
+            <option value="Volunteering" ${data.category === 'Volunteering' ? 'selected' : ''}>Volunteering</option>
+            <option value="Competitions" ${data.category === 'Competitions' ? 'selected' : ''}>Competitions</option>
+            <option value="Sports" ${data.category === 'Sports' ? 'selected' : ''}>Sports</option>
+            <option value="Other Activities" ${data.category === 'Other Activities' ? 'selected' : ''}>Other Activities</option>
+          </select>
+        </div>
+        <div class="col-12">
+          <label class="form-label">Description</label>
+          <input type="text" class="form-control extra-desc" placeholder="Describe role, impact, or leadership contribution..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
+        </div>
+      </div>
+    `;
+    extracurricularsContainer.appendChild(div);
+    attachInputListeners(div);
+  };
+
+  window.removeRepeaterEntry = function(elementId) {
+    const elem = document.getElementById(elementId);
     if (elem) {
       elem.remove();
-      saveDraftToStorage();
+      saveDraft();
     }
   };
 
-  const addExpBtn = document.getElementById('addExpBtn');
-  if (addExpBtn) {
-    addExpBtn.addEventListener('click', () => window.addExpEntry());
+  function attachInputListeners(container) {
+    container.querySelectorAll('input, textarea, select').forEach(input => {
+      input.addEventListener('input', saveDraft);
+      input.addEventListener('change', saveDraft);
+    });
   }
 
-  // ==========================================
-  // 9. TEMPLATE SELECTION
-  // ==========================================
-  let selectedTemplate = 'modern-dark';
-
+  // =========================================================================
+  // 6. TEMPLATE SELECTION (STEP 12)
+  // =========================================================================
   templateCards.forEach(card => {
     card.addEventListener('click', () => {
       templateCards.forEach(c => c.classList.remove('selected'));
@@ -553,360 +591,415 @@ document.addEventListener('DOMContentLoaded', () => {
       if (radio) {
         radio.checked = true;
         selectedTemplate = radio.value;
-        saveDraftToStorage();
+        saveDraft();
       }
     });
   });
 
-  // Check if template query param was passed in URL (e.g. /create?template=minimal-professional)
+  // URL Query parameter template support
   const urlParams = new URLSearchParams(window.location.search);
-  const paramTemplate = urlParams.get('template');
-  if (paramTemplate) {
-    const matchingCard = document.querySelector(`.template-radio-card[data-template="${paramTemplate}"]`);
-    if (matchingCard) {
-      matchingCard.click();
+  const qTmpl = urlParams.get('template');
+  if (qTmpl) {
+    const matching = document.querySelector(`.template-picker-card[data-template="${qTmpl}"]`);
+    if (matching) {
+      matching.click();
     }
   }
 
-  // ==========================================
-  // 10. GATHER FORM DATA OBJECT
-  // ==========================================
-  function gatherFormData() {
-    // Personal
+  // =========================================================================
+  // 7. GATHER ALL FORM DATA
+  // =========================================================================
+  function collectFormData() {
+    // Personal Information
     const personal = {
       fullName: (document.getElementById('fullName') || {}).value || '',
       title: (document.getElementById('title') || {}).value || '',
       email: (document.getElementById('email') || {}).value || '',
       phone: (document.getElementById('phone') || {}).value || '',
-      location: (document.getElementById('location') || {}).value || '',
-      dob: (document.getElementById('dob') || {}).value || '',
-      about: (document.getElementById('about') || {}).value || '',
-      photo: avatarBase64
+      city: (document.getElementById('city') || {}).value || '',
+      state: (document.getElementById('state') || {}).value || '',
+      linkedin: (document.getElementById('linkedin') || {}).value || '',
+      github: (document.getElementById('github') || {}).value || '',
+      website: (document.getElementById('website') || {}).value || '',
+      summary: (document.getElementById('summary') || {}).value || '',
+      photo: profilePhotoBase64
     };
 
-    // Education
+    // Career Objective
+    const careerObjective = (document.getElementById('careerObjective') || {}).value || '';
+
+    // Education entries
     const education = [];
-    document.querySelectorAll('#educationContainer .repeater-card').forEach(card => {
-      const institution = (card.querySelector('.edu-institution') || {}).value || '';
-      const degree = (card.querySelector('.edu-degree') || {}).value || '';
-      if (institution || degree) {
+    document.querySelectorAll('#educationContainer .repeater-card-item').forEach(card => {
+      const inst = (card.querySelector('.edu-institution') || {}).value || '';
+      const deg = (card.querySelector('.edu-degree') || {}).value || '';
+      if (inst || deg) {
         education.push({
-          institution,
-          degree,
+          institution: inst,
+          degree: deg,
           department: (card.querySelector('.edu-department') || {}).value || '',
+          universityName: (card.querySelector('.edu-university') || {}).value || '',
           startYear: (card.querySelector('.edu-start') || {}).value || '',
           gradYear: (card.querySelector('.edu-grad') || {}).value || '',
-          score: (card.querySelector('.edu-score') || {}).value || ''
+          score: (card.querySelector('.edu-score') || {}).value || '',
+          coursework: (card.querySelector('.edu-coursework') || {}).value || ''
         });
       }
     });
 
-    // Projects
+    // Categorized Skills
+    const skills = {
+      programmingLanguages: (document.getElementById('skillProgLang') || {}).value || '',
+      frontend: (document.getElementById('skillFrontend') || {}).value || '',
+      backend: (document.getElementById('skillBackend') || {}).value || '',
+      frameworks: (document.getElementById('skillFrameworks') || {}).value || '',
+      databases: (document.getElementById('skillDatabases') || {}).value || '',
+      tools: (document.getElementById('skillTools') || {}).value || '',
+      softwareSkills: (document.getElementById('skillSoftware') || {}).value || '',
+      softSkills: (document.getElementById('skillSoft') || {}).value || '',
+      otherSkills: (document.getElementById('skillOther') || {}).value || ''
+    };
+
+    // Projects entries
     const projects = [];
-    document.querySelectorAll('#projectsContainer .repeater-card').forEach(card => {
+    document.querySelectorAll('#projectsContainer .repeater-card-item').forEach(card => {
       const name = (card.querySelector('.proj-name') || {}).value || '';
       if (name) {
         projects.push({
           name,
           description: (card.querySelector('.proj-desc') || {}).value || '',
+          problemStatement: (card.querySelector('.proj-problem') || {}).value || '',
+          solution: (card.querySelector('.proj-solution') || {}).value || '',
           technologies: (card.querySelector('.proj-tech') || {}).value || '',
-          projectUrl: (card.querySelector('.proj-live') || {}).value || '',
-          githubUrl: (card.querySelector('.proj-github') || {}).value || ''
+          contribution: (card.querySelector('.proj-contrib') || {}).value || '',
+          duration: (card.querySelector('.proj-duration') || {}).value || '',
+          githubUrl: (card.querySelector('.proj-github') || {}).value || '',
+          liveUrl: (card.querySelector('.proj-live') || {}).value || ''
+        });
+      }
+    });
+
+    // Experience entries
+    const experience = [];
+    document.querySelectorAll('#experienceContainer .repeater-card-item').forEach(card => {
+      const org = (card.querySelector('.exp-org') || {}).value || '';
+      const pos = (card.querySelector('.exp-pos') || {}).value || '';
+      if (org || pos) {
+        experience.push({
+          organization: org,
+          position: pos,
+          experienceType: (card.querySelector('.exp-type') || {}).value || 'Internship',
+          startDate: (card.querySelector('.exp-start') || {}).value || '',
+          endDate: (card.querySelector('.exp-end') || {}).value || '',
+          responsibilities: (card.querySelector('.exp-resp') || {}).value || '',
+          achievements: (card.querySelector('.exp-achieve') || {}).value || ''
         });
       }
     });
 
     // Certifications
     const certifications = [];
-    document.querySelectorAll('#certsContainer .repeater-card').forEach(card => {
-      const name = (card.querySelector('.cert-name') || {}).value || '';
-      if (name) {
+    document.querySelectorAll('#certsContainer .repeater-card-item').forEach(card => {
+      const cName = (card.querySelector('.cert-name') || {}).value || '';
+      if (cName) {
         certifications.push({
-          name,
+          name: cName,
           organization: (card.querySelector('.cert-org') || {}).value || '',
-          year: (card.querySelector('.cert-year') || {}).value || '',
-          url: (card.querySelector('.cert-url') || {}).value || ''
+          issueDate: (card.querySelector('.cert-date') || {}).value || '',
+          credentialId: (card.querySelector('.cert-id') || {}).value || '',
+          credentialUrl: (card.querySelector('.cert-url') || {}).value || ''
         });
       }
     });
 
-    // Experience
-    const experience = [];
-    document.querySelectorAll('#experienceContainer .repeater-card').forEach(card => {
-      const company = (card.querySelector('.exp-company') || {}).value || '';
-      const position = (card.querySelector('.exp-pos') || {}).value || '';
-      if (company || position) {
-        experience.push({
-          company,
-          position,
-          duration: (card.querySelector('.exp-duration') || {}).value || '',
-          description: (card.querySelector('.exp-desc') || {}).value || ''
+    // Achievements
+    const achievements = [];
+    document.querySelectorAll('#achievementsContainer .repeater-card-item').forEach(card => {
+      const aTitle = (card.querySelector('.ach-title') || {}).value || '';
+      if (aTitle) {
+        achievements.push({
+          title: aTitle,
+          date: (card.querySelector('.ach-date') || {}).value || '',
+          organization: (card.querySelector('.ach-org') || {}).value || '',
+          description: (card.querySelector('.ach-desc') || {}).value || ''
         });
       }
     });
 
-    // Social Links
-    const social = {
-      github: (document.getElementById('socialGithub') || {}).value || '',
-      linkedin: (document.getElementById('socialLinkedin') || {}).value || '',
-      instagram: (document.getElementById('socialInstagram') || {}).value || '',
-      website: (document.getElementById('socialWebsite') || {}).value || '',
-      twitter: (document.getElementById('socialTwitter') || {}).value || ''
+    // Workshops
+    const workshops = [];
+    document.querySelectorAll('#workshopsContainer .repeater-card-item').forEach(card => {
+      const wName = (card.querySelector('.ws-name') || {}).value || '';
+      if (wName) {
+        workshops.push({
+          name: wName,
+          organization: (card.querySelector('.ws-org') || {}).value || '',
+          date: (card.querySelector('.ws-date') || {}).value || '',
+          description: (card.querySelector('.ws-desc') || {}).value || ''
+        });
+      }
+    });
+
+    // Extracurriculars
+    const extracurriculars = [];
+    document.querySelectorAll('#extracurricularsContainer .repeater-card-item').forEach(card => {
+      const eTitle = (card.querySelector('.extra-title') || {}).value || '';
+      if (eTitle) {
+        extracurriculars.push({
+          title: eTitle,
+          category: (card.querySelector('.extra-cat') || {}).value || 'Activities',
+          description: (card.querySelector('.extra-desc') || {}).value || ''
+        });
+      }
+    });
+
+    // Additional Info
+    const additionalInfo = {
+      languages: (document.getElementById('addlLanguages') || {}).value || '',
+      hobbies: (document.getElementById('addlHobbies') || {}).value || '',
+      publications: (document.getElementById('addlPublications') || {}).value || '',
+      references: (document.getElementById('addlReferences') || {}).value || ''
     };
 
     return {
+      category: selectedCategory,
       template: selectedTemplate,
       personal,
+      careerObjective,
       education,
-      skills: skillsList,
+      skills,
       projects,
-      certifications,
       experience,
-      social,
+      certifications,
+      achievements,
+      workshops,
+      extracurriculars,
+      additionalInfo,
       updatedAt: new Date().toISOString()
     };
   }
 
-  // ==========================================
-  // 11. AUTOSAVE DRAFT & RESTORATION
-  // ==========================================
+  // =========================================================================
+  // 8. AUTOSAVE DRAFT & FORM RESTORATION
+  // =========================================================================
   let autoSaveTimeout = null;
-  function saveDraftToStorage() {
+  function saveDraft() {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
     autoSaveTimeout = setTimeout(() => {
-      const data = gatherFormData();
+      const data = collectFormData();
       PortfolioGenerator.saveDraft(data);
-      if (autoSaveStatus) {
-        autoSaveStatus.style.opacity = '1';
+      if (autoSaveBadge) {
+        autoSaveBadge.style.opacity = '1';
         setTimeout(() => {
-          autoSaveStatus.style.opacity = '0.6';
-        }, 1500);
+          autoSaveBadge.style.opacity = '0.7';
+        }, 1200);
       }
-    }, 400);
+    }, 350);
   }
 
-  function populateForm(data) {
+  function populateFormData(data) {
     if (!data) return;
 
-    // Personal
+    // Category
+    if (data.category) {
+      selectedCategory = data.category;
+      const targetCard = document.querySelector(`.category-choice-card[data-category="${data.category}"]`);
+      if (targetCard) {
+        categoryCards.forEach(c => c.classList.remove('selected'));
+        targetCard.classList.add('selected');
+      }
+    }
+
+    // Personal Information
     const p = data.personal || {};
     if (document.getElementById('fullName')) document.getElementById('fullName').value = p.fullName || '';
     if (document.getElementById('title')) document.getElementById('title').value = p.title || '';
     if (document.getElementById('email')) document.getElementById('email').value = p.email || '';
     if (document.getElementById('phone')) document.getElementById('phone').value = p.phone || '';
-    if (document.getElementById('location')) document.getElementById('location').value = p.location || '';
-    if (document.getElementById('dob')) document.getElementById('dob').value = p.dob || '';
-    if (document.getElementById('about')) document.getElementById('about').value = p.about || '';
+    if (document.getElementById('city')) document.getElementById('city').value = p.city || '';
+    if (document.getElementById('state')) document.getElementById('state').value = p.state || '';
+    if (document.getElementById('linkedin')) document.getElementById('linkedin').value = p.linkedin || '';
+    if (document.getElementById('github')) document.getElementById('github').value = p.github || '';
+    if (document.getElementById('website')) document.getElementById('website').value = p.website || '';
+    if (document.getElementById('summary')) document.getElementById('summary').value = p.summary || '';
     if (p.photo) {
-      avatarBase64 = p.photo;
+      profilePhotoBase64 = p.photo;
       displayAvatar(p.photo);
+    }
+
+    // Career Objective
+    if (document.getElementById('careerObjective')) {
+      document.getElementById('careerObjective').value = data.careerObjective || '';
     }
 
     // Education
     educationContainer.innerHTML = '';
-    if (data.education && data.education.length > 0) {
+    if (Array.isArray(data.education) && data.education.length > 0) {
       data.education.forEach(edu => window.addEducationEntry(edu));
     } else {
-      window.addEducationEntry(); // default empty one
+      window.addEducationEntry();
     }
 
     // Skills
-    skillsList = data.skills ? [...data.skills] : [];
-    renderSkills();
+    const sk = data.skills || {};
+    if (document.getElementById('skillProgLang')) document.getElementById('skillProgLang').value = sk.programmingLanguages || '';
+    if (document.getElementById('skillFrontend')) document.getElementById('skillFrontend').value = sk.frontend || '';
+    if (document.getElementById('skillBackend')) document.getElementById('skillBackend').value = sk.backend || '';
+    if (document.getElementById('skillFrameworks')) document.getElementById('skillFrameworks').value = sk.frameworks || '';
+    if (document.getElementById('skillDatabases')) document.getElementById('skillDatabases').value = sk.databases || '';
+    if (document.getElementById('skillTools')) document.getElementById('skillTools').value = sk.tools || '';
+    if (document.getElementById('skillSoftware')) document.getElementById('skillSoftware').value = sk.softwareSkills || '';
+    if (document.getElementById('skillSoft')) document.getElementById('skillSoft').value = sk.softSkills || '';
+    if (document.getElementById('skillOther')) document.getElementById('skillOther').value = sk.otherSkills || '';
 
     // Projects
     projectsContainer.innerHTML = '';
-    if (data.projects && data.projects.length > 0) {
+    if (Array.isArray(data.projects) && data.projects.length > 0) {
       data.projects.forEach(proj => window.addProjectEntry(proj));
     } else {
-      window.addProjectEntry(); // default empty one
-    }
-
-    // Certifications
-    certsContainer.innerHTML = '';
-    if (data.certifications && data.certifications.length > 0) {
-      data.certifications.forEach(cert => window.addCertEntry(cert));
+      window.addProjectEntry();
     }
 
     // Experience
     experienceContainer.innerHTML = '';
-    if (data.experience && data.experience.length > 0) {
-      data.experience.forEach(exp => window.addExpEntry(exp));
+    if (Array.isArray(data.experience) && data.experience.length > 0) {
+      data.experience.forEach(exp => window.addExperienceEntry(exp));
     }
 
-    // Social Links
-    const s = data.social || {};
-    if (document.getElementById('socialGithub')) document.getElementById('socialGithub').value = s.github || '';
-    if (document.getElementById('socialLinkedin')) document.getElementById('socialLinkedin').value = s.linkedin || '';
-    if (document.getElementById('socialInstagram')) document.getElementById('socialInstagram').value = s.instagram || '';
-    if (document.getElementById('socialWebsite')) document.getElementById('socialWebsite').value = s.website || '';
-    if (document.getElementById('socialTwitter')) document.getElementById('socialTwitter').value = s.twitter || '';
+    // Certifications
+    certsContainer.innerHTML = '';
+    if (Array.isArray(data.certifications) && data.certifications.length > 0) {
+      data.certifications.forEach(c => window.addCertEntry(c));
+    }
+
+    // Achievements
+    achievementsContainer.innerHTML = '';
+    if (Array.isArray(data.achievements) && data.achievements.length > 0) {
+      data.achievements.forEach(a => window.addAchievementEntry(a));
+    }
+
+    // Workshops
+    workshopsContainer.innerHTML = '';
+    if (Array.isArray(data.workshops) && data.workshops.length > 0) {
+      data.workshops.forEach(w => window.addWorkshopEntry(w));
+    }
+
+    // Extracurriculars
+    extracurricularsContainer.innerHTML = '';
+    if (Array.isArray(data.extracurriculars) && data.extracurriculars.length > 0) {
+      data.extracurriculars.forEach(e => window.addExtracurricularEntry(e));
+    }
+
+    // Additional Info
+    const ad = data.additionalInfo || {};
+    if (document.getElementById('addlLanguages')) document.getElementById('addlLanguages').value = ad.languages || '';
+    if (document.getElementById('addlHobbies')) document.getElementById('addlHobbies').value = ad.hobbies || '';
+    if (document.getElementById('addlPublications')) document.getElementById('addlPublications').value = ad.publications || '';
+    if (document.getElementById('addlReferences')) document.getElementById('addlReferences').value = ad.references || '';
 
     // Template
     if (data.template) {
       selectedTemplate = data.template;
-      const card = document.querySelector(`.template-radio-card[data-template="${data.template}"]`);
-      if (card) {
+      const tCard = document.querySelector(`.template-picker-card[data-template="${data.template}"]`);
+      if (tCard) {
         templateCards.forEach(c => c.classList.remove('selected'));
-        card.classList.add('selected');
-        const radio = card.querySelector('input[type="radio"]');
+        tCard.classList.add('selected');
+        const radio = tCard.querySelector('input[type="radio"]');
         if (radio) radio.checked = true;
       }
     }
   }
 
-  // ==========================================
-  // 12. DEMO DATA LOADER (1-CLICK FILL)
-  // ==========================================
+  // =========================================================================
+  // 9. SAMPLE DEMO DATA (1-CLICK LOAD)
+  // =========================================================================
+  const fillDemoBtn = document.getElementById('fillDemoBtn');
   if (fillDemoBtn) {
     fillDemoBtn.addEventListener('click', async () => {
       try {
-        const response = await fetch('/api/demo-data');
-        if (response.ok) {
-          const res = await response.json();
+        const resp = await fetch('/api/demo-data');
+        if (resp.ok) {
+          const res = await resp.json();
           if (res.success && res.data) {
-            populateForm(res.data);
+            populateFormData(res.data);
             PortfolioGenerator.saveDraft(res.data);
-            alert('Sample student details populated successfully! You can customize any field.');
+            alert('Sample student portfolio loaded successfully! All 11 sections have been populated.');
             return;
           }
         }
       } catch (err) {
-        console.warn('API fetch failed, loading fallback local demo data...', err);
+        console.warn('API error fetching demo data:', err);
       }
-
-      // Built-in fallback demo data if offline
-      const fallbackDemo = {
-        template: 'modern-dark',
-        personal: {
-          fullName: 'Alex Vance',
-          title: 'Computer Science Student & Full Stack Developer',
-          email: 'alex.vance@university.edu',
-          phone: '+1 (555) 234-5678',
-          location: 'San Francisco, CA',
-          dob: '2003-08-15',
-          about: 'Undergraduate Computer Science student passionate about distributed cloud architectures, human-centered UI/UX, and machine learning models.'
-        },
-        education: [
-          {
-            institution: 'University of California, Berkeley',
-            degree: 'Bachelor of Science',
-            department: 'Computer Science',
-            startYear: '2022',
-            gradYear: '2026',
-            score: '3.92 CGPA'
-          }
-        ],
-        skills: [
-          { name: 'JavaScript', level: 'Advanced' },
-          { name: 'React.js', level: 'Advanced' },
-          { name: 'Node.js', level: 'Intermediate' },
-          { name: 'Python', level: 'Advanced' },
-          { name: 'HTML & CSS', level: 'Advanced' }
-        ],
-        projects: [
-          {
-            name: 'StudySync Campus Hub',
-            description: 'A collaborative real-time study platform for university students featuring synchronized markdown whiteboards.',
-            technologies: 'React, Node.js, WebSockets, Tailwind',
-            projectUrl: 'https://example.com/demo',
-            githubUrl: 'https://github.com/example/studysync'
-          }
-        ],
-        certifications: [
-          {
-            name: 'Meta Front-End Developer',
-            organization: 'Meta / Coursera',
-            year: '2024',
-            url: 'https://coursera.org/verify'
-          }
-        ],
-        experience: [
-          {
-            company: 'Vanguard Software Labs',
-            position: 'Software Engineering Intern',
-            duration: 'Summer 2024',
-            description: 'Developed responsive UI modules using React and reduced bundle load latency by 25%.'
-          }
-        ],
-        social: {
-          github: 'https://github.com/example',
-          linkedin: 'https://linkedin.com/in/example',
-          website: 'https://alexvance.dev'
-        }
-      };
-      populateForm(fallbackDemo);
-      PortfolioGenerator.saveDraft(fallbackDemo);
-      alert('Sample student details populated! You can now browse each step or generate right away.');
     });
   }
 
-  // Clear Form Button
+  // Clear Form Reset
+  const clearFormBtn = document.getElementById('clearFormBtn');
   if (clearFormBtn) {
     clearFormBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to clear all entered details? This will reset your form.')) {
+      if (confirm('Are you sure you want to reset the form? All entered information will be cleared.')) {
         PortfolioGenerator.clearAll();
         window.location.reload();
       }
     });
   }
 
-  // ==========================================
-  // 13. GENERATE PORTFOLIO ACTION
-  // ==========================================
-  if (generateBtn) {
-    generateBtn.addEventListener('click', () => {
-      // Validate all critical steps
-      if (!validateStep(1)) {
-        currentStep = 1;
-        updateWizardUI();
+  // =========================================================================
+  // 10. GENERATE PORTFOLIO ACTION
+  // =========================================================================
+  const generatePortfolioBtn = document.getElementById('generatePortfolioBtn');
+  if (generatePortfolioBtn) {
+    generatePortfolioBtn.addEventListener('click', () => {
+      // Validate Personal Information before final generation
+      if (!validateCurrentStep()) {
+        renderStep(1);
         return;
       }
 
-      // Collect data
-      const finalData = gatherFormData();
-
-      // Show generation modal/spinner
-      const modalHtml = `
-        <div class="modal fade show" id="generatingModal" tabindex="-1" style="display:block; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999;">
-          <div class="modal-dialog modal-dialog-centered">
-            <div class="custom-modal-content text-center p-4" style="background:#141721; border:1px solid #e63946; border-radius:18px;">
-              <div class="spinner-border text-danger mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
-                <span class="visually-hidden">Loading...</span>
-              </div>
-              <h3 class="text-white mb-2" style="font-family:'Outfit', sans-serif;">Generating Your Portfolio...</h3>
-              <p class="text-secondary mb-0">Applying template design, formatting sections, and preparing live preview...</p>
-            </div>
-          </div>
-        </div>
-      `;
-      const tempDiv = document.createElement('div');
-      tempDiv.id = 'genModalWrap';
-      tempDiv.innerHTML = modalHtml;
-      document.body.appendChild(tempDiv);
-
-      // Save to LocalStorage
+      const finalData = collectFormData();
       PortfolioGenerator.saveData(finalData);
 
-      // Smooth redirection to preview page after 800ms
+      // Loading dialog
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(20,36,58,0.85);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;color:#FFFFFF;text-align:center;font-family:Inter,sans-serif;';
+      overlay.innerHTML = `
+        <div style="background:#FFFFFF; color:#14243A; padding:2rem 2.5rem; border-radius:8px; max-width:420px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+          <div class="spinner-border text-primary mb-3" style="width:3rem; height:3rem;" role="status"></div>
+          <h4 style="font-weight:800; margin-bottom:0.5rem;">Generating Your Portfolio...</h4>
+          <p style="color:#64748B; font-size:0.9rem; margin:0;">Formatting academic sections and preparing live A4 preview...</p>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
       setTimeout(() => {
         window.location.href = '/preview';
-      }, 800);
+      }, 700);
     });
   }
 
-  // ==========================================
-  // 14. INITIALIZE ON LOAD
-  // ==========================================
-  // Check if we have an existing draft or saved portfolio data
+  // Attach auto-save to static inputs
+  document.querySelectorAll('.form-control, .form-select').forEach(input => {
+    input.addEventListener('input', saveDraft);
+    input.addEventListener('change', saveDraft);
+  });
+
+  // =========================================================================
+  // 11. INITIALIZATION ON LOAD
+  // =========================================================================
   const existingData = PortfolioGenerator.getData() || PortfolioGenerator.getDraft();
   if (existingData) {
-    populateForm(existingData);
+    populateFormData(existingData);
   } else {
-    // Add default initial empty rows
+    // Default initial rows
     window.addEducationEntry();
     window.addProjectEntry();
   }
 
-  updateWizardUI();
+  // Check URL query for step parameter
+  const qStep = parseInt(urlParams.get('step'), 10);
+  if (!isNaN(qStep) && qStep >= 0 && qStep <= totalSteps) {
+    renderStep(qStep, false);
+  } else {
+    renderStep(0, false);
+  }
 });

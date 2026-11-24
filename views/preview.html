@@ -3,33 +3,34 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Your Generated Portfolio — Live Preview</title>
+  <title>Portfolio Preview &amp; PDF Export — Personal Portfolio</title>
   
-  <!-- Google Fonts -->
+  <!-- Typography: Inter & Roboto Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
-  <!-- Bootstrap 5 CSS & Icons -->
+  <!-- Bootstrap 5 CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
   
-  <!-- Custom CSS -->
+  <!-- Custom Stylesheets -->
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/templates.css">
 
   <style>
-    /* Preview Action Toolbar (Floating at Top) */
+    body {
+      background-color: #E2E8F0;
+    }
+
+    /* Floating Top Control Toolbar */
     .preview-control-bar {
       position: sticky;
       top: 0;
       z-index: 1050;
-      background: rgba(14, 16, 22, 0.92);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 0.65rem 1rem;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      background-color: #FFFFFF;
+      border-bottom: 1px solid var(--color-border);
+      padding: 0.75rem 1.25rem;
+      box-shadow: var(--shadow-sm);
     }
 
     .preview-toolbar-inner {
@@ -38,23 +39,24 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 0.75rem;
+      gap: 1rem;
       flex-wrap: wrap;
     }
 
     .preview-template-select {
-      background: #191c26;
-      border: 1px solid rgba(255, 255, 255, 0.18);
-      color: #fff;
+      background-color: #F8FAFC;
+      border: 1px solid var(--color-border);
+      color: var(--color-primary-navy);
+      font-weight: 600;
       font-size: 0.88rem;
       border-radius: var(--radius-sm);
-      padding: 0.35rem 0.85rem;
+      padding: 0.4rem 0.85rem;
       cursor: pointer;
     }
 
     .preview-template-select:focus {
       outline: none;
-      border-color: var(--accent-red);
+      border-color: var(--color-blue);
     }
 
     .preview-actions-group {
@@ -64,123 +66,203 @@
       flex-wrap: wrap;
     }
 
-    /* Empty state card */
+    .device-toggle-btn {
+      background: none;
+      border: 1px solid var(--color-border);
+      padding: 0.35rem 0.65rem;
+      border-radius: var(--radius-xs);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .device-toggle-btn.active {
+      background-color: var(--color-primary-navy);
+      color: #FFFFFF;
+      border-color: var(--color-primary-navy);
+    }
+
+    /* A4 Canvas Sheet Wrapper */
+    .a4-viewport-container {
+      padding: 2.5rem 1rem 5rem 1rem;
+      display: flex;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .a4-viewport-container.mobile-view {
+      max-width: 420px;
+      margin: 0 auto;
+      padding: 1.5rem 0.5rem;
+    }
+
+    .a4-viewport-container.mobile-view .a4-page-canvas {
+      width: 100% !important;
+      min-height: auto !important;
+      box-shadow: var(--shadow-md);
+    }
+
+    /* Empty state */
     .empty-state-box {
       max-width: 580px;
       margin: 6rem auto;
       text-align: center;
       padding: 3rem 2rem;
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: var(--radius-xl);
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      background: #FFFFFF;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+    }
+
+    /* PDF Rendering Overlay */
+    .pdf-overlay-loading {
+      position: fixed;
+      inset: 0;
+      background: rgba(20, 36, 58, 0.85);
+      backdrop-filter: blur(4px);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+      font-family: var(--font-family-base);
+    }
+
+    .pdf-loading-card {
+      background: #FFFFFF;
+      color: var(--color-primary-navy);
+      padding: 2.5rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+      max-width: 440px;
+      box-shadow: var(--shadow-lg);
     }
 
     @media print {
-      .preview-control-bar {
+      body {
+        background: #FFFFFF !important;
+      }
+      .preview-control-bar, .no-print {
         display: none !important;
+      }
+      .a4-viewport-container {
+        padding: 0 !important;
       }
     }
   </style>
 
-  <!-- html2pdf.js for vector-quality PDF generation -->
+  <!-- html2pdf.js for vector-quality multi-page A4 PDF export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
-  <!-- Floating Action Toolbar -->
-  <div class="preview-control-bar no-print">
+  <!-- Floating Action Control Bar -->
+  <header class="preview-control-bar no-print">
     <div class="preview-toolbar-inner">
       <div class="d-flex align-items-center gap-3">
-        <a href="/create" class="btn-ghost-dark btn-sm-custom" title="Return to form to edit details">
-          <i class="bi bi-pencil-square"></i> Edit Details
+        <!-- Back to Edit Details Button -->
+        <a href="/create" class="btn-back-corp" id="backToEditBtn" title="Return to edit your information with all data preserved">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+          <span>Back to Edit Details</span>
         </a>
 
+        <!-- Template Selector Dropdown -->
         <div class="d-flex align-items-center gap-2">
-          <label for="templateSwitcher" class="text-secondary small d-none d-sm-inline mb-0">Template:</label>
+          <label for="templateSwitcher" class="small text-secondary fw-bold mb-0 d-none d-sm-inline">Template:</label>
           <select id="templateSwitcher" class="preview-template-select">
-            <option value="minimal-professional">Minimal Professional (Light)</option>
-            <option value="modern-dark">Modern Dark (Obsidian)</option>
-            <option value="creative-student">Creative Student (Gradient)</option>
-            <option value="developer-portfolio">Developer Portfolio (Terminal)</option>
+            <option value="corporate-professional">Corporate Professional</option>
+            <option value="modern-minimal">Modern Minimal</option>
+            <option value="developer-portfolio">Developer Portfolio</option>
+            <option value="academic-portfolio">Academic Portfolio</option>
+            <option value="professional-creative">Professional Creative</option>
           </select>
         </div>
       </div>
 
+      <!-- Action Buttons Group -->
       <div class="preview-actions-group">
-        <!-- PDF Download -->
-        <button type="button" id="downloadPdfBtn" class="btn-red btn-sm-custom">
-          <i class="bi bi-file-earmark-pdf-fill"></i> Download PDF
-        </button>
-
-        <!-- Native Print -->
-        <button type="button" id="printBtn" class="btn-ghost-dark btn-sm-custom" title="Print portfolio">
-          <i class="bi bi-printer"></i> Print
-        </button>
-
-        <!-- Dropdown for More Options -->
-        <div class="dropdown">
-          <button class="btn-ghost-dark btn-sm-custom dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-three-dots"></i> More
+        <!-- Viewport Toggle -->
+        <div class="d-none d-md-flex gap-1 me-2">
+          <button type="button" class="device-toggle-btn active" id="viewDesktopBtn">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+            <span>A4 Document</span>
           </button>
-          <ul class="dropdown-menu dropdown-menu-dark dropdown-menu-end shadow">
+          <button type="button" class="device-toggle-btn" id="viewMobileBtn">
+            <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+            <span>Mobile</span>
+          </button>
+        </div>
+
+        <!-- Download Portfolio PDF Button -->
+        <button type="button" id="downloadPdfBtn" class="btn-blue btn-sm-custom">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Download Portfolio PDF</span>
+        </button>
+
+        <!-- Print Portfolio Button -->
+        <button type="button" id="printBtn" class="btn-outline-corp btn-sm-custom" title="Open print dialog">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
+          <span>Print</span>
+        </button>
+
+        <!-- Additional Export Options -->
+        <div class="dropdown">
+          <button class="btn-outline-corp btn-sm-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
+            <span>Export</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow">
             <li>
               <a class="dropdown-item" href="#" id="exportHtmlBtn">
-                <i class="bi bi-filetype-html me-2 text-primary"></i> Export Standalone HTML
+                Export Standalone HTML
               </a>
             </li>
             <li>
               <a class="dropdown-item" href="#" id="exportJsonBtn">
-                <i class="bi bi-filetype-json me-2 text-warning"></i> Export JSON Data
-              </a>
-            </li>
-            <li><hr class="dropdown-divider border-secondary opacity-25"></li>
-            <li>
-              <a class="dropdown-item" href="#" id="copyShareLinkBtn">
-                <i class="bi bi-link-45deg me-2 text-success"></i> Copy Shareable Link
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/create">
-                <i class="bi bi-plus-circle me-2"></i> Create Another Portfolio
+                Export JSON Data
               </a>
             </li>
           </ul>
         </div>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Dynamic Portfolio Container -->
-  <main id="portfolioRenderContainer">
-    <!-- Generated portfolio inserted dynamically here -->
-  </main>
+  <!-- Live A4 Portfolio Canvas -->
+  <div class="a4-viewport-container" id="viewportContainer">
+    <div class="a4-page-canvas" id="portfolioRenderContainer">
+      <!-- Generated portfolio HTML injected here -->
+    </div>
+  </div>
 
   <!-- Empty State Fallback -->
   <div id="emptyState" class="empty-state-box" style="display: none;">
-    <div class="feature-icon-wrapper mx-auto mb-3">
-      <i class="bi bi-file-earmark-person"></i>
+    <div class="feature-icon-box mx-auto mb-3">
+      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
     </div>
-    <h3 class="text-white mb-2">No Portfolio Found</h3>
-    <p class="text-secondary mb-4">
-      You haven't generated a portfolio yet or your browser cache was cleared. You can load our instant sample demo or start from scratch!
+    <h3 style="font-weight: 800; color: var(--color-primary-navy); margin-bottom: 0.5rem;">No Portfolio Data Found</h3>
+    <p style="color: #64748B; font-size: 0.92rem; margin-bottom: 1.5rem;">
+      You have not created a portfolio yet or your browser cache was cleared. Load our verified student sample profile or start with a blank form.
     </p>
     <div class="d-flex justify-content-center gap-2 flex-wrap">
-      <button type="button" id="loadSampleDemoBtn" class="btn-red">
-        <i class="bi bi-magic"></i> Load Sample Student Demo
+      <button type="button" id="loadSampleDemoBtn" class="btn-primary-corp">
+        <span>Load Sample Student Profile</span>
       </button>
-      <a href="/create" class="btn-ghost-dark">
-        <i class="bi bi-pencil"></i> Open Form Builder
+      <a href="/create" class="btn-outline-corp">
+        <span>Open Builder</span>
       </a>
     </div>
   </div>
 
   <!-- PDF Generating Overlay -->
-  <div id="pdfLoadingOverlay" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:9999; align-items:center; justify-content:center;">
-    <div class="text-center p-4" style="background:#141721; border:1px solid #e63946; border-radius:18px; max-width:400px;">
-      <div class="spinner-border text-danger mb-3" style="width:3rem; height:3rem;" role="status"></div>
-      <h4 class="text-white mb-1">Generating High-Quality PDF...</h4>
-      <p class="text-secondary small mb-0">Formatting vector sections and assembling multi-page layout. Please wait...</p>
+  <div id="pdfLoadingOverlay" class="pdf-overlay-loading" style="display: none;">
+    <div class="pdf-loading-card">
+      <div class="spinner-border text-primary mb-3" style="width: 3rem; height: 3rem;" role="status"></div>
+      <h4 style="font-weight: 800; color: var(--color-primary-navy); margin-bottom: 0.5rem;">Generating Multi-Page A4 PDF...</h4>
+      <p style="color: #64748B; font-size: 0.9rem; margin: 0;">Preserving vector typography, page margins, and calculating page breaks...</p>
     </div>
   </div>
 
@@ -191,42 +273,43 @@
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const container = document.getElementById('portfolioRenderContainer');
+      const viewportContainer = document.getElementById('viewportContainer');
       const emptyState = document.getElementById('emptyState');
       const templateSwitcher = document.getElementById('templateSwitcher');
       const downloadPdfBtn = document.getElementById('downloadPdfBtn');
       const printBtn = document.getElementById('printBtn');
       const exportHtmlBtn = document.getElementById('exportHtmlBtn');
       const exportJsonBtn = document.getElementById('exportJsonBtn');
-      const copyShareLinkBtn = document.getElementById('copyShareLinkBtn');
       const loadSampleDemoBtn = document.getElementById('loadSampleDemoBtn');
       const pdfLoadingOverlay = document.getElementById('pdfLoadingOverlay');
+      const viewDesktopBtn = document.getElementById('viewDesktopBtn');
+      const viewMobileBtn = document.getElementById('viewMobileBtn');
 
       let currentData = PortfolioGenerator.getData() || PortfolioGenerator.getDraft();
 
       function renderCurrentPortfolio() {
         if (!currentData || (!currentData.personal && !currentData.education)) {
-          container.style.display = 'none';
-          emptyState.style.display = 'block';
+          if (viewportContainer) viewportContainer.style.display = 'none';
+          if (emptyState) emptyState.style.display = 'block';
           return;
         }
 
-        emptyState.style.display = 'none';
-        container.style.display = 'block';
+        if (emptyState) emptyState.style.display = 'none';
+        if (viewportContainer) viewportContainer.style.display = 'flex';
 
-        const activeTemplate = currentData.template || 'modern-dark';
+        const activeTemplate = currentData.template || 'corporate-professional';
         if (templateSwitcher) {
           templateSwitcher.value = activeTemplate;
         }
 
-        // Render HTML
+        // Render HTML using generator
         container.innerHTML = PortfolioGenerator.generate(currentData, activeTemplate);
 
-        // Update document title with student's name
         const name = (currentData.personal && currentData.personal.fullName) || 'Student';
-        document.title = `${name} — Personal Portfolio`;
+        document.title = `${name} — Professional Portfolio`;
       }
 
-      // Template switch in-place
+      // Template Switcher (Instant In-Place Rendering)
       if (templateSwitcher) {
         templateSwitcher.addEventListener('change', (e) => {
           if (currentData) {
@@ -237,13 +320,13 @@
         });
       }
 
-      // PDF Download
+      // Multi-Page A4 PDF Download
       if (downloadPdfBtn) {
         downloadPdfBtn.addEventListener('click', async () => {
           if (!container || !currentData) return;
           pdfLoadingOverlay.style.display = 'flex';
-          const name = (currentData.personal && currentData.personal.fullName) || 'Personal';
-          const filename = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-portfolio.pdf`;
+          const name = (currentData.personal && currentData.personal.fullName) ? currentData.personal.fullName.replace(/[^a-zA-Z0-9]/g, '_') : 'Student';
+          const filename = `${name}_Portfolio.pdf`;
 
           try {
             await PortfolioGenerator.downloadPdf(container, filename);
@@ -255,14 +338,14 @@
         });
       }
 
-      // Native Print
+      // Print Portfolio
       if (printBtn) {
         printBtn.addEventListener('click', () => {
           PortfolioGenerator.print();
         });
       }
 
-      // Export Standalone HTML
+      // Standalone HTML Export
       if (exportHtmlBtn) {
         exportHtmlBtn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -272,7 +355,7 @@
         });
       }
 
-      // Export JSON
+      // JSON Data Export
       if (exportJsonBtn) {
         exportJsonBtn.addEventListener('click', (e) => {
           e.preventDefault();
@@ -282,20 +365,21 @@
         });
       }
 
-      // Copy Share Link
-      if (copyShareLinkBtn) {
-        copyShareLinkBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          const currentUrl = window.location.href;
-          navigator.clipboard.writeText(currentUrl).then(() => {
-            alert('Preview link copied to clipboard! Share with anyone using this browser.');
-          }).catch(() => {
-            alert(`Shareable URL: ${currentUrl}`);
-          });
+      // Device Viewport Toggles
+      if (viewDesktopBtn && viewMobileBtn && viewportContainer) {
+        viewDesktopBtn.addEventListener('click', () => {
+          viewDesktopBtn.classList.add('active');
+          viewMobileBtn.classList.remove('active');
+          viewportContainer.classList.remove('mobile-view');
+        });
+        viewMobileBtn.addEventListener('click', () => {
+          viewMobileBtn.classList.add('active');
+          viewDesktopBtn.classList.remove('active');
+          viewportContainer.classList.add('mobile-view');
         });
       }
 
-      // Load sample demo if empty
+      // Load Sample Demo if empty
       if (loadSampleDemoBtn) {
         loadSampleDemoBtn.addEventListener('click', async () => {
           try {
@@ -310,7 +394,7 @@
               }
             }
           } catch (e) {
-            console.warn('API error, redirecting to create...');
+            console.warn('API error:', e);
           }
           window.location.href = '/create';
         });

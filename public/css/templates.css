@@ -1,915 +1,728 @@
 /* ==========================================================================
-   PORTFOLIO TEMPLATES STYLESHEET
-   4 Distinct Professional Architectures:
-   1. Minimal Professional (Clean Editorial White, Black Serif/Sans Typography)
-   2. Modern Dark (Sleek Obsidian, Glowing Crimson Accents, Glassmorphism)
-   3. Creative Student (Vibrant Gradient Hero, Curved Floating Cards, Asymmetrical)
-   4. Developer Portfolio (IDE / Terminal aesthetics, Fira Code font, Git Commit Timeline)
+   PORTFOLIO TEMPLATES & A4 PDF STYLESHEET
+   Five Distinct Professional Architectures:
+   1. Corporate Professional
+   2. Modern Minimal
+   3. Developer Portfolio
+   4. Academic Portfolio
+   5. Professional Creative
+   Strictly Clean: No Emojis, No Childish Elements, Authentic Layout Differences
    ========================================================================== */
 
-/* Shared Base Reset for Rendered Portfolios */
-.portfolio-render-root {
+/* Base Root Container for Rendered Portfolios */
+.portfolio-document-root {
   width: 100%;
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
+  background-color: #FFFFFF;
+  color: #263238;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+  line-height: 1.55;
+  box-sizing: border-box;
+}
+
+.portfolio-document-root *,
+.portfolio-document-root *::before,
+.portfolio-document-root *::after {
   box-sizing: border-box;
 }
 
 /* ==========================================================================
-   TEMPLATE 1: MINIMAL PROFESSIONAL
-   - Crisp white canvas, elegant black typography, minimalist grid
-   - Thin geometric borders, refined red accent rules
+   TEMPLATE 1: CORPORATE PROFESSIONAL
+   Structured, authoritative, deep navy headings, clean rule dividers.
+   Tailored for campus placements, corporate recruitment, and internships.
    ========================================================================== */
-.portfolio-template-minimal {
-  background-color: #ffffff !important;
-  color: #111827 !important;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  line-height: 1.65;
-}
-
-.portfolio-template-minimal * {
-  box-sizing: border-box;
-}
-
-.portfolio-template-minimal .min-nav {
-  border-bottom: 1px solid #e5e7eb;
-  padding: 1.5rem 0;
-  background: #ffffff;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.portfolio-template-minimal .min-nav-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.portfolio-template-minimal .min-brand {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 700;
-  font-size: 1.3rem;
-  letter-spacing: -0.02em;
-  color: #000000;
-}
-
-.portfolio-template-minimal .min-links {
-  display: flex;
-  gap: 1.8rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.portfolio-template-minimal .min-links a {
-  color: #4b5563;
-  font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s;
-}
-
-.portfolio-template-minimal .min-links a:hover {
-  color: #e63946;
-}
-
-.portfolio-template-minimal .min-container {
-  max-width: 1000px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* Minimal Hero */
-.portfolio-template-minimal .min-hero {
-  padding: 5rem 0 4rem 0;
-  border-bottom: 1px solid #f3f4f6;
-  display: flex;
-  align-items: center;
-  gap: 3.5rem;
-}
-
-.portfolio-template-minimal .min-avatar {
-  width: 170px;
-  height: 170px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-  border: 1px solid #e5e7eb;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-}
-
-.portfolio-template-minimal .min-hero-text h1 {
-  font-family: 'Outfit', sans-serif;
-  font-size: 3rem;
-  font-weight: 800;
-  color: #000000;
-  letter-spacing: -0.03em;
-  margin-bottom: 0.5rem;
-}
-
-.portfolio-template-minimal .min-title {
-  font-size: 1.25rem;
-  color: #e63946;
-  font-weight: 600;
-  margin-bottom: 1rem;
-}
-
-.portfolio-template-minimal .min-bio {
-  color: #4b5563;
-  font-size: 1.05rem;
-  max-width: 650px;
-  margin-bottom: 1.5rem;
-}
-
-.portfolio-template-minimal .min-meta-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  font-size: 0.88rem;
-  color: #6b7280;
-}
-
-.portfolio-template-minimal .min-meta-pills span {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-}
-
-/* Minimal Section Structure */
-.portfolio-template-minimal .min-section {
-  padding: 4rem 0;
-  border-bottom: 1px solid #f3f4f6;
-}
-
-.portfolio-template-minimal .min-section-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 2rem;
-  position: relative;
-  display: inline-block;
-}
-
-.portfolio-template-minimal .min-section-title::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 36px;
-  height: 3px;
-  background: #e63946;
-}
-
-/* Minimal Education & Experience Timeline */
-.portfolio-template-minimal .min-timeline-item {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 2rem;
-  margin-bottom: 2.2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px dashed #e5e7eb;
-}
-
-.portfolio-template-minimal .min-timeline-item:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-.portfolio-template-minimal .min-period {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #6b7280;
-}
-
-.portfolio-template-minimal .min-content h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: #111827;
-  margin-bottom: 0.25rem;
-}
-
-.portfolio-template-minimal .min-institution {
-  font-size: 0.95rem;
-  color: #e63946;
-  font-weight: 500;
-  margin-bottom: 0.5rem;
-}
-
-.portfolio-template-minimal .min-content p {
-  color: #4b5563;
-  font-size: 0.95rem;
-  margin: 0;
-}
-
-/* Minimal Skills */
-.portfolio-template-minimal .min-skills-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.portfolio-template-minimal .min-skill-tag {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #1f2937;
-}
-
-/* Minimal Projects */
-.portfolio-template-minimal .min-projects-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: 2rem;
-}
-
-.portfolio-template-minimal .min-project-card {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  padding: 1.75rem;
-  background: #ffffff;
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: flex;
-  flex-direction: column;
-}
-
-.portfolio-template-minimal .min-project-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
-  border-color: #d1d5db;
-}
-
-.portfolio-template-minimal .min-project-card h3 {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #000000;
-  margin-bottom: 0.5rem;
-}
-
-.portfolio-template-minimal .min-project-card p {
-  color: #4b5563;
-  font-size: 0.9rem;
-  flex-grow: 1;
-  margin-bottom: 1.25rem;
-}
-
-.portfolio-template-minimal .min-project-tech {
-  font-size: 0.8rem;
-  color: #6b7280;
-  font-family: monospace;
-  margin-bottom: 1.25rem;
-}
-
-.portfolio-template-minimal .min-project-links {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.88rem;
-  font-weight: 600;
-}
-
-.portfolio-template-minimal .min-project-links a {
-  color: #000000;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.portfolio-template-minimal .min-project-links a:hover {
-  color: #e63946;
-}
-
-/* Minimal Footer */
-.portfolio-template-minimal .min-footer {
-  padding: 3rem 0;
-  background: #f9fafb;
-  border-top: 1px solid #e5e7eb;
-  text-align: center;
-  color: #6b7280;
-  font-size: 0.9rem;
-}
-
-.portfolio-template-minimal .min-social-links {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-}
-
-.portfolio-template-minimal .min-social-links a {
-  color: #111827;
-  font-size: 1.25rem;
-  transition: color 0.2s;
-}
-
-.portfolio-template-minimal .min-social-links a:hover {
-  color: #e63946;
-}
-
-/* ==========================================================================
-   TEMPLATE 2: MODERN DARK
-   - Deep obsidian (#0b0c10), glowing crimson (#ff3344), glass cards
-   - Neon borders, floating glow, high contrast luxury aesthetic
-   ========================================================================== */
-.portfolio-template-dark {
-  background-color: #0b0c10 !important;
-  color: #e2e8f0 !important;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  line-height: 1.6;
-}
-
-.portfolio-template-dark * {
-  box-sizing: border-box;
-}
-
-.portfolio-template-dark .dark-nav {
-  background: rgba(11, 12, 16, 0.85);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  padding: 1.2rem 0;
-}
-
-.portfolio-template-dark .dark-nav-container {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.portfolio-template-dark .dark-brand {
-  font-family: 'Outfit', sans-serif;
-  font-weight: 800;
-  font-size: 1.4rem;
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.portfolio-template-dark .dark-brand-dot {
-  width: 8px;
-  height: 8px;
-  background: #ff3344;
-  border-radius: 50%;
-  box-shadow: 0 0 10px #ff3344;
-}
-
-.portfolio-template-dark .dark-links {
-  display: flex;
-  gap: 1.8rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.portfolio-template-dark .dark-links a {
-  color: #94a3b8;
-  font-size: 0.92rem;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-
-.portfolio-template-dark .dark-links a:hover {
-  color: #ff3344;
-}
-
-.portfolio-template-dark .dark-container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 0 1.5rem;
-}
-
-/* Dark Hero */
-.portfolio-template-dark .dark-hero {
-  padding: 6rem 0 5rem 0;
-  position: relative;
-}
-
-.portfolio-template-dark .dark-hero-glow {
-  position: absolute;
-  top: 10%;
-  right: 5%;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255, 51, 68, 0.15) 0%, rgba(11, 12, 16, 0) 70%);
-  pointer-events: none;
-  filter: blur(50px);
-}
-
-.portfolio-template-dark .dark-hero-grid {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  align-items: center;
-  gap: 3rem;
-  position: relative;
-  z-index: 2;
-}
-
-.portfolio-template-dark .dark-greeting {
-  display: inline-block;
-  background: rgba(255, 51, 68, 0.12);
-  color: #ff4d5a;
-  border: 1px solid rgba(255, 51, 68, 0.3);
-  padding: 0.35rem 0.9rem;
-  border-radius: 999px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  margin-bottom: 1.2rem;
-}
-
-.portfolio-template-dark .dark-hero-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 3.4rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.15;
-  margin-bottom: 0.8rem;
-}
-
-.portfolio-template-dark .dark-hero-subtitle {
-  font-size: 1.35rem;
-  color: #ff3344;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-}
-
-.portfolio-template-dark .dark-hero-bio {
-  color: #94a3b8;
-  font-size: 1.05rem;
-  line-height: 1.7;
-  margin-bottom: 2rem;
-}
-
-.portfolio-template-dark .dark-hero-actions {
-  display: flex;
-  gap: 1rem;
-}
-
-.portfolio-template-dark .dark-avatar-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.portfolio-template-dark .dark-avatar {
-  width: 250px;
-  height: 250px;
-  border-radius: 24px;
-  object-fit: cover;
-  border: 2px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(255, 51, 68, 0.25);
-  position: relative;
-  z-index: 2;
-}
-
-/* Dark Section */
-.portfolio-template-dark .dark-section {
-  padding: 5rem 0;
-}
-
-.portfolio-template-dark .dark-section-title-wrap {
-  margin-bottom: 3rem;
-}
-
-.portfolio-template-dark .dark-section-tag {
-  color: #ff3344;
-  font-size: 0.82rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  display: block;
-  margin-bottom: 0.4rem;
-}
-
-.portfolio-template-dark .dark-section-title {
-  font-family: 'Outfit', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #ffffff;
-}
-
-/* Dark Cards */
-.portfolio-template-dark .dark-card {
-  background: #14161f;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 1.8rem;
-  transition: all 0.25s ease;
-}
-
-.portfolio-template-dark .dark-card:hover {
-  border-color: rgba(255, 51, 68, 0.4);
-  transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px rgba(255, 51, 68, 0.15);
-}
-
-.portfolio-template-dark .dark-grid-2 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 1.5rem;
-}
-
-.portfolio-template-dark .dark-grid-3 {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-  gap: 1.5rem;
-}
-
-/* Dark Skills */
-.portfolio-template-dark .dark-skill-pill {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.6rem 1.1rem;
-  border-radius: 999px;
-  font-size: 0.9rem;
-  color: #f1f5f9;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  transition: all 0.2s;
-}
-
-.portfolio-template-dark .dark-skill-pill:hover {
-  border-color: #ff3344;
-  background: rgba(255, 51, 68, 0.1);
-  color: #ffffff;
-}
-
-.portfolio-template-dark .dark-skill-pill .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #ff3344;
-}
-
-/* Dark Footer */
-.portfolio-template-dark .dark-footer {
-  background: #07080b;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  padding: 4rem 0 2rem 0;
-  text-align: center;
-}
-
-.portfolio-template-dark .dark-footer-socials {
-  display: flex;
-  justify-content: center;
-  gap: 1.25rem;
-  margin-bottom: 1.5rem;
-}
-
-.portfolio-template-dark .dark-social-btn {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: #14161f;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #ffffff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-  transition: all 0.2s;
-}
-
-.portfolio-template-dark .dark-social-btn:hover {
-  background: #ff3344;
-  border-color: #ff3344;
-  box-shadow: 0 0 15px rgba(255, 51, 68, 0.5);
-  transform: translateY(-2px);
-}
-
-/* ==========================================================================
-   TEMPLATE 3: CREATIVE STUDENT
-   - Vibrant gradient accents, rounded pill design, creative portfolio layout
-   - Playful yet professional cards, floating avatar with colorful ring
-   ========================================================================== */
-.portfolio-template-creative {
-  background-color: #0f1016 !important;
-  color: #e2e8f0 !important;
-  font-family: 'Outfit', sans-serif;
-  line-height: 1.6;
-}
-
-.portfolio-template-creative * {
-  box-sizing: border-box;
-}
-
-.portfolio-template-creative .creative-hero {
-  background: linear-gradient(135deg, #1b0c10 0%, #0f1016 50%, #151124 100%);
-  padding: 6rem 0 5rem 0;
-  position: relative;
-  overflow: hidden;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.portfolio-template-creative .creative-hero-content {
+.template-corporate-professional {
+  background-color: #FFFFFF;
+  color: #1E293B;
+  padding: 40px;
   max-width: 900px;
   margin: 0 auto;
-  text-align: center;
-  padding: 0 1.5rem;
 }
 
-.portfolio-template-creative .creative-avatar-box {
-  width: 140px;
-  height: 140px;
-  margin: 0 auto 1.5rem auto;
-  position: relative;
-}
-
-.portfolio-template-creative .creative-avatar {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  object-fit: cover;
-  padding: 4px;
-  background: linear-gradient(135deg, #ff3344, #ff8c42, #b91c1c);
-  box-shadow: 0 10px 30px rgba(255, 51, 68, 0.3);
-}
-
-.portfolio-template-creative .creative-hero h1 {
-  font-size: 3.5rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #ffffff 40%, #ff8a93 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
-}
-
-.portfolio-template-creative .creative-badge-title {
-  display: inline-block;
-  background: linear-gradient(90deg, #ff3344, #e63946);
-  color: #ffffff;
-  padding: 0.35rem 1.2rem;
-  border-radius: 999px;
-  font-size: 0.95rem;
-  font-weight: 700;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 4px 15px rgba(230, 57, 70, 0.4);
-}
-
-.portfolio-template-creative .creative-bio {
-  font-family: 'Plus Jakarta Sans', sans-serif;
-  color: #cbd5e1;
-  font-size: 1.15rem;
-  max-width: 700px;
-  margin: 0 auto 2rem auto;
-}
-
-.portfolio-template-creative .creative-container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 4rem 1.5rem;
-}
-
-.portfolio-template-creative .creative-card {
-  background: #171822;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  padding: 2.2rem;
-  margin-bottom: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.portfolio-template-creative .creative-card-badge {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  background: rgba(255, 255, 255, 0.06);
-  padding: 0.3rem 0.8rem;
-  border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #ff6b77;
-}
-
-.portfolio-template-creative .creative-section-title {
-  font-size: 2rem;
-  font-weight: 800;
-  color: #fff;
-  margin-bottom: 1.75rem;
+.template-corporate-professional .corp-header {
+  border-bottom: 2px solid #14243A;
+  padding-bottom: 24px;
+  margin-bottom: 28px;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.template-corporate-professional .corp-avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #CBD5E1;
+  flex-shrink: 0;
+}
+
+.template-corporate-professional .corp-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: #14243A;
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+
+.template-corporate-professional .corp-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2563EB;
+  margin-bottom: 12px;
+}
+
+.template-corporate-professional .corp-contact-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-size: 13px;
+  color: #475569;
+}
+
+.template-corporate-professional .corp-contact-item {
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 6px;
+}
+
+.template-corporate-professional .corp-section {
+  margin-bottom: 26px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-corporate-professional .corp-section-heading {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #14243A;
+  border-bottom: 1px solid #CBD5E1;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+}
+
+.template-corporate-professional .corp-item-block {
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-corporate-professional .corp-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 3px;
+}
+
+.template-corporate-professional .corp-item-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.template-corporate-professional .corp-item-subtitle {
+  font-size: 13px;
+  font-weight: 600;
+  color: #2563EB;
+}
+
+.template-corporate-professional .corp-item-date {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748B;
+  white-space: nowrap;
+}
+
+.template-corporate-professional .corp-item-desc {
+  font-size: 13px;
+  color: #334155;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+.template-corporate-professional .corp-skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.template-corporate-professional .corp-skill-cell {
+  background-color: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 8px 12px;
+  border-radius: 4px;
+}
+
+.template-corporate-professional .corp-skill-cat {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #64748B;
+  margin-bottom: 2px;
+}
+
+.template-corporate-professional .corp-skill-val {
+  font-size: 13px;
+  font-weight: 500;
+  color: #0F172A;
 }
 
 /* ==========================================================================
-   TEMPLATE 4: DEVELOPER PORTFOLIO
-   - Terminal & IDE aesthetic, Fira Code font, command prompt headers
-   - Code badge tags, Git commit styled timeline, project status indicators
+   TEMPLATE 2: MODERN MINIMAL
+   Light, airy, sophisticated whitespace, elegant clean typography.
    ========================================================================== */
-.portfolio-template-developer {
-  background-color: #0d1117 !important;
-  color: #c9d1d9 !important;
-  font-family: 'Fira Code', 'Courier New', monospace;
-  line-height: 1.6;
+.template-modern-minimal {
+  background-color: #FFFFFF;
+  color: #2D3748;
+  padding: 44px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
-.portfolio-template-developer * {
-  box-sizing: border-box;
+.template-modern-minimal .min-header {
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+  border-bottom: 1px solid #E2E8F0;
 }
 
-.portfolio-template-developer .dev-window-bar {
-  background: #161b22;
-  border-bottom: 1px solid #30363d;
-  padding: 0.75rem 1.5rem;
+.template-modern-minimal .min-header-flex {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 50;
+  gap: 28px;
 }
 
-.portfolio-template-developer .dev-dots {
+.template-modern-minimal .min-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #E2E8F0;
+  flex-shrink: 0;
+}
+
+.template-modern-minimal .min-name {
+  font-size: 30px;
+  font-weight: 700;
+  color: #1A202C;
+  letter-spacing: -0.03em;
+  margin-bottom: 4px;
+}
+
+.template-modern-minimal .min-title {
+  font-size: 15px;
+  font-weight: 500;
+  color: #4A5568;
+  margin-bottom: 10px;
+}
+
+.template-modern-minimal .min-meta-row {
   display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12.5px;
+  color: #718096;
+}
+
+.template-modern-minimal .min-section {
+  margin-bottom: 28px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-modern-minimal .min-section-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1A202C;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
   gap: 8px;
 }
 
-.portfolio-template-developer .dev-dots span {
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  display: inline-block;
+.template-modern-minimal .min-section-title::after {
+  content: '';
+  flex-grow: 1;
+  height: 1px;
+  background-color: #EDF2F7;
 }
 
-.portfolio-template-developer .dot-red { background: #ff5555; }
-.portfolio-template-developer .dot-yellow { background: #ffb86c; }
-.portfolio-template-developer .dot-green { background: #50fa7b; }
-
-.portfolio-template-developer .dev-prompt-header {
-  color: #8b949e;
-  font-size: 0.85rem;
+.template-modern-minimal .min-entry {
+  margin-bottom: 16px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
-.portfolio-template-developer .dev-container {
-  max-width: 1050px;
-  margin: 0 auto;
-  padding: 3rem 1.5rem;
-}
-
-.portfolio-template-developer .dev-terminal-box {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 8px;
-  padding: 2rem;
-  margin-bottom: 2.5rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-}
-
-.portfolio-template-developer .dev-prompt-line {
-  color: #ff5555;
-  font-weight: 700;
-  margin-bottom: 1rem;
+.template-modern-minimal .min-entry-top {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1.1rem;
+  justify-content: space-between;
+  margin-bottom: 2px;
 }
 
-.portfolio-template-developer .dev-hero-grid {
-  display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 2rem;
-  align-items: center;
+.template-modern-minimal .min-entry-role {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2D3748;
 }
 
-.portfolio-template-developer .dev-avatar {
-  width: 130px;
-  height: 130px;
-  border-radius: 6px;
-  border: 2px solid #ff5555;
-  object-fit: cover;
+.template-modern-minimal .min-entry-org {
+  font-size: 13px;
+  color: #4A5568;
+  font-weight: 500;
 }
 
-.portfolio-template-developer .dev-name {
-  font-size: 2.4rem;
-  color: #58a6ff;
-  font-weight: 800;
-  margin-bottom: 0.25rem;
+.template-modern-minimal .min-entry-date {
+  font-size: 12px;
+  color: #A0AEC0;
 }
 
-.portfolio-template-developer .dev-role {
-  color: #7ee787;
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
+.template-modern-minimal .min-entry-text {
+  font-size: 13px;
+  color: #4A5568;
+  line-height: 1.55;
+  margin-top: 4px;
 }
 
-.portfolio-template-developer .dev-comment {
-  color: #8b949e;
-  font-style: italic;
-  margin-bottom: 1rem;
-}
-
-.portfolio-template-developer .dev-badge-grid {
+.template-modern-minimal .min-skills-wrap {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
+  gap: 8px;
 }
 
-.portfolio-template-developer .dev-badge {
-  background: #21262d;
-  border: 1px solid #30363d;
-  color: #58a6ff;
-  font-size: 0.85rem;
-  padding: 0.35rem 0.75rem;
-  border-radius: 4px;
-}
-
-.portfolio-template-developer .dev-badge.red {
-  color: #ff7b72;
-  border-color: rgba(255, 123, 114, 0.3);
-}
-
-.portfolio-template-developer .dev-project-card {
-  background: #161b22;
-  border: 1px solid #30363d;
-  border-radius: 6px;
-  padding: 1.5rem;
-  margin-bottom: 1.25rem;
-  transition: border-color 0.2s;
-}
-
-.portfolio-template-developer .dev-project-card:hover {
-  border-color: #58a6ff;
-}
-
-.portfolio-template-developer .dev-project-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-}
-
-.portfolio-template-developer .dev-repo-name {
-  color: #58a6ff;
-  font-size: 1.15rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.portfolio-template-developer .dev-repo-name:hover {
-  text-decoration: underline;
+.template-modern-minimal .min-skill-tag {
+  background-color: #F7FAFC;
+  border: 1px solid #E2E8F0;
+  padding: 4px 10px;
+  border-radius: 3px;
+  font-size: 12.5px;
+  color: #2D3748;
 }
 
 /* ==========================================================================
-   PRINT & PDF HIGH FIDELITY RULES
-   - Ensure clean multi-page pagination, no cutoffs, high resolution
+   TEMPLATE 3: DEVELOPER PORTFOLIO
+   Technical aesthetic, code-centric visual hierarchy, repository links.
+   No gaming elements or emojis; clean, high-precision technical resume layout.
    ========================================================================== */
+.template-developer-portfolio {
+  background-color: #FFFFFF;
+  color: #24292F;
+  padding: 40px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.template-developer-portfolio .dev-header-panel {
+  background-color: #F6F8FA;
+  border: 1px solid #D0D7DE;
+  border-radius: 6px;
+  padding: 24px;
+  margin-bottom: 28px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.template-developer-portfolio .dev-avatar {
+  width: 95px;
+  height: 95px;
+  border-radius: 6px;
+  object-fit: cover;
+  border: 1px solid #D0D7DE;
+  flex-shrink: 0;
+}
+
+.template-developer-portfolio .dev-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0969DA;
+  margin-bottom: 4px;
+  letter-spacing: -0.02em;
+}
+
+.template-developer-portfolio .dev-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #24292F;
+  margin-bottom: 8px;
+}
+
+.template-developer-portfolio .dev-links-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  font-size: 12px;
+  color: #57606A;
+  font-family: var(--font-family-mono);
+}
+
+.template-developer-portfolio .dev-section {
+  margin-bottom: 26px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-developer-portfolio .dev-section-title {
+  font-size: 13px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #24292F;
+  background-color: #F6F8FA;
+  border-left: 3px solid #0969DA;
+  padding: 6px 10px;
+  margin-bottom: 14px;
+  border-radius: 0 4px 4px 0;
+}
+
+.template-developer-portfolio .dev-project-card {
+  border: 1px solid #D0D7DE;
+  border-radius: 6px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  background-color: #FFFFFF;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-developer-portfolio .dev-project-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0969DA;
+  margin-bottom: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.template-developer-portfolio .dev-project-tech {
+  font-size: 12px;
+  color: #57606A;
+  font-family: var(--font-family-mono);
+  margin-bottom: 6px;
+}
+
+.template-developer-portfolio .dev-project-desc {
+  font-size: 13px;
+  color: #24292F;
+  line-height: 1.5;
+}
+
+.template-developer-portfolio .dev-skill-group {
+  display: flex;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.template-developer-portfolio .dev-skill-lbl {
+  width: 170px;
+  font-weight: 700;
+  color: #57606A;
+  flex-shrink: 0;
+}
+
+.template-developer-portfolio .dev-skill-txt {
+  color: #24292F;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   TEMPLATE 4: ACADEMIC PORTFOLIO
+   Education-centric, detailed coursework, publications, research orientation.
+   Suitable for postgraduate admissions, scholarships, research & faculty reviews.
+   ========================================================================== */
+.template-academic-portfolio {
+  background-color: #FFFFFF;
+  color: #1A1A1A;
+  padding: 44px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.template-academic-portfolio .acad-header {
+  text-align: center;
+  border-bottom: 1px double #94A3B8;
+  padding-bottom: 20px;
+  margin-bottom: 28px;
+}
+
+.template-academic-portfolio .acad-name {
+  font-size: 26px;
+  font-weight: 800;
+  color: #0F172A;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+}
+
+.template-academic-portfolio .acad-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 8px;
+}
+
+.template-academic-portfolio .acad-contacts {
+  font-size: 12.5px;
+  color: #64748B;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.template-academic-portfolio .acad-section {
+  margin-bottom: 24px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-academic-portfolio .acad-section-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0F172A;
+  border-bottom: 1.5px solid #0F172A;
+  padding-bottom: 3px;
+  margin-bottom: 12px;
+}
+
+.template-academic-portfolio .acad-entry {
+  margin-bottom: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-academic-portfolio .acad-entry-top {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.template-academic-portfolio .acad-entry-sub {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 2px;
+}
+
+.template-academic-portfolio .acad-entry-date {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.template-academic-portfolio .acad-entry-details {
+  font-size: 12.5px;
+  color: #334155;
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   TEMPLATE 5: PROFESSIONAL CREATIVE
+   Modern corporate design, sidebar column layout, sophisticated accents.
+   ========================================================================== */
+.template-professional-creative {
+  background-color: #FFFFFF;
+  color: #1E293B;
+  max-width: 900px;
+  margin: 0 auto;
+  box-shadow: none;
+}
+
+.template-professional-creative .creat-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100%;
+}
+
+.template-professional-creative .creat-sidebar {
+  background-color: #F8FAFC;
+  border-right: 1px solid #E2E8F0;
+  padding: 36px 24px;
+}
+
+.template-professional-creative .creat-main {
+  padding: 36px 32px;
+}
+
+.template-professional-creative .creat-avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin-bottom: 16px;
+}
+
+.template-professional-creative .creat-name {
+  font-size: 24px;
+  font-weight: 800;
+  color: #14243A;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.template-professional-creative .creat-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #2563EB;
+  margin-bottom: 20px;
+}
+
+.template-professional-creative .creat-side-section {
+  margin-bottom: 24px;
+}
+
+.template-professional-creative .creat-side-heading {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748B;
+  border-bottom: 1px solid #CBD5E1;
+  padding-bottom: 4px;
+  margin-bottom: 10px;
+}
+
+.template-professional-creative .creat-side-item {
+  font-size: 12.5px;
+  color: #334155;
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+
+.template-professional-creative .creat-main-section {
+  margin-bottom: 26px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-professional-creative .creat-main-heading {
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #14243A;
+  border-bottom: 2px solid #2563EB;
+  display: inline-block;
+  padding-bottom: 3px;
+  margin-bottom: 14px;
+}
+
+.template-professional-creative .creat-card {
+  margin-bottom: 16px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.template-professional-creative .creat-card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2px;
+}
+
+.template-professional-creative .creat-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: #0F172A;
+}
+
+.template-professional-creative .creat-card-sub {
+  font-size: 13px;
+  color: #2563EB;
+  font-weight: 600;
+}
+
+.template-professional-creative .creat-card-date {
+  font-size: 12px;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.template-professional-creative .creat-card-desc {
+  font-size: 12.8px;
+  color: #475569;
+  line-height: 1.5;
+  margin-top: 4px;
+}
+
+/* ==========================================================================
+   CRITICAL: PROFESSIONAL A4 PDF & PRINT SPECIFICATIONS
+   A4 Dimensions: 210mm x 297mm | Margins: 15-20mm
+   Automatic Multi-page Support | Page-break-inside Avoidance
+   ========================================================================== */
+
+/* A4 Container Preview Formatting */
+.a4-page-canvas {
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: #FFFFFF;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 15mm;
+}
+
 @media print {
-  body, html {
-    background: #ffffff !important;
+  html, body {
+    width: 210mm;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #FFFFFF !important;
     color: #000000 !important;
-  }
-
-  .portfolio-template-dark,
-  .portfolio-template-creative,
-  .portfolio-template-developer {
-    background-color: #ffffff !important;
-    color: #111827 !important;
-  }
-
-  /* Make sure text and titles remain dark & crisp in print */
-  .portfolio-template-dark .dark-card,
-  .portfolio-template-creative .creative-card,
-  .portfolio-template-developer .dev-terminal-box,
-  .portfolio-template-developer .dev-project-card {
-    background: #ffffff !important;
-    border: 1px solid #d1d5db !important;
-    box-shadow: none !important;
-    color: #111827 !important;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  .portfolio-template-dark .dark-hero-title,
-  .portfolio-template-dark .dark-section-title,
-  .portfolio-template-creative .creative-hero h1,
-  .portfolio-template-developer .dev-name {
-    color: #000000 !important;
-    -webkit-text-fill-color: initial !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .no-print,
-  .preview-toolbar,
   .site-navbar,
-  .site-footer {
+  .site-footer,
+  .preview-control-bar,
+  .btn,
+  button {
     display: none !important;
   }
 
-  .portfolio-render-root {
-    padding: 0 !important;
+  .a4-page-canvas,
+  .portfolio-document-root {
+    width: 100% !important;
+    box-shadow: none !important;
     margin: 0 !important;
+    padding: 0 !important;
+    background: #FFFFFF !important;
+  }
+
+  /* Prevent awkward page cuts */
+  .corp-section,
+  .corp-item-block,
+  .min-section,
+  .min-entry,
+  .dev-section,
+  .dev-project-card,
+  .acad-section,
+  .acad-entry,
+  .creat-main-section,
+  .creat-card,
+  h1, h2, h3, h4, h5, h6 {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid !important;
+    break-after: avoid !important;
   }
 }

@@ -1,13 +1,13 @@
 /**
- * Portfolio Generator Core Engine
- * Handles generation, LocalStorage persistence, PDF printing, Standalone HTML export, and Data Sharing.
+ * Professional Portfolio Generator Engine
+ * Multi-page A4 PDF Generation, Print Formatting, LocalStorage Persistence & Export
  */
 
 const PortfolioGenerator = {
   STORAGE_KEY: 'student_portfolio_data',
   DRAFT_KEY: 'student_portfolio_form_draft',
 
-  // Save full finalized portfolio data
+  // Save finalized portfolio data
   saveData(data) {
     try {
       localStorage.setItem(this.STORAGE_KEY, JSON.stringify(data));
@@ -57,39 +57,46 @@ const PortfolioGenerator = {
 
   // Generate HTML using selected template
   generate(data, templateId) {
-    const selectedTemplate = templateId || data.template || 'modern-dark';
+    const selectedTemplate = templateId || data.template || 'corporate-professional';
     if (!window.PortfolioTemplates) {
       console.error('PortfolioTemplates library not loaded.');
-      return '<div>Error: Templates engine not loaded.</div>';
+      return '<div>Error: Portfolio Templates engine not loaded.</div>';
     }
     return window.PortfolioTemplates.render(selectedTemplate, data);
   },
 
-  // High Quality PDF Download via html2pdf or fallback print
-  async downloadPdf(element, filename = 'My-Personal-Portfolio.pdf') {
+  // Critical: Professional Multi-Page A4 PDF Generator
+  async downloadPdf(element, customFilename) {
     if (!element) {
-      console.error('PDF element not found');
-      return;
+      console.error('Target element for PDF generation not found.');
+      return false;
     }
 
-    // If html2pdf is available on the window
+    const filename = customFilename || 'Student_Portfolio.pdf';
+
+    // If html2pdf bundle is available
     if (typeof html2pdf !== 'undefined') {
       const opt = {
-        margin: [10, 10, 10, 10],
+        margin: [15, 15, 15, 15], // 15mm standard professional A4 margin
         filename: filename,
         image: { type: 'jpeg', quality: 0.98 },
         html2canvas: {
-          scale: 2,
+          scale: 2, // High-DPI crisp vector text
           useCORS: true,
           logging: false,
-          letterRendering: true
+          letterRendering: true,
+          backgroundColor: '#FFFFFF'
         },
         jsPDF: {
           unit: 'mm',
           format: 'a4',
-          orientation: 'portrait'
+          orientation: 'portrait',
+          compress: true
         },
-        pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+        pagebreak: {
+          mode: ['avoid-all', 'css', 'legacy'],
+          avoid: ['.corp-item-block', '.corp-section', '.min-entry', '.dev-project-card', '.acad-entry', '.creat-card', 'h1', 'h2', 'h3', 'h4']
+        }
       };
 
       try {
@@ -101,6 +108,7 @@ const PortfolioGenerator = {
         return false;
       }
     } else {
+      // Native high-fidelity browser print dialog fallback
       window.print();
       return true;
     }
@@ -113,7 +121,7 @@ const PortfolioGenerator = {
 
   // Export full standalone self-contained HTML file
   exportStandaloneHtml(data, templateId) {
-    const activeTemplate = templateId || data.template || 'modern-dark';
+    const activeTemplate = templateId || data.template || 'corporate-professional';
     const bodyContent = this.generate(data, activeTemplate);
     const fullName = (data.personal && data.personal.fullName) || 'Student Portfolio';
 
@@ -122,21 +130,17 @@ const PortfolioGenerator = {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${window.PortfolioTemplates.escapeHtml(fullName)} - Personal Portfolio</title>
+  <title>${window.PortfolioTemplates ? window.PortfolioTemplates.escapeHtml(fullName) : 'Student'} - Professional Portfolio</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;500;600;700&family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-  <style>
-    /* Embed critical styles */
-    body { margin: 0; padding: 0; }
-  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Roboto+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/style.css">
   <link rel="stylesheet" href="/css/templates.css">
 </head>
-<body>
-  ${bodyContent}
+<body style="background:#F5F7FA; margin:0; padding:40px 10px;">
+  <div style="max-width:900px; margin:0 auto; background:#FFFFFF; box-shadow:0 1px 3px rgba(0,0,0,0.1); border-radius:6px; overflow:hidden;">
+    ${bodyContent}
+  </div>
 </body>
 </html>`;
 
@@ -144,21 +148,22 @@ const PortfolioGenerator = {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `${fullName.toLowerCase().replace(/[^a-z0-9]/g, '-')}-portfolio.html`;
+    const cleanName = fullName.replace(/[^a-zA-Z0-9]/g, '_');
+    link.download = `${cleanName}_Portfolio.html`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   },
 
-  // Export data as JSON
+  // Export raw JSON data
   exportJson(data) {
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    const name = (data.personal && data.personal.fullName) || 'portfolio';
-    link.download = `${name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-data.json`;
+    const name = (data.personal && data.personal.fullName) ? data.personal.fullName.replace(/[^a-zA-Z0-9]/g, '_') : 'Portfolio';
+    link.download = `${name}_Data.json`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);

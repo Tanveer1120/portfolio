@@ -1,5 +1,5 @@
 /**
- * Main Site Script - Homepage & Navigation Interactions
+ * Main Site Script - Professional Homepage & Navigation Interactions
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,75 +26,71 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!modalEl || !modalContainer) return;
 
-    // Sample data to preview
+    // Professional sample data to preview
     const previewData = {
+      category: 'Computer Science / IT',
       template: templateId,
       personal: {
-        fullName: 'Alex Vance',
-        title: 'Computer Science Student & Full-Stack Engineer',
-        email: 'alex.vance@university.edu',
-        phone: '+1 (555) 019-2834',
-        location: 'California, USA',
-        about: 'Passionate student technologist focused on clean architectural design, scalable microservices, and reactive web applications.'
+        fullName: 'Alexander Vance',
+        title: 'Computer Science Undergraduate & Software Engineering Aspirant',
+        email: 'alexander.vance@university.edu',
+        phone: '+1 (555) 234-5678',
+        city: 'San Francisco',
+        state: 'CA',
+        linkedin: 'https://linkedin.com/in/alexander-vance',
+        github: 'https://github.com/alexander-vance',
+        summary: 'Results-driven Computer Science student with a strong academic foundation in software design, algorithms, and distributed systems. Committed to building robust, accessible, and scalable digital solutions.'
       },
+      careerObjective: 'Aspiring Software Engineer seeking an internship or entry-level software development role to contribute to high-impact enterprise engineering initiatives.',
       education: [
         {
           institution: 'University of California, Berkeley',
-          degree: 'B.S. in Computer Science',
+          universityName: 'University of California System',
+          degree: 'Bachelor of Science in Computer Science',
           department: 'EECS',
           startYear: '2022',
           gradYear: '2026',
-          score: '3.92 CGPA'
+          score: '3.91 CGPA',
+          coursework: 'Data Structures, Algorithms, Computer Systems Architecture, Database Management Systems'
         }
       ],
-      skills: [
-        { name: 'JavaScript', level: 'Advanced' },
-        { name: 'Python', level: 'Advanced' },
-        { name: 'React.js', level: 'Advanced' },
-        { name: 'Node.js', level: 'Intermediate' },
-        { name: 'SQL', level: 'Intermediate' }
-      ],
+      skills: {
+        programmingLanguages: 'JavaScript, TypeScript, Python, Java, C++',
+        frontend: 'React.js, Next.js, HTML5, CSS3, Tailwind CSS',
+        backend: 'Node.js, Express.js, RESTful API Design',
+        databases: 'PostgreSQL, MongoDB',
+        tools: 'Git, GitHub, Docker, Linux/Unix CLI'
+      },
       projects: [
         {
-          name: 'StudySync Campus Hub',
-          description: 'A collaborative real-time study platform for university students featuring synchronized markdown whiteboards.',
-          technologies: 'React, Node.js, WebSockets',
-          projectUrl: 'https://example.com/demo',
-          githubUrl: 'https://github.com/example/studysync'
-        },
-        {
-          name: 'AI Tutor & Quiz Engine',
-          description: 'Interactive exam prep assistant that converts lecture notes into flashcards and automated quizzes.',
-          technologies: 'Python, FastAPI, OpenAI, React',
-          projectUrl: 'https://example.com/ai-tutor',
-          githubUrl: 'https://github.com/example/ai-tutor'
+          name: 'Enterprise Campus Collab Portal',
+          description: 'A high-performance web platform that synchronizes academic resource sharing and project collaboration.',
+          technologies: 'React, Node.js, Express, PostgreSQL',
+          githubUrl: 'https://github.com/alexander-vance/campus-collab',
+          liveUrl: 'https://campus-collab.demo.edu',
+          duration: '4 Months (Spring 2024)'
         }
       ],
       certifications: [
         {
-          name: 'AWS Cloud Practitioner',
+          name: 'AWS Certified Cloud Practitioner',
           organization: 'Amazon Web Services',
-          year: '2024',
-          url: 'https://aws.amazon.com'
+          issueDate: 'July 2024',
+          credentialId: 'AWS-CCP-98721345'
         }
       ],
-      experience: [
+      achievements: [
         {
-          company: 'Vanguard Software Labs',
-          position: 'Software Engineering Intern',
-          duration: 'Summer 2024',
-          description: 'Engineered responsive frontend modules and optimized API performance.'
+          title: 'First Place Winner — University Hackathon 2024',
+          description: 'Led a four-member engineering team to build an accessibility-first student locator.',
+          date: 'April 2024'
         }
-      ],
-      social: {
-        github: 'https://github.com',
-        linkedin: 'https://linkedin.com'
-      }
+      ]
     };
 
     // Set title
     const templateMeta = (window.PortfolioTemplates && window.PortfolioTemplates.catalog.find(t => t.id === templateId)) || { name: 'Template Preview' };
-    if (modalTitle) modalTitle.textContent = `${templateMeta.name} — Live Preview`;
+    if (modalTitle) modalTitle.textContent = `${templateMeta.name} — Live A4 Preview`;
 
     // Render preview HTML
     if (window.PortfolioTemplates) {
@@ -106,24 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
       modalUseBtn.href = `/create?template=${templateId}`;
     }
 
-    // Show modal
+    // Show modal via Bootstrap 5
     if (window.bootstrap && bootstrap.Modal) {
       const bsModal = new bootstrap.Modal(modalEl);
       bsModal.show();
     }
   };
-
-  // Homepage Hero Mockup interactive rotation
-  const heroMockup = document.querySelector('.mockup-card');
-  if (heroMockup) {
-    let templates = ['modern-dark', 'minimal-professional', 'creative-student', 'developer-portfolio'];
-    let idx = 0;
-    heroMockup.addEventListener('click', () => {
-      idx = (idx + 1) % templates.length;
-      const previewAddress = document.querySelector('.mockup-address');
-      if (previewAddress) {
-        previewAddress.textContent = `portfolio.local/${templates[idx]}`;
-      }
-    });
-  }
 });

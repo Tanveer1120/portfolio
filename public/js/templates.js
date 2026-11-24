@@ -1,54 +1,59 @@
 /**
- * Portfolio Templates Engine & Layout Definitions
- * 4 Distinct Templates:
- * 1. minimal-professional
- * 2. modern-dark
- * 3. creative-student
- * 4. developer-portfolio
+ * Professional Portfolio Templates Engine
+ * Five Genuine Architectural Layouts:
+ * 1. Corporate Professional
+ * 2. Modern Minimal
+ * 3. Developer Portfolio
+ * 4. Academic Portfolio
+ * 5. Professional Creative
+ * Strictly Professional: Clean Typography, High Whitespace, No Emojis, No Childish Graphics
  */
 
 const PortfolioTemplates = {
-  // Registry metadata
   catalog: [
     {
-      id: 'minimal-professional',
-      name: 'Minimal Professional',
-      badge: 'Editorial Clean',
-      description: 'Clean white canvas, timeless typography, structured grid layout. Ideal for business, consulting, and classic academic portfolios.',
-      accent: '#e63946',
-      bgClass: 'portfolio-template-minimal',
-      tags: ['Light Theme', 'Minimalist', 'Clean Grid', 'Fast Loading']
+      id: 'corporate-professional',
+      name: 'Corporate Professional',
+      badge: 'Placement & Job Ready',
+      description: 'Structured corporate layout with navy headings, crisp divider rules, and prominent sections. Ideal for placements, internships, and corporate employment.',
+      className: 'template-corporate-professional',
+      tags: ['Corporate', 'Placement Ready', 'Structured', 'A4 Optimized']
     },
     {
-      id: 'modern-dark',
-      name: 'Modern Dark',
-      badge: 'Popular Choice',
-      description: 'High-contrast obsidian theme with vibrant crimson accents, glass cards, and glowing interactive elements.',
-      accent: '#ff3344',
-      bgClass: 'portfolio-template-dark',
-      tags: ['Dark Theme', 'SaaS Modern', 'Glowing Accents', 'Glassmorphism']
-    },
-    {
-      id: 'creative-student',
-      name: 'Creative Student',
-      badge: 'Dynamic & Bold',
-      description: 'Expressive gradient headers, curved floating cards, and stylish badges tailored for design, multimedia, and student innovators.',
-      accent: '#e63946',
-      bgClass: 'portfolio-template-creative',
-      tags: ['Gradients', 'Playful & Polished', 'Floating UI', 'Visual Impact']
+      id: 'modern-minimal',
+      name: 'Modern Minimal',
+      badge: 'Editorial & Clean',
+      description: 'Refined typography with balanced whitespace and subtle dividers. Tailored for graduates seeking an elegant, distraction-free career presentation.',
+      className: 'template-modern-minimal',
+      tags: ['Minimalist', 'High Whitespace', 'Modern Typo', 'Executive']
     },
     {
       id: 'developer-portfolio',
       name: 'Developer Portfolio',
-      badge: 'Tech & Code',
-      description: 'Terminal and IDE inspired design with syntax badges, repository commit styling, and prominent code project showcases.',
-      accent: '#ff5555',
-      bgClass: 'portfolio-template-developer',
-      tags: ['Monospace Font', 'Terminal Vibe', 'GitHub Repo Cards', 'Code-Centric']
+      badge: 'Technical & Engineering',
+      description: 'Clean developer layout emphasizing programming competencies, technical stacks, GitHub repositories, and architectural project summaries.',
+      className: 'template-developer-portfolio',
+      tags: ['Software Engineer', 'Code Centric', 'Repository Links', 'Technical']
+    },
+    {
+      id: 'academic-portfolio',
+      name: 'Academic Portfolio',
+      badge: 'Research & Education',
+      description: 'Education-first design with comprehensive coursework details, academic projects, honors, and publications. Ideal for research and university admissions.',
+      className: 'template-academic-portfolio',
+      tags: ['Academics', 'Postgraduate', 'Coursework', 'Publications']
+    },
+    {
+      id: 'professional-creative',
+      name: 'Professional Creative',
+      badge: 'Two-Column Executive',
+      description: 'Sophisticated two-column asymmetric layout with a structured profile sidebar and expansive project details. Great for engineering and product roles.',
+      className: 'template-professional-creative',
+      tags: ['Two Column', 'Executive', 'Visual Hierarchy', 'Balanced']
     }
   ],
 
-  // Utility to safely escape HTML
+  // Utility to safely escape HTML to prevent XSS
   escapeHtml(str) {
     if (!str) return '';
     return String(str)
@@ -59,677 +64,896 @@ const PortfolioTemplates = {
       .replace(/'/g, '&#039;');
   },
 
-  // Fallback avatar generator
+  // Fallback avatar generator (clean monogram, no cartoon illustrations)
   getAvatar(data) {
     if (data.personal && data.personal.photo) {
       return data.personal.photo;
     }
-    const name = (data.personal && data.personal.fullName) || 'Student Portfolio';
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=e63946&color=fff&size=256&bold=true`;
+    const name = (data.personal && data.personal.fullName) || 'Student';
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=14243A&color=FFFFFF&size=200&bold=true`;
   },
 
-  // 1. MINIMAL PROFESSIONAL RENDERER
+  // =========================================================================
+  // 1. CORPORATE PROFESSIONAL TEMPLATE RENDERER
+  // =========================================================================
+  renderCorporate(data) {
+    const p = data.personal || {};
+    const avatar = this.getAvatar(data);
+    const hasPhoto = !!p.photo;
+    const hasCareerObj = !!(data.careerObjective && data.careerObjective.trim());
+    const hasEdu = Array.isArray(data.education) && data.education.length > 0;
+    const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+    const hasExp = Array.isArray(data.experience) && data.experience.length > 0;
+    const hasCerts = Array.isArray(data.certifications) && data.certifications.length > 0;
+    const hasAchieve = Array.isArray(data.achievements) && data.achievements.length > 0;
+    const hasWorkshops = Array.isArray(data.workshops) && data.workshops.length > 0;
+    const hasExtracurriculars = Array.isArray(data.extracurriculars) && data.extracurriculars.length > 0;
+    const addl = data.additionalInfo || {};
+    const hasAddl = !!(addl.languages || addl.hobbies || addl.publications || addl.references);
+
+    return `
+    <div class="portfolio-document-root template-corporate-professional">
+      <!-- Header -->
+      <header class="corp-header">
+        <div style="flex-grow: 1;">
+          <h1 class="corp-name">${this.escapeHtml(p.fullName || 'Student Name')}</h1>
+          <div class="corp-title">${this.escapeHtml(p.title || 'Professional Title / Degree Candidate')}</div>
+          
+          <div class="corp-contact-row">
+            ${p.email ? `<span class="corp-contact-item"><strong>Email:</strong> ${this.escapeHtml(p.email)}</span>` : ''}
+            ${p.phone ? `<span class="corp-contact-item"><strong>Phone:</strong> ${this.escapeHtml(p.phone)}</span>` : ''}
+            ${(p.city || p.state) ? `<span class="corp-contact-item"><strong>Location:</strong> ${this.escapeHtml([p.city, p.state].filter(Boolean).join(', '))}</span>` : ''}
+            ${p.linkedin ? `<span class="corp-contact-item"><a href="${this.escapeHtml(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a></span>` : ''}
+            ${p.github ? `<span class="corp-contact-item"><a href="${this.escapeHtml(p.github)}" target="_blank" rel="noopener">GitHub</a></span>` : ''}
+            ${p.website ? `<span class="corp-contact-item"><a href="${this.escapeHtml(p.website)}" target="_blank" rel="noopener">Portfolio Website</a></span>` : ''}
+          </div>
+        </div>
+        ${hasPhoto ? `<img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="corp-avatar" />` : ''}
+      </header>
+
+      <!-- Professional Summary -->
+      ${p.summary ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Professional Summary</div>
+        <p class="corp-item-desc" style="font-size: 13.5px; color: #1E293B;">${this.escapeHtml(p.summary)}</p>
+      </section>
+      ` : ''}
+
+      <!-- Career Objective (if provided) -->
+      ${hasCareerObj ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Career Objective</div>
+        <p class="corp-item-desc" style="font-size: 13.5px; color: #1E293B;">${this.escapeHtml(data.careerObjective)}</p>
+      </section>
+      ` : ''}
+
+      <!-- Education -->
+      ${hasEdu ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Education</div>
+        ${data.education.map(edu => `
+          <div class="corp-item-block">
+            <div class="corp-item-header">
+              <span class="corp-item-title">${this.escapeHtml(edu.degree || 'Degree')}</span>
+              <span class="corp-item-date">${this.escapeHtml(edu.startYear || '')} - ${this.escapeHtml(edu.gradYear || 'Present')}</span>
+            </div>
+            <div class="corp-item-subtitle">${this.escapeHtml(edu.institution || '')}${edu.universityName ? ` (${this.escapeHtml(edu.universityName)})` : ''}</div>
+            <div class="corp-item-desc">
+              ${edu.department ? `<div><strong>Department:</strong> ${this.escapeHtml(edu.department)}</div>` : ''}
+              ${edu.score ? `<div><strong>Score / CGPA:</strong> ${this.escapeHtml(edu.score)}</div>` : ''}
+              ${edu.coursework ? `<div><strong>Relevant Coursework:</strong> ${this.escapeHtml(edu.coursework)}</div>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Skills Section -->
+      ${this.hasSkills(data.skills) ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Technical &amp; Professional Competencies</div>
+        <div class="corp-skills-grid">
+          ${this.renderSkillsGrid(data.skills, 'corp')}
+        </div>
+      </section>
+      ` : ''}
+
+      <!-- Projects -->
+      ${hasProjects ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Key Projects</div>
+        ${data.projects.map(proj => `
+          <div class="corp-item-block">
+            <div class="corp-item-header">
+              <span class="corp-item-title">${this.escapeHtml(proj.name)}</span>
+              ${proj.duration ? `<span class="corp-item-date">${this.escapeHtml(proj.duration)}</span>` : ''}
+            </div>
+            ${proj.technologies ? `<div class="corp-item-subtitle">Technologies: ${this.escapeHtml(proj.technologies)}</div>` : ''}
+            <div class="corp-item-desc">
+              ${proj.description ? `<p style="margin-bottom: 4px;">${this.escapeHtml(proj.description)}</p>` : ''}
+              ${proj.problemStatement ? `<p style="margin-bottom: 2px;"><strong>Problem:</strong> ${this.escapeHtml(proj.problemStatement)}</p>` : ''}
+              ${proj.solution ? `<p style="margin-bottom: 2px;"><strong>Solution:</strong> ${this.escapeHtml(proj.solution)}</p>` : ''}
+              ${proj.contribution ? `<p style="margin-bottom: 2px;"><strong>Role / Contribution:</strong> ${this.escapeHtml(proj.contribution)}</p>` : ''}
+              <div style="margin-top: 4px; display: flex; gap: 14px;">
+                ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" rel="noopener">GitHub Repository</a>` : ''}
+                ${proj.liveUrl ? `<a href="${this.escapeHtml(proj.liveUrl)}" target="_blank" rel="noopener">Live Project Demo</a>` : ''}
+              </div>
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Experience & Internships (Optional) -->
+      ${hasExp ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Internships &amp; Experience</div>
+        ${data.experience.map(exp => `
+          <div class="corp-item-block">
+            <div class="corp-item-header">
+              <span class="corp-item-title">${this.escapeHtml(exp.position)}</span>
+              <span class="corp-item-date">${this.escapeHtml(exp.startDate || '')} - ${this.escapeHtml(exp.endDate || 'Present')}</span>
+            </div>
+            <div class="corp-item-subtitle">${this.escapeHtml(exp.organization)}${exp.experienceType ? ` · ${this.escapeHtml(exp.experienceType)}` : ''}</div>
+            <div class="corp-item-desc">
+              ${exp.responsibilities ? `<p style="margin-bottom: 2px;">${this.escapeHtml(exp.responsibilities)}</p>` : ''}
+              ${exp.achievements ? `<p style="margin-bottom: 2px;"><strong>Achievements:</strong> ${this.escapeHtml(exp.achievements)}</p>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Certifications -->
+      ${hasCerts ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Certifications</div>
+        ${data.certifications.map(cert => `
+          <div class="corp-item-block" style="margin-bottom: 8px;">
+            <div class="corp-item-header">
+              <span class="corp-item-title" style="font-size: 14px;">${this.escapeHtml(cert.name)}</span>
+              <span class="corp-item-date">${this.escapeHtml(cert.issueDate || '')}</span>
+            </div>
+            <div class="corp-item-desc">
+              <span>${this.escapeHtml(cert.organization || '')}</span>
+              ${cert.credentialId ? ` · ID: ${this.escapeHtml(cert.credentialId)}` : ''}
+              ${cert.credentialUrl ? ` · <a href="${this.escapeHtml(cert.credentialUrl)}" target="_blank" rel="noopener">Verify</a>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Achievements & Awards -->
+      ${hasAchieve ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Achievements &amp; Honors</div>
+        ${data.achievements.map(ach => `
+          <div class="corp-item-block" style="margin-bottom: 8px;">
+            <div class="corp-item-header">
+              <span class="corp-item-title" style="font-size: 14px;">${this.escapeHtml(ach.title)}</span>
+              <span class="corp-item-date">${this.escapeHtml(ach.date || '')}</span>
+            </div>
+            <div class="corp-item-desc">${this.escapeHtml(ach.description || '')}${ach.organization ? ` (${this.escapeHtml(ach.organization)})` : ''}</div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Workshops and Training -->
+      ${hasWorkshops ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Workshops &amp; Technical Training</div>
+        ${data.workshops.map(ws => `
+          <div class="corp-item-block" style="margin-bottom: 8px;">
+            <div class="corp-item-header">
+              <span class="corp-item-title" style="font-size: 14px;">${this.escapeHtml(ws.name)}</span>
+              <span class="corp-item-date">${this.escapeHtml(ws.date || '')}</span>
+            </div>
+            <div class="corp-item-desc"><strong>${this.escapeHtml(ws.organization || '')}:</strong> ${this.escapeHtml(ws.description || '')}</div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Extracurricular Activities -->
+      ${hasExtracurriculars ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Extracurricular Activities &amp; Leadership</div>
+        ${data.extracurriculars.map(extra => `
+          <div class="corp-item-block" style="margin-bottom: 8px;">
+            <span class="corp-item-title" style="font-size: 14px;">${this.escapeHtml(extra.title)}</span>
+            ${extra.category ? `<span class="corp-item-subtitle" style="margin-left: 6px;">[${this.escapeHtml(extra.category)}]</span>` : ''}
+            <div class="corp-item-desc">${this.escapeHtml(extra.description || '')}</div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      <!-- Additional Information -->
+      ${hasAddl ? `
+      <section class="corp-section">
+        <div class="corp-section-heading">Additional Information</div>
+        <div class="corp-item-desc">
+          ${addl.languages ? `<div><strong>Languages Known:</strong> ${this.escapeHtml(addl.languages)}</div>` : ''}
+          ${addl.hobbies ? `<div><strong>Interests:</strong> ${this.escapeHtml(addl.hobbies)}</div>` : ''}
+          ${addl.publications ? `<div><strong>Publications:</strong> ${this.escapeHtml(addl.publications)}</div>` : ''}
+          ${addl.references ? `<div><strong>References:</strong> ${this.escapeHtml(addl.references)}</div>` : ''}
+        </div>
+      </section>
+      ` : ''}
+    </div>
+    `;
+  },
+
+  // =========================================================================
+  // 2. MODERN MINIMAL TEMPLATE RENDERER
+  // =========================================================================
   renderMinimal(data) {
     const p = data.personal || {};
     const avatar = this.getAvatar(data);
-    const hasEdu = data.education && data.education.length > 0;
-    const hasSkills = data.skills && data.skills.length > 0;
-    const hasProjects = data.projects && data.projects.length > 0;
-    const hasCerts = data.certifications && data.certifications.length > 0;
-    const hasExp = data.experience && data.experience.length > 0;
-    const social = data.social || {};
+    const hasPhoto = !!p.photo;
+    const hasCareerObj = !!(data.careerObjective && data.careerObjective.trim());
+    const hasEdu = Array.isArray(data.education) && data.education.length > 0;
+    const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+    const hasExp = Array.isArray(data.experience) && data.experience.length > 0;
+    const hasCerts = Array.isArray(data.certifications) && data.certifications.length > 0;
+    const hasAchieve = Array.isArray(data.achievements) && data.achievements.length > 0;
+    const addl = data.additionalInfo || {};
+    const hasAddl = !!(addl.languages || addl.hobbies || addl.publications);
 
-    let html = `
-    <div class="portfolio-render-root portfolio-template-minimal">
-      <!-- Navbar -->
-      <nav class="min-nav">
-        <div class="min-nav-container">
-          <a href="#" class="min-brand">${this.escapeHtml(p.fullName || 'Student Portfolio')}</a>
-          <ul class="min-links">
-            ${hasEdu ? '<li><a href="#education">Education</a></li>' : ''}
-            ${hasSkills ? '<li><a href="#skills">Skills</a></li>' : ''}
-            ${hasProjects ? '<li><a href="#projects">Projects</a></li>' : ''}
-            ${hasExp ? '<li><a href="#experience">Experience</a></li>' : ''}
-            ${hasCerts ? '<li><a href="#certifications">Certifications</a></li>' : ''}
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="min-container">
-        <!-- Hero Section -->
-        <header class="min-hero">
-          <img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="min-avatar" />
-          <div class="min-hero-text">
-            <h1>${this.escapeHtml(p.fullName || 'Your Name')}</h1>
+    return `
+    <div class="portfolio-document-root template-modern-minimal">
+      <header class="min-header">
+        <div class="min-header-flex">
+          ${hasPhoto ? `<img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="min-avatar" />` : ''}
+          <div>
+            <h1 class="min-name">${this.escapeHtml(p.fullName || 'Student Name')}</h1>
             <div class="min-title">${this.escapeHtml(p.title || 'Professional Title')}</div>
-            <p class="min-bio">${this.escapeHtml(p.about || 'Welcome to my professional personal portfolio.')}</p>
-            
-            <div class="min-meta-pills">
-              ${p.location ? `<span><i class="bi bi-geo-alt"></i> ${this.escapeHtml(p.location)}</span>` : ''}
-              ${p.email ? `<span><i class="bi bi-envelope"></i> ${this.escapeHtml(p.email)}</span>` : ''}
-              ${p.phone ? `<span><i class="bi bi-telephone"></i> ${this.escapeHtml(p.phone)}</span>` : ''}
+            <div class="min-meta-row">
+              ${p.email ? `<span>${this.escapeHtml(p.email)}</span>` : ''}
+              ${p.phone ? `<span>${this.escapeHtml(p.phone)}</span>` : ''}
+              ${(p.city || p.state) ? `<span>${this.escapeHtml([p.city, p.state].filter(Boolean).join(', '))}</span>` : ''}
+              ${p.linkedin ? `<a href="${this.escapeHtml(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ''}
+              ${p.github ? `<a href="${this.escapeHtml(p.github)}" target="_blank" rel="noopener">GitHub</a>` : ''}
             </div>
-          </div>
-        </header>
-
-        <!-- Education Section -->
-        ${hasEdu ? `
-        <section id="education" class="min-section">
-          <h2 class="min-section-title">Education</h2>
-          <div>
-            ${data.education.map(edu => `
-              <div class="min-timeline-item">
-                <div class="min-period">
-                  ${this.escapeHtml(edu.startYear || '')} — ${this.escapeHtml(edu.gradYear || 'Present')}
-                  ${edu.score ? `<div style="color: #e63946; font-size: 0.85rem; margin-top: 4px;">Score: ${this.escapeHtml(edu.score)}</div>` : ''}
-                </div>
-                <div class="min-content">
-                  <h3>${this.escapeHtml(edu.degree || '')} ${edu.department ? `<span style="font-weight: 400; color: #6b7280;">in ${this.escapeHtml(edu.department)}</span>` : ''}</h3>
-                  <div class="min-institution">${this.escapeHtml(edu.institution || '')}</div>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Technical Skills Section -->
-        ${hasSkills ? `
-        <section id="skills" class="min-section">
-          <h2 class="min-section-title">Technical Expertise</h2>
-          <div class="min-skills-grid">
-            ${data.skills.map(skill => `
-              <div class="min-skill-tag">
-                <strong>${this.escapeHtml(skill.name)}</strong>
-                ${skill.level ? `<span style="color:#6b7280; font-size:0.8rem; margin-left:6px;">(${this.escapeHtml(skill.level)})</span>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Projects Section -->
-        ${hasProjects ? `
-        <section id="projects" class="min-section">
-          <h2 class="min-section-title">Featured Projects</h2>
-          <div class="min-projects-grid">
-            ${data.projects.map(proj => `
-              <div class="min-project-card">
-                <h3>${this.escapeHtml(proj.name)}</h3>
-                <p>${this.escapeHtml(proj.description || '')}</p>
-                ${proj.technologies ? `<div class="min-project-tech">${this.escapeHtml(proj.technologies)}</div>` : ''}
-                <div class="min-project-links">
-                  ${proj.projectUrl ? `<a href="${this.escapeHtml(proj.projectUrl)}" target="_blank" rel="noopener">Live Demo <i class="bi bi-box-arrow-up-right"></i></a>` : ''}
-                  ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" rel="noopener">Source Code <i class="bi bi-github"></i></a>` : ''}
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Experience Section (Optional) -->
-        ${hasExp ? `
-        <section id="experience" class="min-section">
-          <h2 class="min-section-title">Experience & Internships</h2>
-          <div>
-            ${data.experience.map(exp => `
-              <div class="min-timeline-item">
-                <div class="min-period">${this.escapeHtml(exp.duration || '')}</div>
-                <div class="min-content">
-                  <h3>${this.escapeHtml(exp.position || '')}</h3>
-                  <div class="min-institution">${this.escapeHtml(exp.company || '')}</div>
-                  <p>${this.escapeHtml(exp.description || '')}</p>
-                </div>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Certifications Section -->
-        ${hasCerts ? `
-        <section id="certifications" class="min-section">
-          <h2 class="min-section-title">Certifications & Honors</h2>
-          <div class="min-projects-grid">
-            ${data.certifications.map(cert => `
-              <div class="min-project-card" style="padding: 1.25rem;">
-                <h3 style="font-size: 1.05rem;">${this.escapeHtml(cert.name)}</h3>
-                <div style="color: #e63946; font-size: 0.88rem; font-weight: 500; margin-bottom: 0.5rem;">${this.escapeHtml(cert.organization)} (${this.escapeHtml(cert.year)})</div>
-                ${cert.url ? `<a href="${this.escapeHtml(cert.url)}" target="_blank" rel="noopener" style="font-size: 0.82rem; color: #000; text-decoration: underline;">View Credential <i class="bi bi-patch-check"></i></a>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Contact Section -->
-        <section id="contact" class="min-section" style="border-bottom: none;">
-          <h2 class="min-section-title">Get in Touch</h2>
-          <p style="color: #4b5563; font-size: 1.05rem; margin-bottom: 1.5rem;">Feel free to reach out for project collaborations, internships, or open opportunities.</p>
-          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-            ${p.email ? `<a href="mailto:${this.escapeHtml(p.email)}" class="btn-red" style="font-size: 0.95rem;"><i class="bi bi-envelope"></i> Email Me</a>` : ''}
-            ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank" rel="noopener" class="btn-outline-red" style="color:#000;"><i class="bi bi-linkedin"></i> LinkedIn</a>` : ''}
-            ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank" rel="noopener" class="btn-outline-red" style="color:#000;"><i class="bi bi-github"></i> GitHub</a>` : ''}
-          </div>
-        </section>
-      </div>
-
-      <!-- Footer -->
-      <footer class="min-footer">
-        <div class="min-social-links">
-          ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank"><i class="bi bi-github"></i></a>` : ''}
-          ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank"><i class="bi bi-linkedin"></i></a>` : ''}
-          ${social.instagram ? `<a href="${this.escapeHtml(social.instagram)}" target="_blank"><i class="bi bi-instagram"></i></a>` : ''}
-          ${social.website ? `<a href="${this.escapeHtml(social.website)}" target="_blank"><i class="bi bi-globe"></i></a>` : ''}
-        </div>
-        <p>&copy; ${new Date().getFullYear()} ${this.escapeHtml(p.fullName || 'Student Portfolio')}. All rights reserved.</p>
-      </footer>
-    </div>
-    `;
-    return html;
-  },
-
-  // 2. MODERN DARK RENDERER
-  renderDark(data) {
-    const p = data.personal || {};
-    const avatar = this.getAvatar(data);
-    const hasEdu = data.education && data.education.length > 0;
-    const hasSkills = data.skills && data.skills.length > 0;
-    const hasProjects = data.projects && data.projects.length > 0;
-    const hasCerts = data.certifications && data.certifications.length > 0;
-    const hasExp = data.experience && data.experience.length > 0;
-    const social = data.social || {};
-
-    let html = `
-    <div class="portfolio-render-root portfolio-template-dark">
-      <!-- Navbar -->
-      <nav class="dark-nav">
-        <div class="dark-nav-container">
-          <a href="#" class="dark-brand">
-            <span class="dark-brand-dot"></span>
-            ${this.escapeHtml(p.fullName || 'Student Portfolio')}
-          </a>
-          <ul class="dark-links">
-            ${hasEdu ? '<li><a href="#dark-edu">Education</a></li>' : ''}
-            ${hasSkills ? '<li><a href="#dark-skills">Skills</a></li>' : ''}
-            ${hasProjects ? '<li><a href="#dark-projects">Projects</a></li>' : ''}
-            ${hasExp ? '<li><a href="#dark-exp">Experience</a></li>' : ''}
-            ${hasCerts ? '<li><a href="#dark-certs">Certifications</a></li>' : ''}
-            <li><a href="#dark-contact">Contact</a></li>
-          </ul>
-        </div>
-      </nav>
-
-      <div class="dark-container">
-        <!-- Hero Section -->
-        <header class="dark-hero">
-          <div class="dark-hero-glow"></div>
-          <div class="dark-hero-grid">
-            <div>
-              <span class="dark-greeting"><i class="bi bi-stars"></i> Available for Opportunities</span>
-              <h1 class="dark-hero-title">${this.escapeHtml(p.fullName || 'Your Name')}</h1>
-              <div class="dark-hero-subtitle">${this.escapeHtml(p.title || 'Software Engineer & Innovator')}</div>
-              <p class="dark-hero-bio">${this.escapeHtml(p.about || 'Welcome to my digital space. Explore my background, technical stack, and recent software builds.')}</p>
-              
-              <div class="dark-hero-actions">
-                ${p.email ? `<a href="mailto:${this.escapeHtml(p.email)}" class="btn-red"><i class="bi bi-send-fill"></i> Get in Touch</a>` : ''}
-                ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank" rel="noopener" class="btn-ghost-dark"><i class="bi bi-github"></i> GitHub</a>` : ''}
-              </div>
-            </div>
-
-            <div class="dark-avatar-wrapper">
-              <img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="dark-avatar" />
-            </div>
-          </div>
-        </header>
-
-        <!-- Education Section -->
-        ${hasEdu ? `
-        <section id="dark-edu" class="dark-section">
-          <div class="dark-section-title-wrap">
-            <span class="dark-section-tag">Academic Background</span>
-            <h2 class="dark-section-title">Education & Qualifications</h2>
-          </div>
-          <div class="dark-grid-2">
-            ${data.education.map(edu => `
-              <div class="dark-card">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 0.8rem;">
-                  <span style="font-size:0.8rem; background: rgba(255,51,68,0.12); color:#ff5f6d; padding:0.25rem 0.65rem; border-radius:999px;">
-                    ${this.escapeHtml(edu.startYear || '')} — ${this.escapeHtml(edu.gradYear || 'Present')}
-                  </span>
-                  ${edu.score ? `<span style="font-size:0.85rem; color:#38ef7d; font-weight:600;"><i class="bi bi-award"></i> ${this.escapeHtml(edu.score)}</span>` : ''}
-                </div>
-                <h3 style="font-size:1.25rem; color:#fff; margin-bottom:0.35rem;">${this.escapeHtml(edu.degree || '')}</h3>
-                ${edu.department ? `<div style="color:#94a3b8; font-size:0.95rem; margin-bottom:0.5rem;">Major: ${this.escapeHtml(edu.department)}</div>` : ''}
-                <div style="color:#ff3344; font-weight:600; font-size:0.95rem;"><i class="bi bi-building"></i> ${this.escapeHtml(edu.institution || '')}</div>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Technical Skills Section -->
-        ${hasSkills ? `
-        <section id="dark-skills" class="dark-section">
-          <div class="dark-section-title-wrap">
-            <span class="dark-section-tag">Core Competencies</span>
-            <h2 class="dark-section-title">Technical Skills</h2>
-          </div>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.75rem;">
-            ${data.skills.map(skill => `
-              <div class="dark-skill-pill">
-                <span class="dot"></span>
-                <strong>${this.escapeHtml(skill.name)}</strong>
-                ${skill.level ? `<span style="color:#94a3b8; font-size:0.8rem;">· ${this.escapeHtml(skill.level)}</span>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Projects Section -->
-        ${hasProjects ? `
-        <section id="dark-projects" class="dark-section">
-          <div class="dark-section-title-wrap">
-            <span class="dark-section-tag">Portfolio Showcase</span>
-            <h2 class="dark-section-title">Featured Projects</h2>
-          </div>
-          <div class="dark-grid-3">
-            ${data.projects.map(proj => `
-              <div class="dark-card" style="display:flex; flex-direction:column;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
-                  <i class="bi bi-folder-fill" style="color:#ff3344; font-size:1.4rem;"></i>
-                  <div style="display:flex; gap:0.6rem;">
-                    ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" style="color:#cbd5e1; font-size:1.1rem;"><i class="bi bi-github"></i></a>` : ''}
-                    ${proj.projectUrl ? `<a href="${this.escapeHtml(proj.projectUrl)}" target="_blank" style="color:#cbd5e1; font-size:1.1rem;"><i class="bi bi-box-arrow-up-right"></i></a>` : ''}
-                  </div>
-                </div>
-                <h3 style="font-size:1.15rem; color:#fff; margin-bottom:0.5rem;">${this.escapeHtml(proj.name)}</h3>
-                <p style="color:#94a3b8; font-size:0.9rem; flex-grow:1; margin-bottom:1.25rem;">${this.escapeHtml(proj.description || '')}</p>
-                ${proj.technologies ? `
-                  <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
-                    ${proj.technologies.split(',').map(tech => `
-                      <span style="font-size:0.75rem; background:rgba(255,255,255,0.06); padding:0.2rem 0.5rem; border-radius:4px; color:#cbd5e1;">${this.escapeHtml(tech.trim())}</span>
-                    `).join('')}
-                  </div>
-                ` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Experience Section (Optional) -->
-        ${hasExp ? `
-        <section id="dark-exp" class="dark-section">
-          <div class="dark-section-title-wrap">
-            <span class="dark-section-tag">Professional History</span>
-            <h2 class="dark-section-title">Work Experience</h2>
-          </div>
-          <div class="dark-grid-2">
-            ${data.experience.map(exp => `
-              <div class="dark-card">
-                <span style="font-size:0.8rem; color:#ff3344; font-weight:600;">${this.escapeHtml(exp.duration || '')}</span>
-                <h3 style="font-size:1.2rem; color:#fff; margin-top:0.35rem; margin-bottom:0.2rem;">${this.escapeHtml(exp.position || '')}</h3>
-                <div style="color:#94a3b8; font-size:0.92rem; margin-bottom:0.75rem;"><i class="bi bi-briefcase"></i> ${this.escapeHtml(exp.company || '')}</div>
-                <p style="color:#cbd5e1; font-size:0.9rem; margin:0;">${this.escapeHtml(exp.description || '')}</p>
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Certifications Section -->
-        ${hasCerts ? `
-        <section id="dark-certs" class="dark-section">
-          <div class="dark-section-title-wrap">
-            <span class="dark-section-tag">Verified Credentials</span>
-            <h2 class="dark-section-title">Certifications</h2>
-          </div>
-          <div class="dark-grid-3">
-            ${data.certifications.map(cert => `
-              <div class="dark-card">
-                <i class="bi bi-patch-check-fill" style="color:#38ef7d; font-size:1.5rem; margin-bottom:0.5rem; display:block;"></i>
-                <h4 style="font-size:1.05rem; color:#fff; margin-bottom:0.3rem;">${this.escapeHtml(cert.name)}</h4>
-                <div style="color:#94a3b8; font-size:0.85rem; margin-bottom:0.75rem;">${this.escapeHtml(cert.organization)} · ${this.escapeHtml(cert.year)}</div>
-                ${cert.url ? `<a href="${this.escapeHtml(cert.url)}" target="_blank" rel="noopener" style="color:#ff3344; font-size:0.82rem; font-weight:600;">Verify Badge <i class="bi bi-arrow-right"></i></a>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </section>
-        ` : ''}
-
-        <!-- Contact Section -->
-        <section id="dark-contact" class="dark-section" style="text-align: center; max-width: 650px; margin: 0 auto;">
-          <span class="dark-section-tag">Let's Connect</span>
-          <h2 class="dark-section-title" style="margin-bottom: 1rem;">Start a Conversation</h2>
-          <p style="color: #94a3b8; margin-bottom: 2rem;">Interested in working together or discussing potential opportunities? My inbox is always open.</p>
-          ${p.email ? `<a href="mailto:${this.escapeHtml(p.email)}" class="btn-red" style="font-size: 1.05rem; padding: 0.8rem 2rem;"><i class="bi bi-envelope-fill"></i> ${this.escapeHtml(p.email)}</a>` : ''}
-        </section>
-      </div>
-
-      <!-- Footer -->
-      <footer class="dark-footer">
-        <div class="dark-footer-socials">
-          ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank" class="dark-social-btn"><i class="bi bi-github"></i></a>` : ''}
-          ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank" class="dark-social-btn"><i class="bi bi-linkedin"></i></a>` : ''}
-          ${social.instagram ? `<a href="${this.escapeHtml(social.instagram)}" target="_blank" class="dark-social-btn"><i class="bi bi-instagram"></i></a>` : ''}
-          ${social.website ? `<a href="${this.escapeHtml(social.website)}" target="_blank" class="dark-social-btn"><i class="bi bi-globe"></i></a>` : ''}
-        </div>
-        <p style="color: #64748b; font-size: 0.85rem; margin: 0;">&copy; ${new Date().getFullYear()} ${this.escapeHtml(p.fullName || 'Student Portfolio')}. Built with Personal Portfolio Builder.</p>
-      </footer>
-    </div>
-    `;
-    return html;
-  },
-
-  // 3. CREATIVE STUDENT RENDERER
-  renderCreative(data) {
-    const p = data.personal || {};
-    const avatar = this.getAvatar(data);
-    const hasEdu = data.education && data.education.length > 0;
-    const hasSkills = data.skills && data.skills.length > 0;
-    const hasProjects = data.projects && data.projects.length > 0;
-    const hasCerts = data.certifications && data.certifications.length > 0;
-    const hasExp = data.experience && data.experience.length > 0;
-    const social = data.social || {};
-
-    let html = `
-    <div class="portfolio-render-root portfolio-template-creative">
-      <!-- Creative Hero -->
-      <header class="creative-hero">
-        <div class="creative-hero-content">
-          <div class="creative-avatar-box">
-            <img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="creative-avatar" />
-          </div>
-          <h1>${this.escapeHtml(p.fullName || 'Creative Student')}</h1>
-          <span class="creative-badge-title"><i class="bi bi-palette-fill"></i> ${this.escapeHtml(p.title || 'Creator & Innovator')}</span>
-          <p class="creative-bio">${this.escapeHtml(p.about || 'Welcome! I craft engaging digital experiences combining design, code, and creative problem solving.')}</p>
-
-          <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
-            ${p.email ? `<a href="mailto:${this.escapeHtml(p.email)}" class="btn-red"><i class="bi bi-envelope-paper-fill"></i> Reach Out</a>` : ''}
-            ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank" class="btn-outline-red"><i class="bi bi-linkedin"></i> Connect</a>` : ''}
           </div>
         </div>
       </header>
 
-      <div class="creative-container">
-        <!-- Education & Academics -->
-        ${hasEdu ? `
-        <div class="creative-card">
-          <span class="creative-card-badge">Education</span>
-          <h2 class="creative-section-title"><i class="bi bi-mortarboard-fill" style="color:#ff3344;"></i> Academic Journey</h2>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
-            ${data.education.map(edu => `
-              <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1.5rem;">
-                <div style="color:#ff3344; font-weight:700; font-size:0.9rem; margin-bottom:0.3rem;">${this.escapeHtml(edu.startYear)} - ${this.escapeHtml(edu.gradYear)}</div>
-                <h3 style="font-size:1.2rem; color:#fff; margin-bottom:0.25rem;">${this.escapeHtml(edu.degree)}</h3>
-                <div style="color:#cbd5e1; font-size:0.95rem; margin-bottom:0.5rem;">${this.escapeHtml(edu.department)}</div>
-                <div style="color:#94a3b8; font-size:0.9rem;">${this.escapeHtml(edu.institution)}</div>
-                ${edu.score ? `<div style="margin-top:0.6rem; color:#ff8a93; font-weight:600; font-size:0.85rem;">Result: ${this.escapeHtml(edu.score)}</div>` : ''}
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        ` : ''}
+      ${p.summary ? `
+      <section class="min-section">
+        <div class="min-section-title">Summary</div>
+        <p class="min-entry-text" style="font-size: 13.5px;">${this.escapeHtml(p.summary)}</p>
+      </section>
+      ` : ''}
 
-        <!-- Skills Gallery -->
-        ${hasSkills ? `
-        <div class="creative-card">
-          <span class="creative-card-badge">Toolkit</span>
-          <h2 class="creative-section-title"><i class="bi bi-lightning-charge-fill" style="color:#ff8c42;"></i> Skills & Superpowers</h2>
-          <div style="display: flex; flex-wrap: wrap; gap: 0.8rem;">
-            ${data.skills.map(skill => `
-              <span style="background: linear-gradient(135deg, rgba(255,51,68,0.15), rgba(255,140,66,0.15)); border: 1px solid rgba(255,80,90,0.3); color:#fff; font-weight:600; padding:0.5rem 1.1rem; border-radius:999px; font-size:0.92rem;">
-                ${this.escapeHtml(skill.name)}
-                ${skill.level ? `<span style="opacity:0.75; font-size:0.8rem; margin-left:4px;">· ${this.escapeHtml(skill.level)}</span>` : ''}
-              </span>
-            `).join('')}
-          </div>
-        </div>
-        ` : ''}
+      ${hasCareerObj ? `
+      <section class="min-section">
+        <div class="min-section-title">Objective</div>
+        <p class="min-entry-text" style="font-size: 13.5px;">${this.escapeHtml(data.careerObjective)}</p>
+      </section>
+      ` : ''}
 
-        <!-- Creative Projects -->
-        ${hasProjects ? `
-        <div class="creative-card">
-          <span class="creative-card-badge">Showcase</span>
-          <h2 class="creative-section-title"><i class="bi bi-stars" style="color:#ff3344;"></i> Creative Projects</h2>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
-            ${data.projects.map(proj => `
-              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.08); border-radius: 18px; padding: 1.6rem; display: flex; flex-direction: column;">
-                <h3 style="font-size:1.25rem; color:#fff; margin-bottom:0.5rem;">${this.escapeHtml(proj.name)}</h3>
-                <p style="color:#cbd5e1; font-size:0.92rem; flex-grow:1; margin-bottom:1.2rem;">${this.escapeHtml(proj.description)}</p>
-                ${proj.technologies ? `<div style="font-size:0.8rem; color:#ff8a93; margin-bottom:1.2rem;">${this.escapeHtml(proj.technologies)}</div>` : ''}
-                <div style="display:flex; gap:0.8rem;">
-                  ${proj.projectUrl ? `<a href="${this.escapeHtml(proj.projectUrl)}" target="_blank" class="btn-red btn-sm-custom">Demo <i class="bi bi-box-arrow-up-right"></i></a>` : ''}
-                  ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" class="btn-ghost-dark btn-sm-custom">Code <i class="bi bi-github"></i></a>` : ''}
-                </div>
-              </div>
-            `).join('')}
+      ${hasEdu ? `
+      <section class="min-section">
+        <div class="min-section-title">Education</div>
+        ${data.education.map(edu => `
+          <div class="min-entry">
+            <div class="min-entry-top">
+              <span class="min-entry-role">${this.escapeHtml(edu.degree || '')}</span>
+              <span class="min-entry-date">${this.escapeHtml(edu.startYear || '')} - ${this.escapeHtml(edu.gradYear || 'Present')}</span>
+            </div>
+            <div class="min-entry-org">${this.escapeHtml(edu.institution || '')}${edu.score ? ` · Grade: ${this.escapeHtml(edu.score)}` : ''}</div>
+            ${edu.coursework ? `<div class="min-entry-text">Coursework: ${this.escapeHtml(edu.coursework)}</div>` : ''}
           </div>
-        </div>
-        ` : ''}
+        `).join('')}
+      </section>
+      ` : ''}
 
-        <!-- Certifications & Experience (Optional) -->
-        ${(hasExp || hasCerts) ? `
-        <div class="creative-card">
-          <span class="creative-card-badge">Milestones</span>
-          <h2 class="creative-section-title"><i class="bi bi-trophy-fill" style="color:#ffbd2e;"></i> Experience & Accreditations</h2>
-          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem;">
-            ${(data.experience || []).map(exp => `
-              <div style="padding: 1.25rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
-                <div style="color:#ff3344; font-size:0.8rem; font-weight:700;">${this.escapeHtml(exp.duration)}</div>
-                <h4 style="color:#fff; font-size:1.1rem; margin:0.25rem 0;">${this.escapeHtml(exp.position)}</h4>
-                <div style="color:#94a3b8; font-size:0.9rem;">${this.escapeHtml(exp.company)}</div>
-                <p style="color:#cbd5e1; font-size:0.85rem; margin-top:0.5rem;">${this.escapeHtml(exp.description)}</p>
-              </div>
-            `).join('')}
-            ${(data.certifications || []).map(cert => `
-              <div style="padding: 1.25rem; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
-                <span style="color:#10b981; font-size:0.8rem; font-weight:700;">CERTIFIED (${this.escapeHtml(cert.year)})</span>
-                <h4 style="color:#fff; font-size:1.05rem; margin:0.25rem 0;">${this.escapeHtml(cert.name)}</h4>
-                <div style="color:#94a3b8; font-size:0.9rem;">${this.escapeHtml(cert.organization)}</div>
-                ${cert.url ? `<a href="${this.escapeHtml(cert.url)}" target="_blank" style="font-size:0.8rem; color:#ff3344; margin-top:0.4rem; display:inline-block;">Verify <i class="bi bi-box-arrow-up-right"></i></a>` : ''}
-              </div>
-            `).join('')}
+      ${this.hasSkills(data.skills) ? `
+      <section class="min-section">
+        <div class="min-section-title">Skills &amp; Expertise</div>
+        <div class="min-skills-wrap">
+          ${this.renderSkillsFlat(data.skills, 'min-skill-tag')}
+        </div>
+      </section>
+      ` : ''}
+
+      ${hasProjects ? `
+      <section class="min-section">
+        <div class="min-section-title">Projects</div>
+        ${data.projects.map(proj => `
+          <div class="min-entry">
+            <div class="min-entry-top">
+              <span class="min-entry-role">${this.escapeHtml(proj.name)}</span>
+              ${proj.duration ? `<span class="min-entry-date">${this.escapeHtml(proj.duration)}</span>` : ''}
+            </div>
+            ${proj.technologies ? `<div class="min-entry-org" style="font-size: 12px;">Stack: ${this.escapeHtml(proj.technologies)}</div>` : ''}
+            <div class="min-entry-text">${this.escapeHtml(proj.description || '')}</div>
+            <div style="margin-top: 4px; font-size: 12px; display: flex; gap: 12px;">
+              ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" rel="noopener">Code Repository</a>` : ''}
+              ${proj.liveUrl ? `<a href="${this.escapeHtml(proj.liveUrl)}" target="_blank" rel="noopener">Live Demo</a>` : ''}
+            </div>
           </div>
-        </div>
-        ` : ''}
-      </div>
+        `).join('')}
+      </section>
+      ` : ''}
 
-      <!-- Footer -->
-      <footer style="text-align: center; padding: 3rem 1.5rem; background: #090a0e; border-top: 1px solid rgba(255,255,255,0.06);">
-        <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem;">Created by ${this.escapeHtml(p.fullName || 'Student')} · Crafted with Personal Portfolio Builder</p>
-        <div style="display: flex; justify-content: center; gap: 1rem;">
-          ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank" style="color:#fff; font-size:1.2rem;"><i class="bi bi-github"></i></a>` : ''}
-          ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank" style="color:#fff; font-size:1.2rem;"><i class="bi bi-linkedin"></i></a>` : ''}
-          ${social.instagram ? `<a href="${this.escapeHtml(social.instagram)}" target="_blank" style="color:#fff; font-size:1.2rem;"><i class="bi bi-instagram"></i></a>` : ''}
+      ${hasExp ? `
+      <section class="min-section">
+        <div class="min-section-title">Experience</div>
+        ${data.experience.map(exp => `
+          <div class="min-entry">
+            <div class="min-entry-top">
+              <span class="min-entry-role">${this.escapeHtml(exp.position)}</span>
+              <span class="min-entry-date">${this.escapeHtml(exp.startDate || '')} - ${this.escapeHtml(exp.endDate || 'Present')}</span>
+            </div>
+            <div class="min-entry-org">${this.escapeHtml(exp.organization)}</div>
+            <div class="min-entry-text">${this.escapeHtml(exp.responsibilities || '')}</div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${(hasCerts || hasAchieve) ? `
+      <section class="min-section">
+        <div class="min-section-title">Certifications &amp; Honors</div>
+        ${(data.certifications || []).map(cert => `
+          <div class="min-entry" style="margin-bottom: 8px;">
+            <span class="min-entry-role" style="font-size: 13.5px;">${this.escapeHtml(cert.name)}</span> — <span class="min-entry-org">${this.escapeHtml(cert.organization)}</span>
+            <span class="min-entry-date" style="float: right;">${this.escapeHtml(cert.issueDate || '')}</span>
+          </div>
+        `).join('')}
+        ${(data.achievements || []).map(ach => `
+          <div class="min-entry" style="margin-bottom: 8px;">
+            <span class="min-entry-role" style="font-size: 13.5px;">${this.escapeHtml(ach.title)}</span> — <span class="min-entry-text">${this.escapeHtml(ach.description || '')}</span>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${hasAddl ? `
+      <section class="min-section">
+        <div class="min-section-title">Additional</div>
+        <div class="min-entry-text">
+          ${addl.languages ? `<div>Languages: ${this.escapeHtml(addl.languages)}</div>` : ''}
+          ${addl.hobbies ? `<div>Interests: ${this.escapeHtml(addl.hobbies)}</div>` : ''}
+          ${addl.publications ? `<div>Publications: ${this.escapeHtml(addl.publications)}</div>` : ''}
         </div>
-      </footer>
+      </section>
+      ` : ''}
     </div>
     `;
-    return html;
   },
 
-  // 4. DEVELOPER PORTFOLIO RENDERER
+  // =========================================================================
+  // 3. DEVELOPER PORTFOLIO TEMPLATE RENDERER
+  // =========================================================================
   renderDeveloper(data) {
     const p = data.personal || {};
     const avatar = this.getAvatar(data);
-    const hasEdu = data.education && data.education.length > 0;
-    const hasSkills = data.skills && data.skills.length > 0;
-    const hasProjects = data.projects && data.projects.length > 0;
-    const hasCerts = data.certifications && data.certifications.length > 0;
-    const hasExp = data.experience && data.experience.length > 0;
-    const social = data.social || {};
+    const hasPhoto = !!p.photo;
+    const hasEdu = Array.isArray(data.education) && data.education.length > 0;
+    const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+    const hasExp = Array.isArray(data.experience) && data.experience.length > 0;
+    const hasCerts = Array.isArray(data.certifications) && data.certifications.length > 0;
 
-    let html = `
-    <div class="portfolio-render-root portfolio-template-developer">
-      <!-- Terminal Window Bar -->
-      <div class="dev-window-bar">
-        <div class="dev-dots">
-          <span class="dot-red"></span>
-          <span class="dot-yellow"></span>
-          <span class="dot-green"></span>
-        </div>
-        <div class="dev-prompt-header">bash - user@portfolio:~ (${this.escapeHtml(p.fullName || 'developer')})</div>
-        <div style="font-size: 0.75rem; color: #58a6ff;">v2.0.0-release</div>
-      </div>
-
-      <div class="dev-container">
-        <!-- Hero Terminal Box -->
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>cat</span> <span style="color:#7ee787;">profile.json</span>
+    return `
+    <div class="portfolio-document-root template-developer-portfolio">
+      <header class="dev-header-panel">
+        <div>
+          <h1 class="dev-name">${this.escapeHtml(p.fullName || 'Developer Name')}</h1>
+          <div class="dev-title">${this.escapeHtml(p.title || 'Software Engineering Student')}</div>
+          
+          <div class="dev-links-row">
+            ${p.email ? `<span>email: ${this.escapeHtml(p.email)}</span>` : ''}
+            ${p.github ? `<a href="${this.escapeHtml(p.github)}" target="_blank" rel="noopener">github.com</a>` : ''}
+            ${p.linkedin ? `<a href="${this.escapeHtml(p.linkedin)}" target="_blank" rel="noopener">linkedin.com</a>` : ''}
+            ${p.website ? `<a href="${this.escapeHtml(p.website)}" target="_blank" rel="noopener">portfolio.web</a>` : ''}
+            ${(p.city || p.state) ? `<span>loc: ${this.escapeHtml([p.city, p.state].filter(Boolean).join(', '))}</span>` : ''}
           </div>
+        </div>
+        ${hasPhoto ? `<img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="dev-avatar" />` : ''}
+      </header>
 
-          <div class="dev-hero-grid">
-            <img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="dev-avatar" />
-            <div>
-              <div class="dev-name">${this.escapeHtml(p.fullName || 'Developer Name')}</div>
-              <div class="dev-role">&gt; ${this.escapeHtml(p.title || 'Full Stack Engineer')}</div>
-              <div class="dev-comment">/* ${this.escapeHtml(p.about || 'Specialized in modern computing, algorithm design, and reliable web architectures.')} */</div>
-              
-              <div style="font-size: 0.85rem; color: #8b949e; margin-bottom: 1rem;">
-                ${p.location ? `<span>📍 ${this.escapeHtml(p.location)}</span> | ` : ''}
-                ${p.email ? `<span>✉️ ${this.escapeHtml(p.email)}</span>` : ''}
-              </div>
+      ${p.summary ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Technical Overview</div>
+        <p class="dev-project-desc" style="font-size: 13.5px;">${this.escapeHtml(p.summary)}</p>
+      </section>
+      ` : ''}
 
-              <div class="dev-badge-grid">
-                ${social.github ? `<a href="${this.escapeHtml(social.github)}" target="_blank" class="dev-badge red"><i class="bi bi-github"></i> github</a>` : ''}
-                ${social.linkedin ? `<a href="${this.escapeHtml(social.linkedin)}" target="_blank" class="dev-badge"><i class="bi bi-linkedin"></i> linkedin</a>` : ''}
-                ${p.email ? `<a href="mailto:${this.escapeHtml(p.email)}" class="dev-badge"><i class="bi bi-envelope"></i> email</a>` : ''}
-              </div>
+      ${this.hasSkills(data.skills) ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Technical Stack &amp; Tooling</div>
+        <div style="background-color: #F6F8FA; border: 1px solid #D0D7DE; padding: 14px; border-radius: 6px;">
+          ${this.renderSkillsDevRows(data.skills)}
+        </div>
+      </section>
+      ` : ''}
+
+      ${hasProjects ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Software Engineering Projects</div>
+        ${data.projects.map(proj => `
+          <div class="dev-project-card">
+            <div class="dev-project-title">
+              <span>${this.escapeHtml(proj.name)}</span>
+              ${proj.duration ? `<span style="font-size: 11.5px; color: #57606A; font-weight: 500;">${this.escapeHtml(proj.duration)}</span>` : ''}
+            </div>
+            ${proj.technologies ? `<div class="dev-project-tech">[ ${this.escapeHtml(proj.technologies)} ]</div>` : ''}
+            <div class="dev-project-desc">
+              <p style="margin-bottom: 4px;">${this.escapeHtml(proj.description || '')}</p>
+              ${proj.problemStatement ? `<div style="font-size: 12.5px;"><strong>Problem:</strong> ${this.escapeHtml(proj.problemStatement)}</div>` : ''}
+              ${proj.solution ? `<div style="font-size: 12.5px;"><strong>Solution:</strong> ${this.escapeHtml(proj.solution)}</div>` : ''}
+            </div>
+            <div style="margin-top: 8px; font-size: 12px; display: flex; gap: 14px;">
+              ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" rel="noopener" style="color: #0969DA; font-weight: 600;">Repository Source</a>` : ''}
+              ${proj.liveUrl ? `<a href="${this.escapeHtml(proj.liveUrl)}" target="_blank" rel="noopener" style="color: #0969DA; font-weight: 600;">Live Deployment</a>` : ''}
             </div>
           </div>
-        </div>
+        `).join('')}
+      </section>
+      ` : ''}
 
-        <!-- Skills Section: $ ./list_skills.sh -->
-        ${hasSkills ? `
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>npm</span> <span style="color:#7ee787;">run skills:list</span>
+      ${hasEdu ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Education &amp; Credentials</div>
+        ${data.education.map(edu => `
+          <div style="margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 14px;">
+              <span>${this.escapeHtml(edu.degree || '')}</span>
+              <span style="font-size: 12px; color: #57606A;">${this.escapeHtml(edu.startYear || '')} - ${this.escapeHtml(edu.gradYear || 'Present')}</span>
+            </div>
+            <div style="font-size: 13px; color: #57606A;">${this.escapeHtml(edu.institution || '')}${edu.score ? ` · GPA: ${this.escapeHtml(edu.score)}` : ''}</div>
+            ${edu.coursework ? `<div style="font-size: 12.5px; color: #24292F; margin-top: 2px;">Key Modules: ${this.escapeHtml(edu.coursework)}</div>` : ''}
           </div>
-          <div class="dev-badge-grid" style="gap: 0.75rem;">
-            ${data.skills.map(s => `
-              <div class="dev-badge" style="padding: 0.5rem 0.85rem; font-size: 0.9rem;">
-                <span style="color:#ff7b72;">const</span> <strong style="color:#f0f6fc;">${this.escapeHtml(s.name)}</strong> = <span style="color:#7ee787;">"${this.escapeHtml(s.level || 'proficient')}"</span>;
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        ` : ''}
+        `).join('')}
+      </section>
+      ` : ''}
 
-        <!-- Projects Section: $ git log --projects -->
-        ${hasProjects ? `
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>git</span> <span style="color:#7ee787;">showcase --featured</span>
+      ${hasExp ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Professional Experience</div>
+        ${data.experience.map(exp => `
+          <div style="margin-bottom: 12px;">
+            <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 14px;">
+              <span>${this.escapeHtml(exp.position)} @ ${this.escapeHtml(exp.organization)}</span>
+              <span style="font-size: 12px; color: #57606A;">${this.escapeHtml(exp.startDate || '')} - ${this.escapeHtml(exp.endDate || 'Present')}</span>
+            </div>
+            <div style="font-size: 13px; color: #24292F; margin-top: 3px;">${this.escapeHtml(exp.responsibilities || '')}</div>
           </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${hasCerts ? `
+      <section class="dev-section">
+        <div class="dev-section-title">Certifications</div>
+        ${data.certifications.map(c => `
+          <div style="font-size: 13px; margin-bottom: 4px;">
+            <strong>${this.escapeHtml(c.name)}</strong> · ${this.escapeHtml(c.organization || '')} (${this.escapeHtml(c.issueDate || '')})
+            ${c.credentialUrl ? ` · <a href="${this.escapeHtml(c.credentialUrl)}" target="_blank" rel="noopener">Verify</a>` : ''}
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+    </div>
+    `;
+  },
+
+  // =========================================================================
+  // 4. ACADEMIC PORTFOLIO TEMPLATE RENDERER
+  // =========================================================================
+  renderAcademic(data) {
+    const p = data.personal || {};
+    const hasCareerObj = !!(data.careerObjective && data.careerObjective.trim());
+    const hasEdu = Array.isArray(data.education) && data.education.length > 0;
+    const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+    const hasExp = Array.isArray(data.experience) && data.experience.length > 0;
+    const hasCerts = Array.isArray(data.certifications) && data.certifications.length > 0;
+    const hasAchieve = Array.isArray(data.achievements) && data.achievements.length > 0;
+    const hasWorkshops = Array.isArray(data.workshops) && data.workshops.length > 0;
+    const addl = data.additionalInfo || {};
+
+    return `
+    <div class="portfolio-document-root template-academic-portfolio">
+      <header class="acad-header">
+        <h1 class="acad-name">${this.escapeHtml(p.fullName || 'Student Name')}</h1>
+        <div class="acad-title">${this.escapeHtml(p.title || 'Academic Candidate')}</div>
+        <div class="acad-contacts">
+          ${p.email ? `<span>Email: ${this.escapeHtml(p.email)}</span>` : ''}
+          ${p.phone ? `<span>Tel: ${this.escapeHtml(p.phone)}</span>` : ''}
+          ${(p.city || p.state) ? `<span>Location: ${this.escapeHtml([p.city, p.state].filter(Boolean).join(', '))}</span>` : ''}
+          ${p.linkedin ? `<a href="${this.escapeHtml(p.linkedin)}" target="_blank" rel="noopener">LinkedIn</a>` : ''}
+        </div>
+      </header>
+
+      ${hasCareerObj ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Academic &amp; Research Objective</div>
+        <p class="acad-entry-details" style="font-size: 13.5px;">${this.escapeHtml(data.careerObjective)}</p>
+      </section>
+      ` : (p.summary ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Scholarly Profile</div>
+        <p class="acad-entry-details" style="font-size: 13.5px;">${this.escapeHtml(p.summary)}</p>
+      </section>
+      ` : '')}
+
+      <!-- Education First in Academic Portfolio -->
+      ${hasEdu ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Education &amp; Qualifications</div>
+        ${data.education.map(edu => `
+          <div class="acad-entry">
+            <div class="acad-entry-top">
+              <span>${this.escapeHtml(edu.degree || '')}</span>
+              <span class="acad-entry-date">${this.escapeHtml(edu.startYear || '')} - ${this.escapeHtml(edu.gradYear || 'Present')}</span>
+            </div>
+            <div class="acad-entry-sub">${this.escapeHtml(edu.institution || '')}${edu.universityName ? `, ${this.escapeHtml(edu.universityName)}` : ''}</div>
+            <div class="acad-entry-details">
+              ${edu.score ? `<div>Cumulative Performance: <strong>${this.escapeHtml(edu.score)}</strong></div>` : ''}
+              ${edu.coursework ? `<div>Relevant Coursework: ${this.escapeHtml(edu.coursework)}</div>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${this.hasSkills(data.skills) ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Core Competencies &amp; Methodologies</div>
+        <div class="acad-entry-details">
+          ${this.renderSkillsAcademic(data.skills)}
+        </div>
+      </section>
+      ` : ''}
+
+      ${hasProjects ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Academic &amp; Applied Projects</div>
+        ${data.projects.map(proj => `
+          <div class="acad-entry">
+            <div class="acad-entry-top">
+              <span>${this.escapeHtml(proj.name)}</span>
+              ${proj.duration ? `<span class="acad-entry-date">${this.escapeHtml(proj.duration)}</span>` : ''}
+            </div>
+            ${proj.technologies ? `<div class="acad-entry-sub" style="font-size: 12px;">Methodologies: ${this.escapeHtml(proj.technologies)}</div>` : ''}
+            <div class="acad-entry-details">
+              <p style="margin-bottom: 3px;">${this.escapeHtml(proj.description || '')}</p>
+              ${proj.solution ? `<p style="margin-bottom: 2px;"><strong>Findings / Solution:</strong> ${this.escapeHtml(proj.solution)}</p>` : ''}
+            </div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${hasExp ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Academic &amp; Professional Experience</div>
+        ${data.experience.map(exp => `
+          <div class="acad-entry">
+            <div class="acad-entry-top">
+              <span>${this.escapeHtml(exp.position)}</span>
+              <span class="acad-entry-date">${this.escapeHtml(exp.startDate || '')} - ${this.escapeHtml(exp.endDate || 'Present')}</span>
+            </div>
+            <div class="acad-entry-sub">${this.escapeHtml(exp.organization)}</div>
+            <div class="acad-entry-details">${this.escapeHtml(exp.responsibilities || '')}</div>
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${(hasAchieve || hasCerts) ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Honors, Awards &amp; Certifications</div>
+        ${(data.achievements || []).map(ach => `
+          <div class="acad-entry" style="margin-bottom: 6px;">
+            <strong>${this.escapeHtml(ach.title)}</strong> — ${this.escapeHtml(ach.description || '')} (${this.escapeHtml(ach.date || '')})
+          </div>
+        `).join('')}
+        ${(data.certifications || []).map(c => `
+          <div class="acad-entry" style="margin-bottom: 6px;">
+            ${this.escapeHtml(c.name)} — ${this.escapeHtml(c.organization || '')} (${this.escapeHtml(c.issueDate || '')})
+          </div>
+        `).join('')}
+      </section>
+      ` : ''}
+
+      ${addl.publications ? `
+      <section class="acad-section">
+        <div class="acad-section-title">Publications &amp; Working Papers</div>
+        <p class="acad-entry-details">${this.escapeHtml(addl.publications)}</p>
+      </section>
+      ` : ''}
+    </div>
+    `;
+  },
+
+  // =========================================================================
+  // 5. PROFESSIONAL CREATIVE TEMPLATE RENDERER
+  // =========================================================================
+  renderCreative(data) {
+    const p = data.personal || {};
+    const avatar = this.getAvatar(data);
+    const hasPhoto = !!p.photo;
+    const hasEdu = Array.isArray(data.education) && data.education.length > 0;
+    const hasProjects = Array.isArray(data.projects) && data.projects.length > 0;
+    const hasExp = Array.isArray(data.experience) && data.experience.length > 0;
+    const hasCerts = Array.isArray(data.certifications) && data.certifications.length > 0;
+    const hasAchieve = Array.isArray(data.achievements) && data.achievements.length > 0;
+    const addl = data.additionalInfo || {};
+
+    return `
+    <div class="portfolio-document-root template-professional-creative">
+      <div class="creat-layout">
+        <!-- Sidebar Column -->
+        <aside class="creat-sidebar">
+          ${hasPhoto ? `<img src="${avatar}" alt="${this.escapeHtml(p.fullName)}" class="creat-avatar" />` : ''}
           
-          <div>
-            ${data.projects.map(proj => `
-              <div class="dev-project-card">
-                <div class="dev-project-header">
-                  <div>
-                    <i class="bi bi-terminal" style="color:#ff5555; margin-right:6px;"></i>
-                    <a href="${this.escapeHtml(proj.projectUrl || proj.githubUrl || '#')}" target="_blank" class="dev-repo-name">${this.escapeHtml(proj.name)}</a>
-                  </div>
-                  <div style="font-size:0.8rem; color:#8b949e;">Public Repo</div>
-                </div>
+          <div class="creat-side-section">
+            <div class="creat-side-heading">Contact</div>
+            ${p.email ? `<div class="creat-side-item"><strong>Email:</strong><br>${this.escapeHtml(p.email)}</div>` : ''}
+            ${p.phone ? `<div class="creat-side-item"><strong>Phone:</strong><br>${this.escapeHtml(p.phone)}</div>` : ''}
+            ${(p.city || p.state) ? `<div class="creat-side-item"><strong>Location:</strong><br>${this.escapeHtml([p.city, p.state].filter(Boolean).join(', '))}</div>` : ''}
+            ${p.linkedin ? `<div class="creat-side-item"><a href="${this.escapeHtml(p.linkedin)}" target="_blank" rel="noopener">LinkedIn Profile</a></div>` : ''}
+            ${p.github ? `<div class="creat-side-item"><a href="${this.escapeHtml(p.github)}" target="_blank" rel="noopener">GitHub Profile</a></div>` : ''}
+            ${p.website ? `<div class="creat-side-item"><a href="${this.escapeHtml(p.website)}" target="_blank" rel="noopener">Personal Website</a></div>` : ''}
+          </div>
 
-                <p style="color:#8b949e; font-size:0.9rem; margin-bottom:0.75rem;">${this.escapeHtml(proj.description)}</p>
-                
-                ${proj.technologies ? `<div style="color:#58a6ff; font-size:0.82rem; margin-bottom:0.85rem;">[Stack: ${this.escapeHtml(proj.technologies)}]</div>` : ''}
+          <!-- Skills Sidebar -->
+          ${this.hasSkills(data.skills) ? `
+          <div class="creat-side-section">
+            <div class="creat-side-heading">Skills</div>
+            ${this.renderSkillsSidebar(data.skills)}
+          </div>
+          ` : ''}
 
-                <div style="display:flex; gap:1rem; font-size:0.85rem;">
-                  ${proj.projectUrl ? `<a href="${this.escapeHtml(proj.projectUrl)}" target="_blank" style="color:#7ee787;"><i class="bi bi-box-arrow-up-right"></i> Live Deployment</a>` : ''}
-                  ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" style="color:#58a6ff;"><i class="bi bi-git"></i> Repository</a>` : ''}
-                </div>
+          <!-- Certifications Sidebar -->
+          ${hasCerts ? `
+          <div class="creat-side-section">
+            <div class="creat-side-heading">Certifications</div>
+            ${data.certifications.map(c => `
+              <div class="creat-side-item" style="margin-bottom: 8px;">
+                <strong>${this.escapeHtml(c.name)}</strong><br>
+                <span style="font-size: 11.5px; color: #64748B;">${this.escapeHtml(c.organization || '')} (${this.escapeHtml(c.issueDate || '')})</span>
               </div>
             `).join('')}
           </div>
-        </div>
-        ` : ''}
+          ` : ''}
 
-        <!-- Education & Academics -->
-        ${hasEdu ? `
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>cat</span> <span style="color:#7ee787;">/etc/education.log</span>
+          <!-- Languages Sidebar -->
+          ${addl.languages ? `
+          <div class="creat-side-section">
+            <div class="creat-side-heading">Languages</div>
+            <div class="creat-side-item">${this.escapeHtml(addl.languages)}</div>
           </div>
-          <div>
+          ` : ''}
+        </aside>
+
+        <!-- Main Column -->
+        <main class="creat-main">
+          <h1 class="creat-name">${this.escapeHtml(p.fullName || 'Student Name')}</h1>
+          <div class="creat-title">${this.escapeHtml(p.title || 'Candidate for Professional Roles')}</div>
+
+          ${p.summary ? `
+          <section class="creat-main-section">
+            <div class="creat-main-heading">Profile</div>
+            <p class="creat-card-desc" style="font-size: 13.5px;">${this.escapeHtml(p.summary)}</p>
+          </section>
+          ` : ''}
+
+          ${hasEdu ? `
+          <section class="creat-main-section">
+            <div class="creat-main-heading">Education</div>
             ${data.education.map(edu => `
-              <div style="border-left: 2px solid #30363d; padding-left: 1rem; margin-bottom: 1.25rem;">
-                <div style="color:#ff7b72; font-size:0.85rem;">[${this.escapeHtml(edu.startYear)} - ${this.escapeHtml(edu.gradYear)}] ${edu.score ? `:: CGPA/Grade: ${this.escapeHtml(edu.score)}` : ''}</div>
-                <div style="color:#f0f6fc; font-weight:700; font-size:1.1rem;">${this.escapeHtml(edu.degree)} ${edu.department ? `- ${this.escapeHtml(edu.department)}` : ''}</div>
-                <div style="color:#8b949e; font-size:0.92rem;">${this.escapeHtml(edu.institution)}</div>
+              <div class="creat-card">
+                <div class="creat-card-top">
+                  <span class="creat-card-title">${this.escapeHtml(edu.degree || '')}</span>
+                  <span class="creat-card-date">${this.escapeHtml(edu.startYear || '')} - ${this.escapeHtml(edu.gradYear || 'Present')}</span>
+                </div>
+                <div class="creat-card-sub">${this.escapeHtml(edu.institution || '')}${edu.score ? ` · GPA: ${this.escapeHtml(edu.score)}` : ''}</div>
+                ${edu.coursework ? `<div class="creat-card-desc">Coursework: ${this.escapeHtml(edu.coursework)}</div>` : ''}
               </div>
             `).join('')}
-          </div>
-        </div>
-        ` : ''}
+          </section>
+          ` : ''}
 
-        <!-- Experience & Internships (Optional) -->
-        ${hasExp ? `
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>ps</span> <span style="color:#7ee787;">aux | grep experience</span>
-          </div>
-          <div>
+          ${hasProjects ? `
+          <section class="creat-main-section">
+            <div class="creat-main-heading">Key Projects</div>
+            ${data.projects.map(proj => `
+              <div class="creat-card">
+                <div class="creat-card-top">
+                  <span class="creat-card-title">${this.escapeHtml(proj.name)}</span>
+                  ${proj.duration ? `<span class="creat-card-date">${this.escapeHtml(proj.duration)}</span>` : ''}
+                </div>
+                ${proj.technologies ? `<div class="creat-card-sub" style="font-size: 12px;">${this.escapeHtml(proj.technologies)}</div>` : ''}
+                <div class="creat-card-desc">
+                  ${this.escapeHtml(proj.description || '')}
+                  <div style="margin-top: 4px; display: flex; gap: 12px; font-size: 12px;">
+                    ${proj.githubUrl ? `<a href="${this.escapeHtml(proj.githubUrl)}" target="_blank" rel="noopener">Code</a>` : ''}
+                    ${proj.liveUrl ? `<a href="${this.escapeHtml(proj.liveUrl)}" target="_blank" rel="noopener">Live Demo</a>` : ''}
+                  </div>
+                </div>
+              </div>
+            `).join('')}
+          </section>
+          ` : ''}
+
+          ${hasExp ? `
+          <section class="creat-main-section">
+            <div class="creat-main-heading">Experience &amp; Internships</div>
             ${data.experience.map(exp => `
-              <div style="border-left: 2px solid #58a6ff; padding-left: 1rem; margin-bottom: 1.25rem;">
-                <div style="color:#7ee787; font-size:0.85rem;">${this.escapeHtml(exp.duration)}</div>
-                <div style="color:#f0f6fc; font-weight:700; font-size:1.05rem;">${this.escapeHtml(exp.position)} @ ${this.escapeHtml(exp.company)}</div>
-                <div style="color:#8b949e; font-size:0.9rem; margin-top:0.25rem;">${this.escapeHtml(exp.description)}</div>
+              <div class="creat-card">
+                <div class="creat-card-top">
+                  <span class="creat-card-title">${this.escapeHtml(exp.position)}</span>
+                  <span class="creat-card-date">${this.escapeHtml(exp.startDate || '')} - ${this.escapeHtml(exp.endDate || 'Present')}</span>
+                </div>
+                <div class="creat-card-sub">${this.escapeHtml(exp.organization)}</div>
+                <div class="creat-card-desc">${this.escapeHtml(exp.responsibilities || '')}</div>
               </div>
             `).join('')}
-          </div>
-        </div>
-        ` : ''}
+          </section>
+          ` : ''}
 
-        <!-- Certifications -->
-        ${hasCerts ? `
-        <div class="dev-terminal-box">
-          <div class="dev-prompt-line">
-            <span>$</span> <span>gpg</span> <span style="color:#7ee787;">--verify certifications.sig</span>
-          </div>
-          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem;">
-            ${data.certifications.map(cert => `
-              <div style="background:#0d1117; border:1px solid #30363d; border-radius:4px; padding:1rem;">
-                <div style="color:#7ee787; font-size:0.8rem;">[VALIDATED ${this.escapeHtml(cert.year)}]</div>
-                <div style="color:#f0f6fc; font-weight:700; font-size:0.95rem; margin:0.2rem 0;">${this.escapeHtml(cert.name)}</div>
-                <div style="color:#8b949e; font-size:0.85rem;">${this.escapeHtml(cert.organization)}</div>
-                ${cert.url ? `<a href="${this.escapeHtml(cert.url)}" target="_blank" style="color:#58a6ff; font-size:0.8rem; margin-top:0.4rem; display:inline-block;">Key / Link <i class="bi bi-box-arrow-up-right"></i></a>` : ''}
+          ${hasAchieve ? `
+          <section class="creat-main-section">
+            <div class="creat-main-heading">Achievements</div>
+            ${data.achievements.map(ach => `
+              <div class="creat-card" style="margin-bottom: 8px;">
+                <span class="creat-card-title" style="font-size: 13.5px;">${this.escapeHtml(ach.title)}</span>
+                <span class="creat-card-date" style="float: right;">${this.escapeHtml(ach.date || '')}</span>
+                <div class="creat-card-desc">${this.escapeHtml(ach.description || '')}</div>
               </div>
             `).join('')}
-          </div>
-        </div>
-        ` : ''}
-      </div>
-
-      <!-- Footer -->
-      <div style="background:#161b22; border-top:1px solid #30363d; padding:2rem 1.5rem; text-align:center; color:#8b949e; font-size:0.85rem;">
-        <div>/* Process finished with exit code 0. &copy; ${new Date().getFullYear()} ${this.escapeHtml(p.fullName || 'Developer')} */</div>
+          </section>
+          ` : ''}
+        </main>
       </div>
     </div>
     `;
+  },
+
+  // =========================================================================
+  // HELPER SKILL PARSERS & RENDERERS
+  // =========================================================================
+  hasSkills(skills) {
+    if (!skills) return false;
+    if (typeof skills === 'string') return skills.trim().length > 0;
+    if (Array.isArray(skills)) return skills.length > 0;
+    if (typeof skills === 'object') {
+      return Object.values(skills).some(val => val && String(val).trim().length > 0);
+    }
+    return false;
+  },
+
+  renderSkillsGrid(skills, prefix) {
+    if (!skills) return '';
+    if (typeof skills === 'string') {
+      return `<div class="${prefix}-skill-cell"><div class="${prefix}-skill-cat">Core Skills</div><div class="${prefix}-skill-val">${this.escapeHtml(skills)}</div></div>`;
+    }
+    if (Array.isArray(skills)) {
+      return skills.map(s => {
+        const name = typeof s === 'string' ? s : s.name;
+        const level = s.level ? ` (${s.level})` : '';
+        return `<div class="${prefix}-skill-cell"><div class="${prefix}-skill-val">${this.escapeHtml(name + level)}</div></div>`;
+      }).join('');
+    }
+    // Object with categorized fields
+    const labels = {
+      programmingLanguages: 'Programming Languages',
+      frontend: 'Frontend Technologies',
+      backend: 'Backend Technologies',
+      frameworks: 'Frameworks & Libraries',
+      databases: 'Databases',
+      tools: 'Developer Tools',
+      softwareSkills: 'Software & Applications',
+      softSkills: 'Professional & Soft Skills',
+      otherSkills: 'Other Skills'
+    };
+
+    let html = '';
+    for (const [key, label] of Object.entries(labels)) {
+      if (skills[key] && skills[key].trim()) {
+        html += `
+          <div class="${prefix}-skill-cell">
+            <div class="${prefix}-skill-cat">${label}</div>
+            <div class="${prefix}-skill-val">${this.escapeHtml(skills[key])}</div>
+          </div>
+        `;
+      }
+    }
     return html;
+  },
+
+  renderSkillsFlat(skills, className) {
+    if (!skills) return '';
+    let items = [];
+    if (typeof skills === 'string') {
+      items = skills.split(',').map(s => s.trim()).filter(Boolean);
+    } else if (Array.isArray(skills)) {
+      items = skills.map(s => typeof s === 'string' ? s : s.name);
+    } else if (typeof skills === 'object') {
+      for (const val of Object.values(skills)) {
+        if (val) {
+          items.push(...val.split(',').map(s => s.trim()).filter(Boolean));
+        }
+      }
+    }
+    return items.map(it => `<span class="${className}">${this.escapeHtml(it)}</span>`).join('');
+  },
+
+  renderSkillsDevRows(skills) {
+    if (!skills) return '';
+    const labels = {
+      programmingLanguages: 'Languages:',
+      frontend: 'Frontend:',
+      backend: 'Backend:',
+      frameworks: 'Frameworks:',
+      databases: 'Databases:',
+      tools: 'Developer Tools:',
+      softwareSkills: 'Software Tools:',
+      softSkills: 'Soft Skills:'
+    };
+
+    if (typeof skills === 'object' && !Array.isArray(skills)) {
+      let rows = '';
+      for (const [key, lbl] of Object.entries(labels)) {
+        if (skills[key] && skills[key].trim()) {
+          rows += `
+            <div class="dev-skill-group">
+              <span class="dev-skill-lbl">${lbl}</span>
+              <span class="dev-skill-txt">${this.escapeHtml(skills[key])}</span>
+            </div>
+          `;
+        }
+      }
+      return rows;
+    }
+    return `<div class="dev-skill-group"><span class="dev-skill-txt">${this.escapeHtml(JSON.stringify(skills))}</span></div>`;
+  },
+
+  renderSkillsAcademic(skills) {
+    if (!skills) return '';
+    if (typeof skills === 'string') return `<div>${this.escapeHtml(skills)}</div>`;
+    if (Array.isArray(skills)) return `<div>${skills.map(s => typeof s === 'string' ? s : s.name).join(', ')}</div>`;
+    return Object.entries(skills)
+      .filter(([k, v]) => v && v.trim())
+      .map(([k, v]) => `<div><strong>${k.replace(/([A-Z])/g, ' $1').toUpperCase()}:</strong> ${this.escapeHtml(v)}</div>`)
+      .join('');
+  },
+
+  renderSkillsSidebar(skills) {
+    if (!skills) return '';
+    if (typeof skills === 'string') return `<div class="creat-side-item">${this.escapeHtml(skills)}</div>`;
+    if (Array.isArray(skills)) return skills.map(s => `<div class="creat-side-item">${this.escapeHtml(typeof s === 'string' ? s : s.name)}</div>`).join('');
+    return Object.entries(skills)
+      .filter(([k, v]) => v && v.trim())
+      .map(([k, v]) => `
+        <div class="creat-side-item" style="margin-bottom: 6px;">
+          <strong style="font-size: 11.5px; color: #14243A;">${k.replace(/([A-Z])/g, ' $1')}:</strong><br>
+          ${this.escapeHtml(v)}
+        </div>
+      `).join('');
   },
 
   // Main render dispatcher
   render(templateId, data) {
     switch (templateId) {
-      case 'minimal-professional':
+      case 'modern-minimal':
         return this.renderMinimal(data);
-      case 'creative-student':
-        return this.renderCreative(data);
       case 'developer-portfolio':
         return this.renderDeveloper(data);
-      case 'modern-dark':
+      case 'academic-portfolio':
+        return this.renderAcademic(data);
+      case 'professional-creative':
+        return this.renderCreative(data);
+      case 'corporate-professional':
       default:
-        return this.renderDark(data);
+        return this.renderCorporate(data);
     }
   }
 };
