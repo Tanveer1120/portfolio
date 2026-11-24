@@ -145,15 +145,15 @@ const minimalData = {
 });
 console.log('  ✅ Empty optional sections omitted smoothly without broken markup.');
 
-// 2b. UNIT TEST: Executive Two-Column PDF Architecture (Reference Design)
-console.log('\n🔹 [Test 2b] Testing Reference Executive Two-Column A4 PDF Layout Generator...');
+// 2b. UNIT TEST: Executive Two-Column Architecture (Reference Design for Preview & PDF)
+console.log('\n🔹 [Test 2b] Testing Reference Executive Two-Column A4 Layout Generator...');
 const pdfHtml = PortfolioGenerator.renderExecutivePdfTemplate(testData);
 assert(pdfHtml.includes('executive-pdf-wrapper'), 'PDF must generate executive-pdf-wrapper container');
 assert(pdfHtml.includes('executive-pdf-sidebar'), 'PDF must generate left sidebar');
 assert(pdfHtml.includes('executive-pdf-main'), 'PDF must generate right main column');
 assert(pdfHtml.includes('executive-pdf-photo-container'), 'PDF must generate framed circular profile photo container');
-assert(pdfHtml.includes('JANE DOE'), 'PDF candidate name must be uppercase in left sidebar header');
-assert(pdfHtml.includes('SOFTWARE DEVELOPER'), 'PDF professional title must be present');
+assert(pdfHtml.includes('Jane Doe'), 'PDF candidate name must be present in left sidebar header');
+assert(pdfHtml.includes('Software Developer'), 'PDF professional title must be present');
 assert(pdfHtml.includes('Contact Me'), 'PDF sidebar must have Contact Me section');
 assert(pdfHtml.includes('Education'), 'PDF sidebar must have Education section with MIT');
 assert(pdfHtml.includes('MIT'), 'PDF sidebar education must contain MIT');
@@ -168,14 +168,20 @@ assert(pdfHtml.includes('Campus Resource Hub'), 'PDF main section must include p
 assert(pdfHtml.includes('Certifications &amp; Achievements'), 'PDF main section must include Certifications');
 console.log('  ✅ Executive Two-Column A4 PDF layout generated with all reference sections matching specifications.');
 
-// Test empty fields handling in PDF template
+// Test PortfolioGenerator.generate generates reference layout for on-screen preview
+const previewHtml = PortfolioGenerator.generate(testData);
+assert(previewHtml.includes('executive-pdf-wrapper'), 'PortfolioGenerator.generate must produce reference executive layout for on-screen preview');
+assert(previewHtml.includes('executive-pdf-sidebar') && previewHtml.includes('executive-pdf-main'), 'Preview must have two-column structure');
+console.log('  ✅ PortfolioGenerator.generate produces synchronized reference two-column design for preview.');
+
+// Test empty fields handling in PDF/preview template
 const minimalPdfHtml = PortfolioGenerator.renderExecutivePdfTemplate(minimalData);
-assert(minimalPdfHtml.includes('MINIMAL CANDIDATE'), 'Minimal PDF must include uppercase candidate name');
+assert(minimalPdfHtml.includes('Minimal Candidate'), 'Minimal PDF must include candidate name');
 assert(!minimalPdfHtml.includes('executive-pdf-edu-card'), 'Minimal PDF must omit empty education cards');
 assert(!minimalPdfHtml.includes('Job Experience</span>'), 'Minimal PDF must omit empty experience section');
 assert(!minimalPdfHtml.includes('Projects</span>'), 'Minimal PDF must omit empty projects section');
 assert(!minimalPdfHtml.includes('Certifications &amp; Achievements</span>'), 'Minimal PDF must omit empty certifications');
-console.log('  ✅ Minimal PDF cleanly omits empty optional sections without blank boxes.');
+console.log('  ✅ Minimal layout cleanly omits empty optional sections without blank boxes.');
 
 // 3. INTEGRATION TEST: HTTP Server Endpoints
 console.log('\n🔹 [Test 3] Testing HTTP Server Routes...');

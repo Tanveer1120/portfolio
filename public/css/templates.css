@@ -807,7 +807,8 @@
    ========================================================================== */
 
 .executive-pdf-wrapper {
-  width: 794px;
+  width: 100%;
+  max-width: 794px;
   min-height: 1123px;
   background-color: #FFFFFF;
   display: flex;
@@ -817,7 +818,7 @@
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: #1E293B;
   line-height: 1.5;
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   -webkit-font-smoothing: antialiased;
 }
@@ -1173,4 +1174,64 @@
   body:has(#executive-pdf-print-root) #emptyState {
     display: none !important;
   }
+}
+
+/* ==========================================================================
+   RESPONSIVE PREVIEW (SCREEN & MOBILE VIEWPORT TOGGLE)
+   Desktop: authentic 2-column A4 document.
+   Mobile / Screen <= 768px: adaptive stacked layout, zero horizontal overflow.
+   ========================================================================== */
+
+@media screen and (max-width: 768px) {
+  .a4-viewport-container {
+    padding: 1rem 0.5rem 3rem 0.5rem !important;
+  }
+  .a4-page-canvas {
+    width: 100% !important;
+    min-height: auto !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    overflow-x: hidden !important;
+  }
+  .executive-pdf-wrapper {
+    flex-direction: column !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-height: auto !important;
+  }
+  .executive-pdf-sidebar {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+    padding: 28px 18px !important;
+  }
+  .executive-pdf-main {
+    width: 100% !important;
+    padding: 24px 18px !important;
+  }
+}
+
+.a4-viewport-container.mobile-view .a4-page-canvas {
+  width: 100% !important;
+  min-height: auto !important;
+  box-shadow: var(--shadow-md) !important;
+  overflow-x: hidden !important;
+}
+
+.a4-viewport-container.mobile-view .executive-pdf-wrapper {
+  flex-direction: column !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: auto !important;
+}
+
+.a4-viewport-container.mobile-view .executive-pdf-sidebar {
+  width: 100% !important;
+  min-width: 100% !important;
+  max-width: 100% !important;
+  padding: 28px 18px !important;
+}
+
+.a4-viewport-container.mobile-view .executive-pdf-main {
+  width: 100% !important;
+  padding: 24px 18px !important;
 }

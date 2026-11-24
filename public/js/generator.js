@@ -55,14 +55,10 @@ const PortfolioGenerator = {
     localStorage.removeItem(this.DRAFT_KEY);
   },
 
-  // Generate HTML using selected template
+  // Generate HTML using the reference executive two-column architecture for preview & export
   generate(data, templateId) {
-    const selectedTemplate = templateId || data.template || 'corporate-professional';
-    if (!window.PortfolioTemplates) {
-      console.error('PortfolioTemplates library not loaded.');
-      return '<div>Error: Portfolio Templates engine not loaded.</div>';
-    }
-    return window.PortfolioTemplates.render(selectedTemplate, data);
+    if (!data) return '<div class="executive-pdf-wrapper"></div>';
+    return this.renderExecutivePdfTemplate(data);
   },
 
   // HTML escaping utility
@@ -375,8 +371,8 @@ const PortfolioGenerator = {
   <!-- LEFT SIDEBAR (~36% width, dark charcoal background) -->
   <aside class="executive-pdf-sidebar">
     <!-- Header: Name & Title -->
-    <div class="executive-pdf-candidate-name">${this.escapeHtml(fullName.toUpperCase())}</div>
-    <div class="executive-pdf-candidate-title">${this.escapeHtml(title.toUpperCase())}</div>
+    <div class="executive-pdf-candidate-name">${this.escapeHtml(fullName)}</div>
+    <div class="executive-pdf-candidate-title">${this.escapeHtml(title)}</div>
 
     <!-- Circular Profile Photo with White Frame -->
     <div class="executive-pdf-photo-container">
