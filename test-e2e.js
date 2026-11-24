@@ -97,6 +97,11 @@ const testData = {
 };
 
 const templates = [
+  'corporate',
+  'minimal',
+  'developer',
+  'academic',
+  'modern-professional',
   'corporate-professional',
   'modern-minimal',
   'developer-portfolio',
@@ -169,9 +174,10 @@ async function runHttpTests() {
   assert(demoJson.data.personal.fullName === 'Alexander Vance', 'Demo data should include student Alexander Vance');
   assert(demoJson.data.projects.length >= 2, 'Demo data should have at least 2 projects');
   assert(demoJson.data.education.length >= 2, 'Demo data should have at least 2 education entries');
-  assert(demoJson.data.workshops.length >= 2, 'Demo data should have workshops');
-  assert(demoJson.data.extracurriculars.length >= 2, 'Demo data should have extracurriculars');
-  console.log('  ✅ API /api/demo-data structure validated across all 11 sections.');
+  assert(demoJson.data.skills.length >= 5, 'Demo data should have skills');
+  assert(demoJson.data.languages.length >= 1, 'Demo data should have languages');
+  assert(demoJson.data.additional && demoJson.data.additional.workshops, 'Demo data should have workshops in additional info');
+  console.log('  ✅ API /api/demo-data structure validated across all sections.');
 
   console.log('\n🎉 ALL TEST SUITES PASSED! The redesigned application is verified and production-ready.\n');
   process.exit(0);

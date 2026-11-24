@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Interactive Live Template Preview Modal
-  window.openTemplatePreview = function(templateId) {
+  window.openTemplatePreview = function (templateId) {
     const modalEl = document.getElementById('templatePreviewModal');
     const modalTitle = document.getElementById('modalTemplateTitle');
     const modalContainer = document.getElementById('modalTemplateContainer');

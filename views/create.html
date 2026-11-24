@@ -44,15 +44,15 @@
     <div class="builder-topbar">
       <div class="builder-header-info">
         <h1>Student Portfolio Builder</h1>
-        <p>Complete the sections below. Progress is preserved automatically in your local browser storage.</p>
+        <p>Complete the 4 streamlined steps below. Progress is preserved automatically in your local browser storage.</p>
       </div>
 
       <div class="builder-quick-tools">
-        <div id="autoSaveBadge" class="autosave-badge" style="opacity: 0.7;">
+        <div id="autoSaveBadge" class="autosave-badge">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>
           <span>Auto-saved</span>
         </div>
-        <button type="button" id="fillDemoBtn" class="btn-outline-blue btn-sm-custom" title="Fill with sample student data for instant evaluation">
+        <button type="button" id="fillDemoBtn" class="btn-outline-blue btn-sm-custom" title="Fill with sample student data for instant preview">
           Fill Sample Data
         </button>
         <button type="button" id="clearFormBtn" class="btn-outline-corp btn-sm-custom text-danger" title="Clear all entered information">
@@ -61,210 +61,117 @@
       </div>
     </div>
 
-    <!-- Stepper Progress Tracker Card -->
+    <!-- Stepper Progress Tracker Card (4 Steps) -->
     <div class="wizard-stepper-card">
       <div class="stepper-header-summary">
-        <span id="stepperStepIndicator" class="stepper-step-indicator">Step 0 of 12: Category Selection</span>
-        <span id="stepperCategoryPill" class="stepper-category-pill">Computer Science / IT</span>
+        <span id="stepperStepIndicator" class="stepper-step-indicator">Step 1 of 4: Profile and Introduction</span>
+        <span class="stepper-category-pill">4 Streamlined Steps</span>
       </div>
       <div class="stepper-progress-track">
-        <div id="stepperProgressFill" class="stepper-progress-fill" style="width: 0%;"></div>
+        <div id="stepperProgressFill" class="stepper-progress-fill" style="width: 25%;"></div>
       </div>
       <ul id="stepperPillsList" class="stepper-pills-list">
-        <!-- Generated dynamically via form.js -->
+        <!-- Rendered via form.js: Step 1, 2, 3, 4 -->
       </ul>
     </div>
 
     <!-- ============================================================== -->
-    <!-- STEP 0: STUDENT ACADEMIC CATEGORY SELECTION -->
+    <!-- STEP 1: PROFILE AND CONTACT INFORMATION -->
     <!-- ============================================================== -->
-    <section class="form-step-panel active" data-step="0">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-          Academic Discipline / Category
-        </h2>
-        <p>Select your field of study. This helps organize relevant academic competencies and project fields.</p>
-      </div>
-
-      <div class="category-selection-grid">
-        <div class="category-choice-card selected" data-category="Computer Science / IT">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-          </div>
-          <h4>Computer Science / IT</h4>
-          <p>Software development, computing algorithms, systems architecture.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="Engineering">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/></svg>
-          </div>
-          <h4>Engineering</h4>
-          <p>Electrical, Mechanical, Civil, Chemical, and Applied Sciences.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="BCA / MCA">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          </div>
-          <h4>BCA / MCA</h4>
-          <p>Computer applications, database administration, web programming.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="BBA / MBA">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-          </div>
-          <h4>BBA / MBA</h4>
-          <p>Business administration, management, marketing, operations.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="BCom / MCom">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
-          </div>
-          <h4>BCom / MCom</h4>
-          <p>Accounting, financial auditing, commerce, economics.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="BSc / MSc">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
-          </div>
-          <h4>BSc / MSc</h4>
-          <p>Pure sciences, mathematics, statistics, data analytics.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="BA / MA">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
-          </div>
-          <h4>BA / MA</h4>
-          <p>Humanities, literature, journalism, social sciences.</p>
-        </div>
-
-        <div class="category-choice-card" data-category="Other Degrees">
-          <div class="category-icon-box">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-          </div>
-          <h4>Other Degrees</h4>
-          <p>Medical, law, design, vocational, and multidisciplinary programs.</p>
-        </div>
-      </div>
-
-      <!-- Action Navigation Bar -->
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <a href="/" class="btn-back-corp">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back to Home</span>
-          </a>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue to Personal Info</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 1: PERSONAL INFORMATION -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="1">
+    <section class="form-step-panel active" data-step="1">
       <div class="step-card-header">
         <h2>
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          Personal Information
+          Step 1: Profile &amp; Contact Information
         </h2>
-        <p>Enter your contact details and professional summary as you would like them to appear on your portfolio.</p>
+        <p>Introduce yourself with your professional identity, contact details, and career summary.</p>
       </div>
 
       <!-- Profile Photo Upload -->
-      <div class="image-upload-wrapper">
-        <div class="photo-preview-box">
-          <svg id="photoPlaceholderSvg" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          <img id="photoPreviewImg" alt="Profile preview">
-        </div>
-        <div class="image-upload-meta">
-          <h5>Profile Photograph (Optional)</h5>
-          <p>Upload a clean, professional headshot (JPG, PNG, or WebP). Maximum file size 5MB.</p>
-          <div class="d-flex gap-2">
-            <label for="photoFileInput" class="btn-outline-corp btn-sm-custom mb-0 cursor-pointer">
+      <div class="step-card-body mb-4">
+        <h3 class="subsection-title">Profile Photo (Optional)</h3>
+        <div class="photo-upload-wrapper">
+          <div class="photo-preview-box">
+            <img id="photoPreviewImg" src="" alt="Profile Preview" class="photo-preview-image d-none">
+            <svg id="photoPlaceholderSvg" class="photo-placeholder-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+            </svg>
+          </div>
+          <div class="photo-upload-controls">
+            <label for="photoFileInput" class="btn-outline-blue btn-sm-custom" style="cursor: pointer;">
               Upload Photo
             </label>
-            <input type="file" id="photoFileInput" accept="image/png, image/jpeg, image/webp" class="d-none">
-            <button type="button" id="removePhotoBtn" class="btn-remove-item" style="display: none;">Remove</button>
+            <input type="file" id="photoFileInput" accept="image/*" class="d-none">
+            <button type="button" id="removePhotoBtn" class="btn-outline-corp btn-sm-custom text-danger d-none">Remove</button>
+            <span class="field-hint d-block mt-2">JPG, PNG, or WebP. Max 2MB. A clear headshot is recommended for professional portfolios.</span>
           </div>
         </div>
       </div>
 
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label" for="fullName">Full Name <span class="required">*</span></label>
-          <input type="text" id="fullName" class="form-control" placeholder="e.g. Alexander Vance" required>
-          <div class="field-error-msg">Please enter your full name.</div>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="title">Professional Title / Headline</label>
-          <input type="text" id="title" class="form-control" placeholder="e.g. Computer Science Undergraduate | Aspiring Software Engineer">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="email">Email Address <span class="required">*</span></label>
-          <input type="email" id="email" class="form-control" placeholder="e.g. alexander.vance@university.edu" required>
-          <div class="field-error-msg">Please enter a valid email address.</div>
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="phone">Phone Number</label>
-          <input type="tel" id="phone" class="form-control" placeholder="e.g. +1 (555) 234-5678">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="city">City</label>
-          <input type="text" id="city" class="form-control" placeholder="e.g. San Francisco">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="state">State / Province</label>
-          <input type="text" id="state" class="form-control" placeholder="e.g. CA">
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label" for="linkedin">LinkedIn Profile URL</label>
-          <input type="url" id="linkedin" class="form-control" placeholder="https://linkedin.com/in/username">
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label" for="github">GitHub Profile URL</label>
-          <input type="url" id="github" class="form-control" placeholder="https://github.com/username">
-        </div>
-
-        <div class="col-md-4">
-          <label class="form-label" for="website">Personal Website / Blog</label>
-          <input type="url" id="website" class="form-control" placeholder="https://alexandervance.dev">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label" for="summary">Professional Summary</label>
-          <textarea id="summary" class="form-control" rows="3" placeholder="Provide a concise 3-4 sentence overview of your academic focus, strengths, and professional direction..."></textarea>
+      <!-- Identity & Summary -->
+      <div class="step-card-body mb-4">
+        <h3 class="subsection-title">Profile &amp; Introduction</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputFullName">Full Name <span class="required-star">*</span></label>
+            <input type="text" id="inputFullName" class="form-control-corp" placeholder="e.g. Alex Morgan" required>
+            <div class="invalid-feedback-corp">Please enter your full name.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputTitle">Professional Title / Headline <span class="required-star">*</span></label>
+            <input type="text" id="inputTitle" class="form-control-corp" placeholder="e.g. Full Stack Developer | Computer Science Senior" required>
+            <div class="invalid-feedback-corp">Please enter a professional title or headline.</div>
+          </div>
+          <div class="col-12">
+            <label class="form-label-corp" for="inputSummary">Short About Me / Professional Summary</label>
+            <textarea id="inputSummary" rows="3" class="form-control-corp" placeholder="Concise 2-3 sentence overview of your background, technical interests, and professional aspirations."></textarea>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputLocation">Current City / Location</label>
+            <input type="text" id="inputLocation" class="form-control-corp" placeholder="e.g. San Francisco, CA">
+          </div>
         </div>
       </div>
 
+      <!-- Contact Information -->
+      <div class="step-card-body">
+        <h3 class="subsection-title">Contact &amp; Social Links</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputEmail">Email Address <span class="required-star">*</span></label>
+            <input type="email" id="inputEmail" class="form-control-corp" placeholder="e.g. alex.morgan@university.edu" required>
+            <div class="invalid-feedback-corp">Please enter a valid email address.</div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputPhone">Phone Number</label>
+            <input type="tel" id="inputPhone" class="form-control-corp" placeholder="e.g. +1 (555) 019-2834">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-corp" for="inputLinkedIn">LinkedIn Profile</label>
+            <input type="url" id="inputLinkedIn" class="form-control-corp" placeholder="https://linkedin.com/in/username">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-corp" for="inputGitHub">GitHub Profile</label>
+            <input type="url" id="inputGitHub" class="form-control-corp" placeholder="https://github.com/username">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label-corp" for="inputWebsite">Personal Website / Blog</label>
+            <input type="url" id="inputWebsite" class="form-control-corp" placeholder="https://yourportfolio.dev">
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Bar -->
       <div class="wizard-nav-actions-bar">
         <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
+          <a href="/" class="btn-back-corp" title="Back to Homepage">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
+            <span>Home</span>
+          </a>
         </div>
         <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
+          <button type="button" class="btn-blue py-2 px-4" onclick="validateAndGoStep(2)">
+            <span>Continue to Education &amp; Skills</span>
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
@@ -272,33 +179,133 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- STEP 2: CAREER OBJECTIVE -->
+    <!-- STEP 2: EDUCATION AND SKILLS -->
     <!-- ============================================================== -->
     <section class="form-step-panel" data-step="2">
       <div class="step-card-header">
         <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
-          Career Objective
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+          Step 2: Education, Skills &amp; Languages
         </h2>
-        <p>Explain your immediate career aspirations, professional motivations, and what you aim to achieve in your target role.</p>
+        <p>List your academic qualifications and select your technical, soft skills, and languages.</p>
       </div>
 
-      <div class="mb-3">
-        <label class="form-label" for="careerObjective">Career Goals &amp; Aspirations</label>
-        <textarea id="careerObjective" class="form-control" rows="4" placeholder="e.g. Aspiring Software Engineer seeking an internship or entry-level software development role. Eager to leverage hands-on proficiency in modern web frameworks and distributed systems to contribute to high-impact enterprise engineering initiatives..."></textarea>
-        <span class="form-hint">Tip: Focus on how your academic skills align with industry problem-solving.</span>
+      <!-- Education Repeater -->
+      <div class="step-card-body mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="subsection-title mb-0">Academic Background</h3>
+          <button type="button" id="addEducationBtn" class="btn-outline-blue btn-sm-custom">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add Education</span>
+          </button>
+        </div>
+
+        <div id="educationContainer" class="repeatable-items-list">
+          <!-- Dynamic Education Item Cards Rendered Here -->
+        </div>
       </div>
 
+      <!-- Searchable Skills Selector -->
+      <div class="step-card-body mb-4">
+        <h3 class="subsection-title">Skills &amp; Competencies</h3>
+        <p class="field-hint mb-3">Click on predefined skills or type custom ones below. Filter by category or search instantly.</p>
+
+        <!-- Category Tabs -->
+        <div class="skill-category-tabs mb-3" id="skillCategoryTabs">
+          <button type="button" class="category-filter-btn active" data-cat="all">All</button>
+          <button type="button" class="category-filter-btn" data-cat="Technical Skills">Technical Skills</button>
+          <button type="button" class="category-filter-btn" data-cat="Programming Languages">Programming Languages</button>
+          <button type="button" class="category-filter-btn" data-cat="Web Technologies">Web Technologies</button>
+          <button type="button" class="category-filter-btn" data-cat="Frameworks">Frameworks</button>
+          <button type="button" class="category-filter-btn" data-cat="Databases">Databases</button>
+          <button type="button" class="category-filter-btn" data-cat="Software and Tools">Software &amp; Tools</button>
+          <button type="button" class="category-filter-btn" data-cat="Professional Skills">Professional Skills</button>
+        </div>
+
+        <!-- Search & Custom Add Input -->
+        <div class="row g-2 mb-3">
+          <div class="col-md-7">
+            <div class="input-search-box">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+              <input type="text" id="skillSearchInput" class="form-control-corp ps-5" placeholder="Search skills (e.g. Python, React, Leadership)...">
+            </div>
+          </div>
+          <div class="col-md-5 d-flex gap-2">
+            <input type="text" id="customSkillInput" class="form-control-corp" placeholder="Add custom skill...">
+            <button type="button" id="addCustomSkillBtn" class="btn-outline-blue px-3 flex-shrink-0">Add</button>
+          </div>
+        </div>
+
+        <!-- Predefined Skills Cloud -->
+        <div class="predefined-skills-cloud mb-3" id="predefinedSkillsCloud">
+          <!-- Populated by form.js -->
+        </div>
+
+        <!-- Selected Skills Tag List -->
+        <div class="selected-tags-box">
+          <div class="selected-tags-header">
+            <span class="fw-bold" style="font-size: 0.85rem; color: var(--color-primary-navy);">Selected Skills (<span id="selectedSkillsCount">0</span>)</span>
+            <button type="button" id="clearAllSkillsBtn" class="btn-link-subtle text-danger" style="font-size: 0.78rem;">Clear All</button>
+          </div>
+          <div id="selectedSkillsTags" class="tags-container">
+            <span class="text-secondary small fst-italic" id="noSkillsText">No skills selected yet. Click skills above or add custom ones.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages with Proficiency -->
+      <div class="step-card-body">
+        <h3 class="subsection-title">Languages</h3>
+        <p class="field-hint mb-3">Add languages you speak and select your proficiency level.</p>
+
+        <div class="row g-2 mb-3 align-items-center">
+          <div class="col-md-5">
+            <input type="text" id="languageInput" class="form-control-corp" list="predefinedLanguagesList" placeholder="Language (e.g. English, Spanish, French)...">
+            <datalist id="predefinedLanguagesList">
+              <option value="English"></option>
+              <option value="Spanish"></option>
+              <option value="French"></option>
+              <option value="German"></option>
+              <option value="Mandarin Chinese"></option>
+              <option value="Hindi"></option>
+              <option value="Arabic"></option>
+              <option value="Japanese"></option>
+              <option value="Portuguese"></option>
+              <option value="Russian"></option>
+              <option value="Italian"></option>
+              <option value="Korean"></option>
+            </datalist>
+          </div>
+          <div class="col-md-4">
+            <select id="languageProficiencySelect" class="form-control-corp">
+              <option value="Fluent">Fluent</option>
+              <option value="Native">Native</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Basic">Basic</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <button type="button" id="addLanguageBtn" class="btn-outline-blue w-100">Add Language</button>
+          </div>
+        </div>
+
+        <!-- Selected Languages Container -->
+        <div id="selectedLanguagesTags" class="tags-container">
+          <!-- Populated by form.js -->
+        </div>
+      </div>
+
+      <!-- Actions Bar -->
       <div class="wizard-nav-actions-bar">
         <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
+          <button type="button" class="btn-back-corp" onclick="goToStep(1)">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
+            <span>Back to Profile</span>
           </button>
         </div>
         <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
+          <button type="button" class="btn-blue py-2 px-4" onclick="validateAndGoStep(3)">
+            <span>Continue to Experience &amp; Projects</span>
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
@@ -306,34 +313,82 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- STEP 3: EDUCATION -->
+    <!-- STEP 3: EXPERIENCE AND PROJECTS -->
     <!-- ============================================================== -->
     <section class="form-step-panel" data-step="3">
       <div class="step-card-header">
         <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/></svg>
-          Education Details
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
+          Step 3: Experience, Projects &amp; Certifications
         </h2>
-        <p>Add your degrees, colleges, relevant coursework, and academic performance.</p>
+        <p>Showcase hands-on projects, internship experiences, and recognized credentials.</p>
       </div>
 
-      <div id="educationContainer"></div>
+      <!-- Projects Section -->
+      <div class="step-card-body mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h3 class="subsection-title mb-0">Projects &amp; Practical Work</h3>
+            <span class="field-hint">Academic, personal, open-source, or capstone projects.</span>
+          </div>
+          <button type="button" id="addProjectBtn" class="btn-outline-blue btn-sm-custom">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add Project</span>
+          </button>
+        </div>
 
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addEducationEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Another Education Entry</span>
-      </button>
+        <div id="projectsContainer" class="repeatable-items-list">
+          <!-- Dynamic Project Cards Rendered Here -->
+        </div>
+      </div>
 
+      <!-- Internship & Work Experience (Optional) -->
+      <div class="step-card-body mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h3 class="subsection-title mb-0">Internships &amp; Work Experience (Optional)</h3>
+            <span class="field-hint">Optional for freshers. Add internships, part-time, or freelance work.</span>
+          </div>
+          <button type="button" id="addExperienceBtn" class="btn-outline-blue btn-sm-custom">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add Experience</span>
+          </button>
+        </div>
+
+        <div id="experienceContainer" class="repeatable-items-list">
+          <!-- Dynamic Experience Cards Rendered Here -->
+        </div>
+      </div>
+
+      <!-- Certifications & Achievements -->
+      <div class="step-card-body">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h3 class="subsection-title mb-0">Certifications &amp; Achievements (Optional)</h3>
+            <span class="field-hint">Professional licenses, online credentials, hackathon awards, or academic honors.</span>
+          </div>
+          <button type="button" id="addCertBtn" class="btn-outline-blue btn-sm-custom">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+            <span>Add Certification</span>
+          </button>
+        </div>
+
+        <div id="certsContainer" class="repeatable-items-list">
+          <!-- Dynamic Certification Cards Rendered Here -->
+        </div>
+      </div>
+
+      <!-- Actions Bar -->
       <div class="wizard-nav-actions-bar">
         <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
+          <button type="button" class="btn-back-corp" onclick="goToStep(2)">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
+            <span>Back to Education</span>
           </button>
         </div>
         <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
+          <button type="button" class="btn-blue py-2 px-4" onclick="validateAndGoStep(4)">
+            <span>Continue to Final Details &amp; Design</span>
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
@@ -341,460 +396,119 @@
     </section>
 
     <!-- ============================================================== -->
-    <!-- STEP 4: TECHNICAL AND PROFESSIONAL SKILLS -->
+    <!-- STEP 4: FINAL DETAILS & TEMPLATE DESIGN -->
     <!-- ============================================================== -->
     <section class="form-step-panel" data-step="4">
       <div class="step-card-header">
         <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"/></svg>
-          Skills &amp; Competencies
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/></svg>
+          Step 4: Final Details &amp; Portfolio Template
         </h2>
-        <p>Organize your technical, domain-specific, and professional skills into clean categories. Non-technical disciplines can omit programming sections.</p>
+        <p>Add optional extracurricular activities and select your preferred professional portfolio layout.</p>
       </div>
 
-      <div class="row g-3">
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Programming Languages</h4>
-            <p>Languages you write and comprehend.</p>
-            <input type="text" id="skillProgLang" class="form-control" placeholder="e.g. Python, Java, JavaScript, C++, TypeScript">
+      <!-- Additional Information (Optional) -->
+      <div class="step-card-body mb-4">
+        <h3 class="subsection-title">Additional Information (Optional)</h3>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputInterests">Professional Interests &amp; Hobbies</label>
+            <input type="text" id="inputInterests" class="form-control-corp" placeholder="e.g. Cloud Computing, Open Source, Technical Writing, Chess">
           </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Frontend Technologies</h4>
-            <p>UI frameworks, styling libraries, client-side tools.</p>
-            <input type="text" id="skillFrontend" class="form-control" placeholder="e.g. React.js, HTML5, CSS3, Tailwind CSS, Bootstrap 5">
+          <div class="col-md-6">
+            <label class="form-label-corp" for="inputActivities">Extracurricular Activities &amp; Leadership</label>
+            <input type="text" id="inputActivities" class="form-control-corp" placeholder="e.g. Lead Organizer, University Tech Club; Volunteer Mentor">
           </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Backend Technologies</h4>
-            <p>Server-side runtimes, APIs, and microservices.</p>
-            <input type="text" id="skillBackend" class="form-control" placeholder="e.g. Node.js, Express.js, REST API Design, GraphQL">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Frameworks &amp; Libraries</h4>
-            <p>Development engines and testing frameworks.</p>
-            <input type="text" id="skillFrameworks" class="form-control" placeholder="e.g. FastAPI, Spring Boot, Next.js, Jest">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Databases</h4>
-            <p>Relational, document, and key-value datastores.</p>
-            <input type="text" id="skillDatabases" class="form-control" placeholder="e.g. PostgreSQL, MySQL, MongoDB, Redis">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Developer Tools</h4>
-            <p>Version control, containerization, and CLI utilities.</p>
-            <input type="text" id="skillTools" class="form-control" placeholder="e.g. Git, GitHub, Docker, Linux/Unix CLI, Postman">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Software Skills</h4>
-            <p>Industry software, design, and management tools.</p>
-            <input type="text" id="skillSoftware" class="form-control" placeholder="e.g. Figma, Jira, MS Excel, Tableau, AutoCAD">
-          </div>
-        </div>
-
-        <div class="col-md-6">
-          <div class="skill-category-block">
-            <h4>Professional &amp; Soft Skills</h4>
-            <p>Core interpersonal and workplace capabilities.</p>
-            <input type="text" id="skillSoft" class="form-control" placeholder="e.g. Analytical Problem Solving, Agile Teamwork, Technical Writing">
-          </div>
-        </div>
-
-        <div class="col-12">
-          <div class="skill-category-block">
-            <h4>Other Specialized Skills</h4>
-            <p>Any additional technical or domain certifications.</p>
-            <input type="text" id="skillOther" class="form-control" placeholder="e.g. CI/CD Pipelines, System Architecture, Financial Modeling">
+          <div class="col-12">
+            <label class="form-label-corp" for="inputWorkshops">Workshops, Seminars &amp; Conferences</label>
+            <input type="text" id="inputWorkshops" class="form-control-corp" placeholder="e.g. Attended National Cloud Architecture Summit 2024">
           </div>
         </div>
       </div>
 
+      <!-- 5 Curated Professional Templates -->
+      <div class="step-card-body">
+        <h3 class="subsection-title">Select Your Portfolio Template</h3>
+        <p class="field-hint mb-3">Choose from 5 distinct architectures. You can switch templates anytime on the preview page.</p>
+
+        <div class="templates-picker-grid">
+          <!-- Template 1: Corporate -->
+          <div class="template-picker-card selected" data-template="corporate">
+            <input type="radio" name="selectedTemplateRadio" value="corporate" checked>
+            <div class="template-picker-header">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
+              <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Corporate</div>
+            </div>
+            <div class="template-picker-info">
+              <h5>Corporate</h5>
+              <p>Formal navy headings, crisp divider rules, and structured placement blocks.</p>
+            </div>
+          </div>
+
+          <!-- Template 2: Minimal -->
+          <div class="template-picker-card" data-template="minimal">
+            <input type="radio" name="selectedTemplateRadio" value="minimal">
+            <div class="template-picker-header">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+              <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Minimal</div>
+            </div>
+            <div class="template-picker-info">
+              <h5>Minimal</h5>
+              <p>Comfortable whitespace, elegant typography, and focused executive layout.</p>
+            </div>
+          </div>
+
+          <!-- Template 3: Developer -->
+          <div class="template-picker-card" data-template="developer">
+            <input type="radio" name="selectedTemplateRadio" value="developer">
+            <div class="template-picker-header">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+              <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Developer</div>
+            </div>
+            <div class="template-picker-info">
+              <h5>Developer</h5>
+              <p>Technical competencies first, skills breakdown, GitHub repos, and live deployments.</p>
+            </div>
+          </div>
+
+          <!-- Template 4: Academic -->
+          <div class="template-picker-card" data-template="academic">
+            <input type="radio" name="selectedTemplateRadio" value="academic">
+            <div class="template-picker-header">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
+              <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Academic</div>
+            </div>
+            <div class="template-picker-info">
+              <h5>Academic</h5>
+              <p>Education-first, coursework highlights, research projects, and university honors.</p>
+            </div>
+          </div>
+
+          <!-- Template 5: Modern Professional -->
+          <div class="template-picker-card" data-template="modern-professional">
+            <input type="radio" name="selectedTemplateRadio" value="modern-professional">
+            <div class="template-picker-header">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
+              <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Modern Professional</div>
+            </div>
+            <div class="template-picker-info">
+              <h5>Modern Professional</h5>
+              <p>Contemporary executive layout with subtle blue accents and structured hierarchy.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actions Bar -->
       <div class="wizard-nav-actions-bar">
         <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
+          <button type="button" class="btn-back-corp" onclick="goToStep(3)">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
+            <span>Back to Projects</span>
           </button>
         </div>
         <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 5: PROJECTS -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="5">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
-          Projects Showcase
-        </h2>
-        <p>Detail academic capstones, hackathon projects, research experiments, or software builds.</p>
-      </div>
-
-      <div id="projectsContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addProjectEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Another Project</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 6: INTERNSHIPS AND EXPERIENCE -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="6">
-      <div class="step-card-header">
-        <div class="d-flex justify-content-between align-items-center">
-          <div>
-            <h2>
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-              Internships &amp; Professional Experience
-            </h2>
-            <p>Add internships, assistantships, research roles, or part-time experience.</p>
-          </div>
-          <span class="tag-badge">Optional for Freshers</span>
-        </div>
-      </div>
-
-      <div id="experienceContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addExperienceEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Experience Entry</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 7: CERTIFICATIONS -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="7">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
-          Certifications
-        </h2>
-        <p>List accredited certifications from cloud providers, professional bodies, or recognized course platforms.</p>
-      </div>
-
-      <div id="certsContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addCertEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Certification Entry</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 8: ACHIEVEMENTS -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="8">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
-          Academic &amp; Professional Achievements
-        </h2>
-        <p>Highlight merit awards, hackathon prizes, Dean's honors, or competitive distinctions.</p>
-      </div>
-
-      <div id="achievementsContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addAchievementEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Achievement</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 9: WORKSHOPS AND TRAINING -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="9">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/></svg>
-          Workshops &amp; Technical Training
-        </h2>
-        <p>List seminars, intensive technical bootcamps, and structured academic trainings attended.</p>
-      </div>
-
-      <div id="workshopsContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addWorkshopEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Workshop / Training</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 10: EXTRACURRICULAR ACTIVITIES -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="10">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/></svg>
-          Extracurricular Activities &amp; Leadership
-        </h2>
-        <p>Demonstrate leadership, student club involvement, athletic participation, or community volunteering.</p>
-      </div>
-
-      <div id="extracurricularsContainer"></div>
-
-      <button type="button" class="btn-add-repeater-row mt-3" onclick="addExtracurricularEntry()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-        <span>Add Extracurricular Entry</span>
-      </button>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 11: ADDITIONAL INFORMATION -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="11">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Additional Information
-        </h2>
-        <p>Languages spoken, research publications, professional hobbies, or references.</p>
-      </div>
-
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label" for="addlLanguages">Languages Known</label>
-          <input type="text" id="addlLanguages" class="form-control" placeholder="e.g. English (Fluent), Spanish (Intermediate), Hindi (Native)">
-        </div>
-
-        <div class="col-md-6">
-          <label class="form-label" for="addlHobbies">Professional Hobbies &amp; Interests</label>
-          <input type="text" id="addlHobbies" class="form-control" placeholder="e.g. Technical Writing, Open Source Contributing, Chess">
-        </div>
-
-        <div class="col-12">
-          <label class="form-label" for="addlPublications">Publications / Conference Papers (Optional)</label>
-          <textarea id="addlPublications" class="form-control" rows="2" placeholder="e.g. Vance, A. (2024). 'Optimizing Asynchronous Data Hydration.' Student Journal of Computing."></textarea>
-        </div>
-
-        <div class="col-12">
-          <label class="form-label" for="addlReferences">References (Optional)</label>
-          <input type="text" id="addlReferences" class="form-control" placeholder="e.g. Available upon professional request">
-        </div>
-      </div>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" class="btn-primary-corp" onclick="navigateNext()">
-            <span>Continue to Template Selection</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================== -->
-    <!-- STEP 12: TEMPLATE SELECTION -->
-    <!-- ============================================================== -->
-    <section class="form-step-panel" data-step="12">
-      <div class="step-card-header">
-        <h2>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
-          Select Your Professional Template
-        </h2>
-        <p>Choose an architectural layout for your portfolio. You can switch templates live on the preview page as well.</p>
-      </div>
-
-      <div class="template-picker-grid">
-        <!-- Template 1: Corporate Professional -->
-        <div class="template-picker-card selected" data-template="corporate-professional">
-          <input type="radio" name="selectedTemplateRadio" value="corporate-professional" checked>
-          <div class="template-picker-header">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg>
-            <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Corporate Professional</div>
-          </div>
-          <div class="template-picker-info">
-            <h5>Corporate Professional</h5>
-            <p>Navy headings, structured sections, formal placement standard.</p>
-          </div>
-        </div>
-
-        <!-- Template 2: Modern Minimal -->
-        <div class="template-picker-card" data-template="modern-minimal">
-          <input type="radio" name="selectedTemplateRadio" value="modern-minimal">
-          <div class="template-picker-header">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-            <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Modern Minimal</div>
-          </div>
-          <div class="template-picker-info">
-            <h5>Modern Minimal</h5>
-            <p>Balanced whitespace, clean separators, elegant typography.</p>
-          </div>
-        </div>
-
-        <!-- Template 3: Developer Portfolio -->
-        <div class="template-picker-card" data-template="developer-portfolio">
-          <input type="radio" name="selectedTemplateRadio" value="developer-portfolio">
-          <div class="template-picker-header">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
-            <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Developer Portfolio</div>
-          </div>
-          <div class="template-picker-info">
-            <h5>Developer Portfolio</h5>
-            <p>Code-centric layout, technical stack focus, GitHub repositories.</p>
-          </div>
-        </div>
-
-        <!-- Template 4: Academic Portfolio -->
-        <div class="template-picker-card" data-template="academic-portfolio">
-          <input type="radio" name="selectedTemplateRadio" value="academic-portfolio">
-          <div class="template-picker-header">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-            <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Academic Portfolio</div>
-          </div>
-          <div class="template-picker-info">
-            <h5>Academic Portfolio</h5>
-            <p>Education first, detailed coursework, academic projects, honors.</p>
-          </div>
-        </div>
-
-        <!-- Template 5: Professional Creative -->
-        <div class="template-picker-card" data-template="professional-creative">
-          <input type="radio" name="selectedTemplateRadio" value="professional-creative">
-          <div class="template-picker-header">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/></svg>
-            <div class="fw-bold" style="font-size: 0.9rem; color: var(--color-primary-navy);">Professional Creative</div>
-          </div>
-          <div class="template-picker-info">
-            <h5>Professional Creative</h5>
-            <p>Two-column asymmetric layout with structured profile sidebar.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="wizard-nav-actions-bar">
-        <div class="nav-actions-left">
-          <button type="button" class="btn-back-corp" onclick="navigateBack()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-            <span>Back</span>
-          </button>
-        </div>
-        <div class="nav-actions-right">
-          <button type="button" id="generatePortfolioBtn" class="btn-blue py-2 px-4">
+          <button type="button" id="generatePortfolioBtn" class="btn-blue py-2 px-4 fw-bold" style="font-size: 1rem;">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             <span>Generate Portfolio</span>
           </button>

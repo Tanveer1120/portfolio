@@ -1,39 +1,108 @@
 /**
  * Student Portfolio Form Controller
- * 12-Step Architecture with Category Selection, Dynamic Repeaters,
- * Mandatory Back Button Navigation System, and Data Loss Prevention.
+ * Streamlined 4-Step Architecture with Searchable Skills & Languages,
+ * Dynamic Repeaters, LocalStorage Auto-Saving, and History Navigation.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-  // Wizard Steps (0: Category Selection, 1-11: Sections, 12: Template Selection)
-  let currentStep = 0;
-  const totalSteps = 12;
-  let selectedCategory = 'Computer Science / IT';
-  let selectedTemplate = 'corporate-professional';
+  // Wizard State
+  let currentStep = 1;
+  const totalSteps = 4;
+  let selectedTemplate = 'corporate';
   let profilePhotoBase64 = '';
 
-  // Step Labels for Header Pill List
+  // Selected Skills and Languages sets
+  let selectedSkills = [];
+  let selectedLanguages = [];
+
   const stepTitles = [
-    'Category',
-    'Personal Info',
-    'Career Objective',
-    'Education',
-    'Skills',
-    'Projects',
-    'Experience',
-    'Certifications',
-    'Achievements',
-    'Workshops',
-    'Extracurricular',
-    'Additional Info',
-    'Template'
+    '',
+    'Profile and Introduction',
+    'Education, Skills & Languages',
+    'Experience & Projects',
+    'Final Details & Template'
+  ];
+
+  // Predefined Skills categorized
+  const PREDEFINED_SKILLS = [
+    // Programming Languages
+    { name: 'JavaScript', category: 'Programming Languages' },
+    { name: 'TypeScript', category: 'Programming Languages' },
+    { name: 'Python', category: 'Programming Languages' },
+    { name: 'Java', category: 'Programming Languages' },
+    { name: 'C++', category: 'Programming Languages' },
+    { name: 'C', category: 'Programming Languages' },
+    { name: 'C#', category: 'Programming Languages' },
+    { name: 'Go', category: 'Programming Languages' },
+    { name: 'Rust', category: 'Programming Languages' },
+    { name: 'PHP', category: 'Programming Languages' },
+    { name: 'Ruby', category: 'Programming Languages' },
+    { name: 'Swift', category: 'Programming Languages' },
+    { name: 'Kotlin', category: 'Programming Languages' },
+    { name: 'SQL', category: 'Programming Languages' },
+
+    // Web Technologies
+    { name: 'HTML5', category: 'Web Technologies' },
+    { name: 'CSS3', category: 'Web Technologies' },
+    { name: 'Tailwind CSS', category: 'Web Technologies' },
+    { name: 'Bootstrap', category: 'Web Technologies' },
+    { name: 'Sass / SCSS', category: 'Web Technologies' },
+    { name: 'Next.js', category: 'Web Technologies' },
+    { name: 'Redux Toolkit', category: 'Web Technologies' },
+    { name: 'Vite', category: 'Web Technologies' },
+
+    // Frameworks
+    { name: 'React', category: 'Frameworks' },
+    { name: 'Node.js', category: 'Frameworks' },
+    { name: 'Express.js', category: 'Frameworks' },
+    { name: 'Angular', category: 'Frameworks' },
+    { name: 'Vue.js', category: 'Frameworks' },
+    { name: 'Django', category: 'Frameworks' },
+    { name: 'Flask', category: 'Frameworks' },
+    { name: 'Spring Boot', category: 'Frameworks' },
+    { name: 'FastAPI', category: 'Frameworks' },
+
+    // Databases
+    { name: 'PostgreSQL', category: 'Databases' },
+    { name: 'MongoDB', category: 'Databases' },
+    { name: 'MySQL', category: 'Databases' },
+    { name: 'SQLite', category: 'Databases' },
+    { name: 'Redis', category: 'Databases' },
+    { name: 'Firebase', category: 'Databases' },
+    { name: 'Supabase', category: 'Databases' },
+
+    // Software and Tools
+    { name: 'Git & GitHub', category: 'Software and Tools' },
+    { name: 'VS Code', category: 'Software and Tools' },
+    { name: 'Postman', category: 'Software and Tools' },
+    { name: 'Docker', category: 'Software and Tools' },
+    { name: 'Linux / Bash', category: 'Software and Tools' },
+    { name: 'AWS', category: 'Software and Tools' },
+    { name: 'Figma', category: 'Software and Tools' },
+    { name: 'Jira', category: 'Software and Tools' },
+
+    // Technical Skills
+    { name: 'Data Structures & Algorithms', category: 'Technical Skills' },
+    { name: 'RESTful API Design', category: 'Technical Skills' },
+    { name: 'Object-Oriented Programming', category: 'Technical Skills' },
+    { name: 'System Architecture', category: 'Technical Skills' },
+    { name: 'CI/CD Pipelines', category: 'Technical Skills' },
+    { name: 'Microservices', category: 'Technical Skills' },
+    { name: 'Unit Testing / Jest', category: 'Technical Skills' },
+
+    // Professional Skills
+    { name: 'Problem Solving', category: 'Professional Skills' },
+    { name: 'Team Collaboration', category: 'Professional Skills' },
+    { name: 'Technical Communication', category: 'Professional Skills' },
+    { name: 'Project Management', category: 'Professional Skills' },
+    { name: 'Critical Thinking', category: 'Professional Skills' },
+    { name: 'Agile & Scrum', category: 'Professional Skills' }
   ];
 
   // DOM Elements
   const stepPanels = document.querySelectorAll('.form-step-panel');
   const stepperProgressFill = document.getElementById('stepperProgressFill');
   const stepperStepIndicator = document.getElementById('stepperStepIndicator');
-  const stepperCategoryPill = document.getElementById('stepperCategoryPill');
   const stepperPillsList = document.getElementById('stepperPillsList');
   const autoSaveBadge = document.getElementById('autoSaveBadge');
 
@@ -42,9 +111,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const projectsContainer = document.getElementById('projectsContainer');
   const experienceContainer = document.getElementById('experienceContainer');
   const certsContainer = document.getElementById('certsContainer');
-  const achievementsContainer = document.getElementById('achievementsContainer');
-  const workshopsContainer = document.getElementById('workshopsContainer');
-  const extracurricularsContainer = document.getElementById('extracurricularsContainer');
 
   // Photo Upload Elements
   const photoFileInput = document.getElementById('photoFileInput');
@@ -52,16 +118,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const photoPlaceholderSvg = document.getElementById('photoPlaceholderSvg');
   const removePhotoBtn = document.getElementById('removePhotoBtn');
 
-  // Category Cards
-  const categoryCards = document.querySelectorAll('.category-choice-card');
+  // Skills Elements
+  const skillCategoryTabs = document.getElementById('skillCategoryTabs');
+  const skillSearchInput = document.getElementById('skillSearchInput');
+  const customSkillInput = document.getElementById('customSkillInput');
+  const addCustomSkillBtn = document.getElementById('addCustomSkillBtn');
+  const predefinedSkillsCloud = document.getElementById('predefinedSkillsCloud');
+  const selectedSkillsTags = document.getElementById('selectedSkillsTags');
+  const selectedSkillsCount = document.getElementById('selectedSkillsCount');
+  const clearAllSkillsBtn = document.getElementById('clearAllSkillsBtn');
+  const noSkillsText = document.getElementById('noSkillsText');
 
-  // Template Cards
+  // Languages Elements
+  const languageInput = document.getElementById('languageInput');
+  const languageProficiencySelect = document.getElementById('languageProficiencySelect');
+  const addLanguageBtn = document.getElementById('addLanguageBtn');
+  const selectedLanguagesTags = document.getElementById('selectedLanguagesTags');
+
+  // Template Picker Cards
   const templateCards = document.querySelectorAll('.template-picker-card');
+  const generatePortfolioBtn = document.getElementById('generatePortfolioBtn');
 
   // =========================================================================
-  // 1. STEP NAVIGATION & UI CONTROLLER
+  // 1. STEP NAVIGATION CONTROLLER
   // =========================================================================
-  function renderStep(stepIndex, pushHistory = true) {
+  window.goToStep = function(stepIndex, pushHistory = true) {
+    if (stepIndex < 1 || stepIndex > totalSteps) return;
     currentStep = stepIndex;
 
     // Show active step panel
@@ -84,922 +166,1003 @@ document.addEventListener('DOMContentLoaded', () => {
       stepperStepIndicator.textContent = `Step ${currentStep} of ${totalSteps}: ${stepTitles[currentStep] || ''}`;
     }
 
-    if (stepperCategoryPill) {
-      stepperCategoryPill.textContent = selectedCategory;
-    }
-
-    // Update pill buttons
     renderStepperPills();
 
-    // Scroll to top of builder
-    const topBar = document.querySelector('.builder-topbar');
-    if (topBar) {
-      topBar.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
+    // Scroll to top smoothly
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // Browser History API integration for reliable Back/Forward navigation
+    // History API
     if (pushHistory) {
       history.pushState({ step: currentStep }, `Step ${currentStep}`, `?step=${currentStep}`);
     }
-  }
+
+    triggerAutoSave();
+  };
+
+  window.validateAndGoStep = function(targetStep) {
+    if (currentStep === 1) {
+      const nameInput = document.getElementById('inputFullName');
+      const titleInput = document.getElementById('inputTitle');
+      const emailInput = document.getElementById('inputEmail');
+
+      let isValid = true;
+      if (!nameInput.value.trim()) {
+        nameInput.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        nameInput.classList.remove('is-invalid');
+      }
+
+      if (!titleInput.value.trim()) {
+        titleInput.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        titleInput.classList.remove('is-invalid');
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailInput.value.trim() || !emailRegex.test(emailInput.value.trim())) {
+        emailInput.classList.add('is-invalid');
+        isValid = false;
+      } else {
+        emailInput.classList.remove('is-invalid');
+      }
+
+      if (!isValid) {
+        const firstInvalid = document.querySelector('.form-step-panel.active .is-invalid');
+        if (firstInvalid) {
+          firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          firstInvalid.focus();
+        }
+        return;
+      }
+    }
+
+    goToStep(targetStep);
+  };
 
   function renderStepperPills() {
     if (!stepperPillsList) return;
     stepperPillsList.innerHTML = '';
-    stepTitles.forEach((title, idx) => {
+
+    const pillLabels = [
+      '1. Profile & Contact',
+      '2. Education & Skills',
+      '3. Projects & Experience',
+      '4. Final & Design'
+    ];
+
+    for (let i = 1; i <= totalSteps; i++) {
       const li = document.createElement('li');
-      li.className = `stepper-pill-item ${idx === currentStep ? 'active' : (idx < currentStep ? 'completed' : '')}`;
-      li.innerHTML = `<span>${idx}.</span> ${title}`;
-      li.addEventListener('click', () => {
-        if (idx < currentStep || validateCurrentStep()) {
-          saveDraft();
-          renderStep(idx);
+      li.className = 'stepper-pill-item';
+      if (i === currentStep) {
+        li.classList.add('active');
+      } else if (i < currentStep) {
+        li.classList.add('completed');
+      }
+
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'stepper-pill-btn';
+      btn.textContent = pillLabels[i - 1];
+
+      // Allow clicking previous steps or current step
+      btn.addEventListener('click', () => {
+        if (i < currentStep) {
+          goToStep(i);
+        } else if (i > currentStep) {
+          validateAndGoStep(i);
         }
       });
+
+      li.appendChild(btn);
       stepperPillsList.appendChild(li);
-    });
+    }
   }
 
-  // Handle Browser Back and Forward buttons (Popstate)
+  // Handle browser Back / Forward buttons
   window.addEventListener('popstate', (e) => {
-    if (e.state && typeof e.state.step === 'number') {
-      renderStep(e.state.step, false);
-    }
-  });
-
-  // Global Next / Continue Handler
-  window.navigateNext = function() {
-    if (validateCurrentStep()) {
-      saveDraft();
-      if (currentStep < totalSteps) {
-        renderStep(currentStep + 1);
-      }
-    }
-  };
-
-  // Global Back Handler
-  window.navigateBack = function() {
-    saveDraft();
-    if (currentStep > 0) {
-      renderStep(currentStep - 1);
+    if (e.state && e.state.step) {
+      goToStep(e.state.step, false);
     } else {
-      window.location.href = '/';
-    }
-  };
-
-  // =========================================================================
-  // 2. VALIDATION
-  // =========================================================================
-  function validateCurrentStep() {
-    let isValid = true;
-
-    // Step 1: Personal Information Validation
-    if (currentStep === 1) {
-      const fullName = document.getElementById('fullName');
-      const email = document.getElementById('email');
-
-      if (!fullName || !fullName.value.trim()) {
-        markInvalid(fullName, 'Please enter your full name.');
-        isValid = false;
+      const params = new URLSearchParams(window.location.search);
+      const stepParam = parseInt(params.get('step'), 10);
+      if (stepParam && stepParam >= 1 && stepParam <= totalSteps) {
+        goToStep(stepParam, false);
       } else {
-        markValid(fullName);
-      }
-
-      if (!email || !email.value.trim() || !validateEmail(email.value.trim())) {
-        markInvalid(email, 'Please enter a valid email address.');
-        isValid = false;
-      } else {
-        markValid(email);
+        goToStep(1, false);
       }
     }
-
-    return isValid;
-  }
-
-  function markInvalid(input, msg) {
-    if (!input) return;
-    input.classList.add('is-invalid');
-    const err = input.nextElementSibling;
-    if (err && err.classList.contains('field-error-msg')) {
-      err.textContent = msg;
-    }
-    input.focus();
-  }
-
-  function markValid(input) {
-    if (!input) return;
-    input.classList.remove('is-invalid');
-  }
-
-  function validateEmail(email) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-  }
-
-  // =========================================================================
-  // 3. CATEGORY SELECTION (STEP 0)
-  // =========================================================================
-  categoryCards.forEach(card => {
-    card.addEventListener('click', () => {
-      categoryCards.forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      selectedCategory = card.getAttribute('data-category') || 'General';
-      if (stepperCategoryPill) stepperCategoryPill.textContent = selectedCategory;
-      saveDraft();
-    });
   });
 
   // =========================================================================
-  // 4. PROFILE PHOTO UPLOADER
+  // 2. SEARCHABLE SKILLS SELECTOR
+  // =========================================================================
+  let currentSkillCategory = 'all';
+
+  function renderPredefinedSkills() {
+    if (!predefinedSkillsCloud) return;
+    predefinedSkillsCloud.innerHTML = '';
+
+    const searchQuery = (skillSearchInput ? skillSearchInput.value : '').toLowerCase().trim();
+
+    const filtered = PREDEFINED_SKILLS.filter(item => {
+      const matchesCat = currentSkillCategory === 'all' || item.category === currentSkillCategory;
+      const matchesSearch = !searchQuery || item.name.toLowerCase().includes(searchQuery);
+      return matchesCat && matchesSearch;
+    });
+
+    if (filtered.length === 0) {
+      predefinedSkillsCloud.innerHTML = '<span class="text-secondary small fst-italic">No matching skills found. Add a custom skill above!</span>';
+      return;
+    }
+
+    filtered.forEach(item => {
+      const isSelected = selectedSkills.includes(item.name);
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = `skill-cloud-chip ${isSelected ? 'selected' : ''}`;
+      chip.textContent = item.name;
+
+      chip.addEventListener('click', () => {
+        toggleSkill(item.name);
+      });
+
+      predefinedSkillsCloud.appendChild(chip);
+    });
+  }
+
+  function toggleSkill(skillName) {
+    const idx = selectedSkills.indexOf(skillName);
+    if (idx >= 0) {
+      selectedSkills.splice(idx, 1);
+    } else {
+      selectedSkills.push(skillName);
+    }
+    updateSelectedSkillsUI();
+    renderPredefinedSkills();
+    triggerAutoSave();
+  }
+
+  function addSkill(skillName) {
+    const trimmed = skillName.trim();
+    if (!trimmed) return;
+    if (!selectedSkills.includes(trimmed)) {
+      selectedSkills.push(trimmed);
+      updateSelectedSkillsUI();
+      renderPredefinedSkills();
+      triggerAutoSave();
+    }
+  }
+
+  function removeSkill(skillName) {
+    selectedSkills = selectedSkills.filter(s => s !== skillName);
+    updateSelectedSkillsUI();
+    renderPredefinedSkills();
+    triggerAutoSave();
+  }
+
+  function updateSelectedSkillsUI() {
+    if (!selectedSkillsTags) return;
+    selectedSkillsTags.innerHTML = '';
+
+    if (selectedSkillsCount) {
+      selectedSkillsCount.textContent = selectedSkills.length;
+    }
+
+    if (selectedSkills.length === 0) {
+      if (noSkillsText) {
+        selectedSkillsTags.appendChild(noSkillsText);
+      }
+      return;
+    }
+
+    selectedSkills.forEach(skill => {
+      const tag = document.createElement('span');
+      tag.className = 'removable-tag';
+      tag.innerHTML = `
+        <span>${escapeHtml(skill)}</span>
+        <button type="button" class="tag-remove-btn" title="Remove skill">&times;</button>
+      `;
+
+      tag.querySelector('.tag-remove-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeSkill(skill);
+      });
+
+      selectedSkillsTags.appendChild(tag);
+    });
+  }
+
+  // Category Tabs Filter
+  if (skillCategoryTabs) {
+    const filterBtns = skillCategoryTabs.querySelectorAll('.category-filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentSkillCategory = btn.getAttribute('data-cat');
+        renderPredefinedSkills();
+      });
+    });
+  }
+
+  // Skill Search Input
+  if (skillSearchInput) {
+    skillSearchInput.addEventListener('input', () => {
+      renderPredefinedSkills();
+    });
+  }
+
+  // Custom Skill Add
+  if (addCustomSkillBtn && customSkillInput) {
+    addCustomSkillBtn.addEventListener('click', () => {
+      if (customSkillInput.value.trim()) {
+        addSkill(customSkillInput.value.trim());
+        customSkillInput.value = '';
+      }
+    });
+
+    customSkillInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addCustomSkillBtn.click();
+      }
+    });
+  }
+
+  // Clear All Skills
+  if (clearAllSkillsBtn) {
+    clearAllSkillsBtn.addEventListener('click', () => {
+      selectedSkills = [];
+      updateSelectedSkillsUI();
+      renderPredefinedSkills();
+      triggerAutoSave();
+    });
+  }
+
+  // =========================================================================
+  // 3. LANGUAGES SELECTOR
+  // =========================================================================
+  function addLanguageItem(name, proficiency = 'Fluent') {
+    const trimmed = name.trim();
+    if (!trimmed) return;
+
+    // Check if already added
+    const existing = selectedLanguages.find(l => l.name.toLowerCase() === trimmed.toLowerCase());
+    if (existing) {
+      existing.proficiency = proficiency;
+    } else {
+      selectedLanguages.push({ name: trimmed, proficiency });
+    }
+
+    updateSelectedLanguagesUI();
+    triggerAutoSave();
+  }
+
+  function removeLanguageItem(name) {
+    selectedLanguages = selectedLanguages.filter(l => l.name.toLowerCase() !== name.toLowerCase());
+    updateSelectedLanguagesUI();
+    triggerAutoSave();
+  }
+
+  function updateSelectedLanguagesUI() {
+    if (!selectedLanguagesTags) return;
+    selectedLanguagesTags.innerHTML = '';
+
+    if (selectedLanguages.length === 0) {
+      selectedLanguagesTags.innerHTML = '<span class="text-secondary small fst-italic">No languages added yet.</span>';
+      return;
+    }
+
+    selectedLanguages.forEach(lang => {
+      const tag = document.createElement('span');
+      tag.className = 'removable-tag lang-tag';
+      tag.innerHTML = `
+        <span><strong>${escapeHtml(lang.name)}</strong> <small class="text-secondary">(${escapeHtml(lang.proficiency)})</small></span>
+        <button type="button" class="tag-remove-btn" title="Remove language">&times;</button>
+      `;
+
+      tag.querySelector('.tag-remove-btn').addEventListener('click', (e) => {
+        e.stopPropagation();
+        removeLanguageItem(lang.name);
+      });
+
+      selectedLanguagesTags.appendChild(tag);
+    });
+  }
+
+  if (addLanguageBtn && languageInput && languageProficiencySelect) {
+    addLanguageBtn.addEventListener('click', () => {
+      if (languageInput.value.trim()) {
+        addLanguageItem(languageInput.value.trim(), languageProficiencySelect.value);
+        languageInput.value = '';
+      }
+    });
+
+    languageInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        addLanguageBtn.click();
+      }
+    });
+  }
+
+  // =========================================================================
+  // 4. DYNAMIC REPEATERS (Education, Projects, Experience, Certifications)
+  // =========================================================================
+
+  // Helper for generating repeatable card containers
+  function createRepeatableCard(title, onRemove, fieldsHtml) {
+    const card = document.createElement('div');
+    card.className = 'repeater-item-card';
+    card.innerHTML = `
+      <div class="repeater-card-header">
+        <h4 class="repeater-card-title">${title}</h4>
+        <button type="button" class="btn-remove-item text-danger" title="Remove this entry">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+          <span>Remove</span>
+        </button>
+      </div>
+      <div class="repeater-card-body">
+        ${fieldsHtml}
+      </div>
+    `;
+
+    card.querySelector('.btn-remove-item').addEventListener('click', () => {
+      onRemove(card);
+      triggerAutoSave();
+    });
+
+    // Auto-save on input
+    card.querySelectorAll('input, textarea, select').forEach(input => {
+      input.addEventListener('input', triggerAutoSave);
+    });
+
+    return card;
+  }
+
+  // --- Education Repeater ---
+  function addEducationRow(data = {}) {
+    const count = educationContainer.querySelectorAll('.repeater-item-card').length + 1;
+    const fields = `
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label-corp">College / Institution Name <span class="required-star">*</span></label>
+          <input type="text" class="form-control-corp edu-institution" placeholder="e.g. Stanford University" value="${escapeAttr(data.institution || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Degree / Course <span class="required-star">*</span></label>
+          <input type="text" class="form-control-corp edu-degree" placeholder="e.g. B.S. in Computer Science" value="${escapeAttr(data.degree || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Department / Specialization</label>
+          <input type="text" class="form-control-corp edu-dept" placeholder="e.g. Artificial Intelligence &amp; Data Science" value="${escapeAttr(data.department || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Affiliated University (Optional)</label>
+          <input type="text" class="form-control-corp edu-univ" placeholder="e.g. State Technical University" value="${escapeAttr(data.university || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-corp">Study Period (Start - End)</label>
+          <input type="text" class="form-control-corp edu-period" placeholder="e.g. 2022 - 2026" value="${escapeAttr(data.studyPeriod || (data.startYear && data.gradYear ? `${data.startYear} - ${data.gradYear}` : ''))}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-corp">Graduation Year</label>
+          <input type="text" class="form-control-corp edu-grad-year" placeholder="e.g. 2026" value="${escapeAttr(data.gradYear || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-corp">CGPA / Percentage</label>
+          <input type="text" class="form-control-corp edu-score" placeholder="e.g. 3.92 / 4.0 or 88%" value="${escapeAttr(data.score || data.cgpa || '')}">
+        </div>
+        <div class="col-12">
+          <label class="form-label-corp">Academic Highlights / Coursework (Optional)</label>
+          <input type="text" class="form-control-corp edu-highlights" placeholder="e.g. Dean's List (Top 5%), Algorithms, Operating Systems, Cloud Computing" value="${escapeAttr(data.coursework || data.highlights || '')}">
+        </div>
+      </div>
+    `;
+
+    const card = createRepeatableCard(`Education Entry #${count}`, (el) => {
+      if (educationContainer.children.length > 1) {
+        el.remove();
+        updateEducationHeaders();
+      } else {
+        alert('At least one education record is recommended.');
+      }
+    }, fields);
+
+    educationContainer.appendChild(card);
+    updateEducationHeaders();
+  }
+
+  function updateEducationHeaders() {
+    educationContainer.querySelectorAll('.repeater-item-card').forEach((card, index) => {
+      card.querySelector('.repeater-card-title').textContent = `Education Entry #${index + 1}`;
+    });
+  }
+
+  document.getElementById('addEducationBtn').addEventListener('click', () => {
+    addEducationRow();
+    triggerAutoSave();
+  });
+
+  // --- Projects Repeater ---
+  function addProjectRow(data = {}) {
+    const count = projectsContainer.querySelectorAll('.repeater-item-card').length + 1;
+    const fields = `
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label-corp">Project Name <span class="required-star">*</span></label>
+          <input type="text" class="form-control-corp proj-name" placeholder="e.g. AI-Powered Medical Diagnosis Hub" value="${escapeAttr(data.name || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Technologies &amp; Tools Used</label>
+          <input type="text" class="form-control-corp proj-tech" placeholder="e.g. React, Node.js, Python, PostgreSQL, Docker" value="${escapeAttr(data.technologies || '')}">
+        </div>
+        <div class="col-12">
+          <label class="form-label-corp">Short Project Description</label>
+          <textarea rows="3" class="form-control-corp proj-desc" placeholder="Explain the project scope, technical challenges solved, architecture, and measurable outcome.">${escapeHtml(data.description || '')}</textarea>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">GitHub Repository Link (Optional)</label>
+          <input type="url" class="form-control-corp proj-github" placeholder="https://github.com/username/project" value="${escapeAttr(data.githubUrl || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Live Demo Link (Optional)</label>
+          <input type="url" class="form-control-corp proj-live" placeholder="https://project-demo.com" value="${escapeAttr(data.liveUrl || '')}">
+        </div>
+      </div>
+    `;
+
+    const card = createRepeatableCard(`Project #${count}`, (el) => {
+      el.remove();
+      updateProjectHeaders();
+    }, fields);
+
+    projectsContainer.appendChild(card);
+    updateProjectHeaders();
+  }
+
+  function updateProjectHeaders() {
+    projectsContainer.querySelectorAll('.repeater-item-card').forEach((card, index) => {
+      card.querySelector('.repeater-card-title').textContent = `Project #${index + 1}`;
+    });
+  }
+
+  document.getElementById('addProjectBtn').addEventListener('click', () => {
+    addProjectRow();
+    triggerAutoSave();
+  });
+
+  // --- Experience Repeater ---
+  function addExperienceRow(data = {}) {
+    const count = experienceContainer.querySelectorAll('.repeater-item-card').length + 1;
+    const fields = `
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label-corp">Organization / Company Name</label>
+          <input type="text" class="form-control-corp exp-org" placeholder="e.g. Google Cloud / Startup Inc." value="${escapeAttr(data.organization || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Position / Role</label>
+          <input type="text" class="form-control-corp exp-role" placeholder="e.g. Software Engineering Intern" value="${escapeAttr(data.position || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Duration</label>
+          <input type="text" class="form-control-corp exp-duration" placeholder="e.g. June 2024 - August 2024" value="${escapeAttr(data.duration || (data.startDate && data.endDate ? `${data.startDate} - ${data.endDate}` : ''))}">
+        </div>
+        <div class="col-12">
+          <label class="form-label-corp">Responsibilities &amp; Work Description</label>
+          <textarea rows="2" class="form-control-corp exp-desc" placeholder="Detail key contributions, modules built, optimizations achieved, or teams collaborated with.">${escapeHtml(data.responsibilities || data.description || '')}</textarea>
+        </div>
+      </div>
+    `;
+
+    const card = createRepeatableCard(`Experience #${count}`, (el) => {
+      el.remove();
+      updateExperienceHeaders();
+    }, fields);
+
+    experienceContainer.appendChild(card);
+    updateExperienceHeaders();
+  }
+
+  function updateExperienceHeaders() {
+    experienceContainer.querySelectorAll('.repeater-item-card').forEach((card, index) => {
+      card.querySelector('.repeater-card-title').textContent = `Experience #${index + 1}`;
+    });
+  }
+
+  document.getElementById('addExperienceBtn').addEventListener('click', () => {
+    addExperienceRow();
+    triggerAutoSave();
+  });
+
+  // --- Certifications Repeater ---
+  function addCertRow(data = {}) {
+    const count = certsContainer.querySelectorAll('.repeater-item-card').length + 1;
+    const fields = `
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="form-label-corp">Certification / Award Name</label>
+          <input type="text" class="form-control-corp cert-name" placeholder="e.g. AWS Certified Solutions Architect" value="${escapeAttr(data.name || '')}">
+        </div>
+        <div class="col-md-6">
+          <label class="form-label-corp">Issuing Organization</label>
+          <input type="text" class="form-control-corp cert-org" placeholder="e.g. Amazon Web Services" value="${escapeAttr(data.organization || '')}">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label-corp">Year</label>
+          <input type="text" class="form-control-corp cert-year" placeholder="e.g. 2024" value="${escapeAttr(data.issueDate || data.year || '')}">
+        </div>
+        <div class="col-md-8">
+          <label class="form-label-corp">Credential Link or ID (Optional)</label>
+          <input type="url" class="form-control-corp cert-url" placeholder="https://credential.net/verify/..." value="${escapeAttr(data.url || data.credentialId || '')}">
+        </div>
+      </div>
+    `;
+
+    const card = createRepeatableCard(`Certification #${count}`, (el) => {
+      el.remove();
+      updateCertHeaders();
+    }, fields);
+
+    certsContainer.appendChild(card);
+    updateCertHeaders();
+  }
+
+  function updateCertHeaders() {
+    certsContainer.querySelectorAll('.repeater-item-card').forEach((card, index) => {
+      card.querySelector('.repeater-card-title').textContent = `Certification #${index + 1}`;
+    });
+  }
+
+  document.getElementById('addCertBtn').addEventListener('click', () => {
+    addCertRow();
+    triggerAutoSave();
+  });
+
+  // =========================================================================
+  // 5. PROFILE PHOTO UPLOAD
   // =========================================================================
   if (photoFileInput) {
     photoFileInput.addEventListener('change', (e) => {
       const file = e.target.files[0];
-      if (file) {
-        if (file.size > 5 * 1024 * 1024) {
-          alert('Image size exceeds 5MB. Please choose a smaller photo.');
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = function(evt) {
-          profilePhotoBase64 = evt.target.result;
-          displayAvatar(profilePhotoBase64);
-          saveDraft();
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
+      if (!file) return;
 
-  function displayAvatar(src) {
-    if (photoPreviewImg && photoPlaceholderSvg) {
-      photoPreviewImg.src = src;
-      photoPreviewImg.style.display = 'block';
-      photoPlaceholderSvg.style.display = 'none';
-      if (removePhotoBtn) removePhotoBtn.style.display = 'inline-flex';
-    }
+      if (!file.type.startsWith('image/')) {
+        alert('Please select an image file (JPG, PNG, WebP).');
+        return;
+      }
+
+      if (file.size > 2 * 1024 * 1024) {
+        alert('Image file size must be under 2MB.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        profilePhotoBase64 = event.target.result;
+        photoPreviewImg.src = profilePhotoBase64;
+        photoPreviewImg.classList.remove('d-none');
+        photoPlaceholderSvg.classList.add('d-none');
+        removePhotoBtn.classList.remove('d-none');
+        triggerAutoSave();
+      };
+      reader.readAsDataURL(file);
+    });
   }
 
   if (removePhotoBtn) {
     removePhotoBtn.addEventListener('click', () => {
       profilePhotoBase64 = '';
-      if (photoFileInput) photoFileInput.value = '';
-      if (photoPreviewImg) {
-        photoPreviewImg.src = '';
-        photoPreviewImg.style.display = 'none';
-      }
-      if (photoPlaceholderSvg) photoPlaceholderSvg.style.display = 'block';
-      removePhotoBtn.style.display = 'none';
-      saveDraft();
+      photoFileInput.value = '';
+      photoPreviewImg.src = '';
+      photoPreviewImg.classList.add('d-none');
+      photoPlaceholderSvg.classList.remove('d-none');
+      removePhotoBtn.classList.add('d-none');
+      triggerAutoSave();
     });
   }
 
   // =========================================================================
-  // 5. DYNAMIC REPEATERS (EDUCATION, PROJECTS, EXPERIENCE, ETC.)
-  // =========================================================================
-
-  // Education Repeater
-  window.addEducationEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `edu-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/></svg>
-          Education Entry
-        </span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('edu-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Institution / College Name <span class="required">*</span></label>
-          <input type="text" class="form-control edu-institution" placeholder="e.g. University of California, Berkeley" value="${PortfolioTemplates.escapeHtml(data.institution || '')}" required>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Degree / Course <span class="required">*</span></label>
-          <input type="text" class="form-control edu-degree" placeholder="e.g. Bachelor of Science in Computer Science" value="${PortfolioTemplates.escapeHtml(data.degree || '')}" required>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Department / Branch</label>
-          <input type="text" class="form-control edu-department" placeholder="e.g. Computer Science & Engineering" value="${PortfolioTemplates.escapeHtml(data.department || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">University / Board Name</label>
-          <input type="text" class="form-control edu-university" placeholder="e.g. State University System" value="${PortfolioTemplates.escapeHtml(data.universityName || '')}">
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Start Year</label>
-          <input type="text" class="form-control edu-start" placeholder="e.g. 2022" value="${PortfolioTemplates.escapeHtml(data.startYear || '')}">
-        </div>
-        <div class="col-md-2">
-          <label class="form-label">Grad Year</label>
-          <input type="text" class="form-control edu-grad" placeholder="e.g. 2026" value="${PortfolioTemplates.escapeHtml(data.gradYear || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">CGPA / Percentage</label>
-          <input type="text" class="form-control edu-score" placeholder="e.g. 3.92 / 4.00 or 92%" value="${PortfolioTemplates.escapeHtml(data.score || '')}">
-        </div>
-        <div class="col-md-8">
-          <label class="form-label">Relevant Coursework</label>
-          <input type="text" class="form-control edu-coursework" placeholder="e.g. Data Structures, Algorithms, DBMS, Operating Systems" value="${PortfolioTemplates.escapeHtml(data.coursework || '')}">
-        </div>
-      </div>
-    `;
-    educationContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Projects Repeater
-  window.addProjectEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `proj-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
-          Project Details
-        </span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('proj-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Project Name <span class="required">*</span></label>
-          <input type="text" class="form-control proj-name" placeholder="e.g. Campus Peer Collaboration Portal" value="${PortfolioTemplates.escapeHtml(data.name || '')}" required>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Technologies Used</label>
-          <input type="text" class="form-control proj-tech" placeholder="e.g. React, Node.js, PostgreSQL, Docker" value="${PortfolioTemplates.escapeHtml(data.technologies || '')}">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Project Description</label>
-          <textarea class="form-control proj-desc" rows="2" placeholder="Brief high-level summary of what the project does...">${PortfolioTemplates.escapeHtml(data.description || '')}</textarea>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Problem Statement</label>
-          <input type="text" class="form-control proj-problem" placeholder="What core academic or practical problem was addressed?" value="${PortfolioTemplates.escapeHtml(data.problemStatement || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Solution &amp; Engineering Outcome</label>
-          <input type="text" class="form-control proj-solution" placeholder="How did your solution solve the problem?" value="${PortfolioTemplates.escapeHtml(data.solution || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Student's Contribution</label>
-          <input type="text" class="form-control proj-contrib" placeholder="e.g. Architected database schemas and designed API routes" value="${PortfolioTemplates.escapeHtml(data.contribution || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Project Duration</label>
-          <input type="text" class="form-control proj-duration" placeholder="e.g. 3 Months (Spring 2024)" value="${PortfolioTemplates.escapeHtml(data.duration || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">GitHub Repository URL</label>
-          <input type="url" class="form-control proj-github" placeholder="https://github.com/username/project" value="${PortfolioTemplates.escapeHtml(data.githubUrl || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Live Demo / Deployment URL</label>
-          <input type="url" class="form-control proj-live" placeholder="https://project-demo.com" value="${PortfolioTemplates.escapeHtml(data.liveUrl || '')}">
-        </div>
-      </div>
-    `;
-    projectsContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Experience Repeater (Optional for freshers)
-  window.addExperienceEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `exp-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-          Experience / Internship Entry
-        </span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('exp-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Organization / Company Name</label>
-          <input type="text" class="form-control exp-org" placeholder="e.g. Vanguard Systems / University Lab" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Position / Role</label>
-          <input type="text" class="form-control exp-pos" placeholder="e.g. Software Development Intern / Teaching Assistant" value="${PortfolioTemplates.escapeHtml(data.position || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Experience Type</label>
-          <select class="form-select exp-type">
-            <option value="Internship" ${data.experienceType === 'Internship' ? 'selected' : ''}>Internship</option>
-            <option value="Part-Time / Full-Time" ${data.experienceType === 'Part-Time / Full-Time' ? 'selected' : ''}>Part-Time / Full-Time</option>
-            <option value="Teaching Assistantship" ${data.experienceType === 'Teaching Assistantship' ? 'selected' : ''}>Teaching Assistantship</option>
-            <option value="Research Assistantship" ${data.experienceType === 'Research Assistantship' ? 'selected' : ''}>Research Assistantship</option>
-            <option value="Freelance Project" ${data.experienceType === 'Freelance Project' ? 'selected' : ''}>Freelance Project</option>
-          </select>
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Start Date</label>
-          <input type="text" class="form-control exp-start" placeholder="e.g. June 2024" value="${PortfolioTemplates.escapeHtml(data.startDate || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">End Date</label>
-          <input type="text" class="form-control exp-end" placeholder="e.g. August 2024 or Present" value="${PortfolioTemplates.escapeHtml(data.endDate || '')}">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Core Responsibilities</label>
-          <textarea class="form-control exp-resp" rows="2" placeholder="Detail tasks, engineering responsibilities, and methodologies used...">${PortfolioTemplates.escapeHtml(data.responsibilities || '')}</textarea>
-        </div>
-        <div class="col-12">
-          <label class="form-label">Key Achievements / Metrics</label>
-          <input type="text" class="form-control exp-achieve" placeholder="e.g. Boosted portal loading speed by 25% across 1,000 daily users" value="${PortfolioTemplates.escapeHtml(data.achievements || '')}">
-        </div>
-      </div>
-    `;
-    experienceContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Certifications Repeater
-  window.addCertEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `cert-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">Certification</span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('cert-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Certification Name</label>
-          <input type="text" class="form-control cert-name" placeholder="e.g. AWS Certified Cloud Practitioner" value="${PortfolioTemplates.escapeHtml(data.name || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Issuing Organization</label>
-          <input type="text" class="form-control cert-org" placeholder="e.g. Amazon Web Services / Meta" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Issue Date</label>
-          <input type="text" class="form-control cert-date" placeholder="e.g. July 2024" value="${PortfolioTemplates.escapeHtml(data.issueDate || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Credential ID</label>
-          <input type="text" class="form-control cert-id" placeholder="e.g. AWS-CCP-123456" value="${PortfolioTemplates.escapeHtml(data.credentialId || '')}">
-        </div>
-        <div class="col-md-4">
-          <label class="form-label">Credential URL</label>
-          <input type="url" class="form-control cert-url" placeholder="https://verify.certificate.org" value="${PortfolioTemplates.escapeHtml(data.credentialUrl || '')}">
-        </div>
-      </div>
-    `;
-    certsContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Achievements Repeater
-  window.addAchievementEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `ach-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">Achievement / Honor</span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('ach-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Achievement Title</label>
-          <input type="text" class="form-control ach-title" placeholder="e.g. First Place — Inter-University Hackathon 2024" value="${PortfolioTemplates.escapeHtml(data.title || '')}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Date</label>
-          <input type="text" class="form-control ach-date" placeholder="e.g. April 2024" value="${PortfolioTemplates.escapeHtml(data.date || '')}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Organization / Body</label>
-          <input type="text" class="form-control ach-org" placeholder="e.g. IEEE Student Chapter" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Description</label>
-          <input type="text" class="form-control ach-desc" placeholder="Briefly describe the context and recognition..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
-        </div>
-      </div>
-    `;
-    achievementsContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Workshops Repeater
-  window.addWorkshopEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `ws-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">Workshop &amp; Training</span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('ws-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Workshop / Training Name</label>
-          <input type="text" class="form-control ws-name" placeholder="e.g. Microservices Architecture Intensive" value="${PortfolioTemplates.escapeHtml(data.name || '')}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Organization / Host</label>
-          <input type="text" class="form-control ws-org" placeholder="e.g. Google Developer Group" value="${PortfolioTemplates.escapeHtml(data.organization || '')}">
-        </div>
-        <div class="col-md-3">
-          <label class="form-label">Date</label>
-          <input type="text" class="form-control ws-date" placeholder="e.g. November 2023" value="${PortfolioTemplates.escapeHtml(data.date || '')}">
-        </div>
-        <div class="col-12">
-          <label class="form-label">Description</label>
-          <input type="text" class="form-control ws-desc" placeholder="Key competencies covered..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
-        </div>
-      </div>
-    `;
-    workshopsContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  // Extracurriculars Repeater
-  window.addExtracurricularEntry = function(data = {}) {
-    const id = Date.now() + Math.random().toString(36).substring(2, 6);
-    const div = document.createElement('div');
-    div.className = 'repeater-card-item';
-    div.id = `extra-${id}`;
-    div.innerHTML = `
-      <div class="repeater-header-bar">
-        <span class="repeater-title-text">Activity / Leadership</span>
-        <button type="button" class="btn-remove-item" onclick="removeRepeaterEntry('extra-${id}')">Remove</button>
-      </div>
-      <div class="row g-3">
-        <div class="col-md-6">
-          <label class="form-label">Activity Title</label>
-          <input type="text" class="form-control extra-title" placeholder="e.g. President, Computer Science Society" value="${PortfolioTemplates.escapeHtml(data.title || '')}">
-        </div>
-        <div class="col-md-6">
-          <label class="form-label">Category</label>
-          <select class="form-select extra-cat">
-            <option value="Leadership" ${data.category === 'Leadership' ? 'selected' : ''}>Leadership</option>
-            <option value="Student Clubs" ${data.category === 'Student Clubs' ? 'selected' : ''}>Student Clubs</option>
-            <option value="Volunteering" ${data.category === 'Volunteering' ? 'selected' : ''}>Volunteering</option>
-            <option value="Competitions" ${data.category === 'Competitions' ? 'selected' : ''}>Competitions</option>
-            <option value="Sports" ${data.category === 'Sports' ? 'selected' : ''}>Sports</option>
-            <option value="Other Activities" ${data.category === 'Other Activities' ? 'selected' : ''}>Other Activities</option>
-          </select>
-        </div>
-        <div class="col-12">
-          <label class="form-label">Description</label>
-          <input type="text" class="form-control extra-desc" placeholder="Describe role, impact, or leadership contribution..." value="${PortfolioTemplates.escapeHtml(data.description || '')}">
-        </div>
-      </div>
-    `;
-    extracurricularsContainer.appendChild(div);
-    attachInputListeners(div);
-  };
-
-  window.removeRepeaterEntry = function(elementId) {
-    const elem = document.getElementById(elementId);
-    if (elem) {
-      elem.remove();
-      saveDraft();
-    }
-  };
-
-  function attachInputListeners(container) {
-    container.querySelectorAll('input, textarea, select').forEach(input => {
-      input.addEventListener('input', saveDraft);
-      input.addEventListener('change', saveDraft);
-    });
-  }
-
-  // =========================================================================
-  // 6. TEMPLATE SELECTION (STEP 12)
+  // 6. TEMPLATE PICKER SELECTION
   // =========================================================================
   templateCards.forEach(card => {
     card.addEventListener('click', () => {
       templateCards.forEach(c => c.classList.remove('selected'));
       card.classList.add('selected');
       const radio = card.querySelector('input[type="radio"]');
-      if (radio) {
-        radio.checked = true;
-        selectedTemplate = radio.value;
-        saveDraft();
-      }
+      if (radio) radio.checked = true;
+      selectedTemplate = card.getAttribute('data-template');
+      triggerAutoSave();
     });
   });
 
-  // URL Query parameter template support
+  // Check URL query parameters for template preselection or step
   const urlParams = new URLSearchParams(window.location.search);
-  const qTmpl = urlParams.get('template');
-  if (qTmpl) {
-    const matching = document.querySelector(`.template-picker-card[data-template="${qTmpl}"]`);
-    if (matching) {
-      matching.click();
+  const tmplQuery = urlParams.get('template');
+  if (tmplQuery) {
+    const targetCard = Array.from(templateCards).find(c => c.getAttribute('data-template') === tmplQuery);
+    if (targetCard) {
+      targetCard.click();
     }
   }
 
+  const stepQuery = parseInt(urlParams.get('step'), 10);
+  if (stepQuery && stepQuery >= 1 && stepQuery <= totalSteps) {
+    goToStep(stepQuery, false);
+  } else {
+    goToStep(1, false);
+  }
+
   // =========================================================================
-  // 7. GATHER ALL FORM DATA
+  // 7. DATA SERIALIZATION & AUTOSAVE
   // =========================================================================
   function collectFormData() {
-    // Personal Information
-    const personal = {
-      fullName: (document.getElementById('fullName') || {}).value || '',
-      title: (document.getElementById('title') || {}).value || '',
-      email: (document.getElementById('email') || {}).value || '',
-      phone: (document.getElementById('phone') || {}).value || '',
-      city: (document.getElementById('city') || {}).value || '',
-      state: (document.getElementById('state') || {}).value || '',
-      linkedin: (document.getElementById('linkedin') || {}).value || '',
-      github: (document.getElementById('github') || {}).value || '',
-      website: (document.getElementById('website') || {}).value || '',
-      summary: (document.getElementById('summary') || {}).value || '',
-      photo: profilePhotoBase64
-    };
+    // 1. Personal & Contact
+    const fullName = document.getElementById('inputFullName').value.trim();
+    const title = document.getElementById('inputTitle').value.trim();
+    const summary = document.getElementById('inputSummary').value.trim();
+    const location = document.getElementById('inputLocation').value.trim();
+    const email = document.getElementById('inputEmail').value.trim();
+    const phone = document.getElementById('inputPhone').value.trim();
+    const linkedin = document.getElementById('inputLinkedIn').value.trim();
+    const github = document.getElementById('inputGitHub').value.trim();
+    const website = document.getElementById('inputWebsite').value.trim();
 
-    // Career Objective
-    const careerObjective = (document.getElementById('careerObjective') || {}).value || '';
-
-    // Education entries
+    // 2. Education
     const education = [];
-    document.querySelectorAll('#educationContainer .repeater-card-item').forEach(card => {
-      const inst = (card.querySelector('.edu-institution') || {}).value || '';
-      const deg = (card.querySelector('.edu-degree') || {}).value || '';
-      if (inst || deg) {
+    educationContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+      const institution = card.querySelector('.edu-institution').value.trim();
+      const degree = card.querySelector('.edu-degree').value.trim();
+      const department = card.querySelector('.edu-dept').value.trim();
+      const university = card.querySelector('.edu-univ').value.trim();
+      const studyPeriod = card.querySelector('.edu-period').value.trim();
+      const gradYear = card.querySelector('.edu-grad-year').value.trim();
+      const score = card.querySelector('.edu-score').value.trim();
+      const coursework = card.querySelector('.edu-highlights').value.trim();
+
+      if (institution || degree) {
         education.push({
-          institution: inst,
-          degree: deg,
-          department: (card.querySelector('.edu-department') || {}).value || '',
-          universityName: (card.querySelector('.edu-university') || {}).value || '',
-          startYear: (card.querySelector('.edu-start') || {}).value || '',
-          gradYear: (card.querySelector('.edu-grad') || {}).value || '',
-          score: (card.querySelector('.edu-score') || {}).value || '',
-          coursework: (card.querySelector('.edu-coursework') || {}).value || ''
+          institution,
+          degree,
+          department,
+          university,
+          studyPeriod,
+          gradYear,
+          score,
+          coursework
         });
       }
     });
 
-    // Categorized Skills
-    const skills = {
-      programmingLanguages: (document.getElementById('skillProgLang') || {}).value || '',
-      frontend: (document.getElementById('skillFrontend') || {}).value || '',
-      backend: (document.getElementById('skillBackend') || {}).value || '',
-      frameworks: (document.getElementById('skillFrameworks') || {}).value || '',
-      databases: (document.getElementById('skillDatabases') || {}).value || '',
-      tools: (document.getElementById('skillTools') || {}).value || '',
-      softwareSkills: (document.getElementById('skillSoftware') || {}).value || '',
-      softSkills: (document.getElementById('skillSoft') || {}).value || '',
-      otherSkills: (document.getElementById('skillOther') || {}).value || ''
-    };
+    // 3. Skills & Languages
+    const skills = selectedSkills.map(s => ({ name: s }));
+    const languages = selectedLanguages.map(l => ({ name: l.name, proficiency: l.proficiency }));
 
-    // Projects entries
+    // 4. Projects
     const projects = [];
-    document.querySelectorAll('#projectsContainer .repeater-card-item').forEach(card => {
-      const name = (card.querySelector('.proj-name') || {}).value || '';
+    projectsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+      const name = card.querySelector('.proj-name').value.trim();
+      const technologies = card.querySelector('.proj-tech').value.trim();
+      const description = card.querySelector('.proj-desc').value.trim();
+      const githubUrl = card.querySelector('.proj-github').value.trim();
+      const liveUrl = card.querySelector('.proj-live').value.trim();
+
       if (name) {
         projects.push({
           name,
-          description: (card.querySelector('.proj-desc') || {}).value || '',
-          problemStatement: (card.querySelector('.proj-problem') || {}).value || '',
-          solution: (card.querySelector('.proj-solution') || {}).value || '',
-          technologies: (card.querySelector('.proj-tech') || {}).value || '',
-          contribution: (card.querySelector('.proj-contrib') || {}).value || '',
-          duration: (card.querySelector('.proj-duration') || {}).value || '',
-          githubUrl: (card.querySelector('.proj-github') || {}).value || '',
-          liveUrl: (card.querySelector('.proj-live') || {}).value || ''
+          technologies,
+          description,
+          githubUrl,
+          liveUrl
         });
       }
     });
 
-    // Experience entries
+    // 5. Experience
     const experience = [];
-    document.querySelectorAll('#experienceContainer .repeater-card-item').forEach(card => {
-      const org = (card.querySelector('.exp-org') || {}).value || '';
-      const pos = (card.querySelector('.exp-pos') || {}).value || '';
-      if (org || pos) {
+    experienceContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+      const organization = card.querySelector('.exp-org').value.trim();
+      const position = card.querySelector('.exp-role').value.trim();
+      const duration = card.querySelector('.exp-duration').value.trim();
+      const responsibilities = card.querySelector('.exp-desc').value.trim();
+
+      if (organization || position) {
         experience.push({
-          organization: org,
-          position: pos,
-          experienceType: (card.querySelector('.exp-type') || {}).value || 'Internship',
-          startDate: (card.querySelector('.exp-start') || {}).value || '',
-          endDate: (card.querySelector('.exp-end') || {}).value || '',
-          responsibilities: (card.querySelector('.exp-resp') || {}).value || '',
-          achievements: (card.querySelector('.exp-achieve') || {}).value || ''
+          organization,
+          position,
+          duration,
+          responsibilities
         });
       }
     });
 
-    // Certifications
+    // 6. Certifications
     const certifications = [];
-    document.querySelectorAll('#certsContainer .repeater-card-item').forEach(card => {
-      const cName = (card.querySelector('.cert-name') || {}).value || '';
-      if (cName) {
+    certsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+      const name = card.querySelector('.cert-name').value.trim();
+      const organization = card.querySelector('.cert-org').value.trim();
+      const issueDate = card.querySelector('.cert-year').value.trim();
+      const url = card.querySelector('.cert-url').value.trim();
+
+      if (name) {
         certifications.push({
-          name: cName,
-          organization: (card.querySelector('.cert-org') || {}).value || '',
-          issueDate: (card.querySelector('.cert-date') || {}).value || '',
-          credentialId: (card.querySelector('.cert-id') || {}).value || '',
-          credentialUrl: (card.querySelector('.cert-url') || {}).value || ''
+          name,
+          organization,
+          issueDate,
+          url
         });
       }
     });
 
-    // Achievements
-    const achievements = [];
-    document.querySelectorAll('#achievementsContainer .repeater-card-item').forEach(card => {
-      const aTitle = (card.querySelector('.ach-title') || {}).value || '';
-      if (aTitle) {
-        achievements.push({
-          title: aTitle,
-          date: (card.querySelector('.ach-date') || {}).value || '',
-          organization: (card.querySelector('.ach-org') || {}).value || '',
-          description: (card.querySelector('.ach-desc') || {}).value || ''
-        });
-      }
-    });
-
-    // Workshops
-    const workshops = [];
-    document.querySelectorAll('#workshopsContainer .repeater-card-item').forEach(card => {
-      const wName = (card.querySelector('.ws-name') || {}).value || '';
-      if (wName) {
-        workshops.push({
-          name: wName,
-          organization: (card.querySelector('.ws-org') || {}).value || '',
-          date: (card.querySelector('.ws-date') || {}).value || '',
-          description: (card.querySelector('.ws-desc') || {}).value || ''
-        });
-      }
-    });
-
-    // Extracurriculars
-    const extracurriculars = [];
-    document.querySelectorAll('#extracurricularsContainer .repeater-card-item').forEach(card => {
-      const eTitle = (card.querySelector('.extra-title') || {}).value || '';
-      if (eTitle) {
-        extracurriculars.push({
-          title: eTitle,
-          category: (card.querySelector('.extra-cat') || {}).value || 'Activities',
-          description: (card.querySelector('.extra-desc') || {}).value || ''
-        });
-      }
-    });
-
-    // Additional Info
-    const additionalInfo = {
-      languages: (document.getElementById('addlLanguages') || {}).value || '',
-      hobbies: (document.getElementById('addlHobbies') || {}).value || '',
-      publications: (document.getElementById('addlPublications') || {}).value || '',
-      references: (document.getElementById('addlReferences') || {}).value || ''
-    };
+    // 7. Additional Info
+    const interests = document.getElementById('inputInterests').value.trim();
+    const activities = document.getElementById('inputActivities').value.trim();
+    const workshops = document.getElementById('inputWorkshops').value.trim();
 
     return {
-      category: selectedCategory,
       template: selectedTemplate,
-      personal,
-      careerObjective,
+      personal: {
+        fullName,
+        title,
+        photo: profilePhotoBase64,
+        summary,
+        location,
+        email,
+        phone,
+        linkedin,
+        github,
+        website
+      },
       education,
       skills,
+      languages,
       projects,
       experience,
       certifications,
-      achievements,
-      workshops,
-      extracurriculars,
-      additionalInfo,
-      updatedAt: new Date().toISOString()
+      additionalInfo: {
+        interests,
+        activities,
+        workshops
+      }
     };
   }
 
-  // =========================================================================
-  // 8. AUTOSAVE DRAFT & FORM RESTORATION
-  // =========================================================================
   let autoSaveTimeout = null;
-  function saveDraft() {
+  function triggerAutoSave() {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
     autoSaveTimeout = setTimeout(() => {
-      const data = collectFormData();
-      PortfolioGenerator.saveDraft(data);
-      if (autoSaveBadge) {
-        autoSaveBadge.style.opacity = '1';
-        setTimeout(() => {
-          autoSaveBadge.style.opacity = '0.7';
-        }, 1200);
+      try {
+        const data = collectFormData();
+        localStorage.setItem('student_portfolio_data', JSON.stringify(data));
+        localStorage.setItem('student_portfolio_form_draft', JSON.stringify(data));
+
+        if (autoSaveBadge) {
+          autoSaveBadge.style.opacity = '1';
+          setTimeout(() => {
+            autoSaveBadge.style.opacity = '0.7';
+          }, 1200);
+        }
+      } catch (err) {
+        console.warn('Autosave warning:', err);
       }
-    }, 350);
+    }, 400);
   }
 
-  function populateFormData(data) {
+  // Attach input listener to static form fields
+  document.querySelectorAll('input, textarea, select').forEach(el => {
+    el.addEventListener('input', triggerAutoSave);
+  });
+
+  // =========================================================================
+  // 8. POPULATE FORM FROM DATA OBJECT
+  // =========================================================================
+  function populateForm(data) {
     if (!data) return;
 
-    // Category
-    if (data.category) {
-      selectedCategory = data.category;
-      const targetCard = document.querySelector(`.category-choice-card[data-category="${data.category}"]`);
-      if (targetCard) {
-        categoryCards.forEach(c => c.classList.remove('selected'));
-        targetCard.classList.add('selected');
-      }
+    // Template
+    if (data.template) {
+      selectedTemplate = data.template;
+      templateCards.forEach(card => {
+        if (card.getAttribute('data-template') === data.template) {
+          card.classList.add('selected');
+          const radio = card.querySelector('input[type="radio"]');
+          if (radio) radio.checked = true;
+        } else {
+          card.classList.remove('selected');
+        }
+      });
     }
 
-    // Personal Information
+    // Personal
     const p = data.personal || {};
-    if (document.getElementById('fullName')) document.getElementById('fullName').value = p.fullName || '';
-    if (document.getElementById('title')) document.getElementById('title').value = p.title || '';
-    if (document.getElementById('email')) document.getElementById('email').value = p.email || '';
-    if (document.getElementById('phone')) document.getElementById('phone').value = p.phone || '';
-    if (document.getElementById('city')) document.getElementById('city').value = p.city || '';
-    if (document.getElementById('state')) document.getElementById('state').value = p.state || '';
-    if (document.getElementById('linkedin')) document.getElementById('linkedin').value = p.linkedin || '';
-    if (document.getElementById('github')) document.getElementById('github').value = p.github || '';
-    if (document.getElementById('website')) document.getElementById('website').value = p.website || '';
-    if (document.getElementById('summary')) document.getElementById('summary').value = p.summary || '';
+    document.getElementById('inputFullName').value = p.fullName || '';
+    document.getElementById('inputTitle').value = p.title || '';
+    document.getElementById('inputSummary').value = p.summary || '';
+    document.getElementById('inputLocation').value = p.location || (p.city && p.state ? `${p.city}, ${p.state}` : p.city || '');
+    document.getElementById('inputEmail').value = p.email || '';
+    document.getElementById('inputPhone').value = p.phone || '';
+    document.getElementById('inputLinkedIn').value = p.linkedin || '';
+    document.getElementById('inputGitHub').value = p.github || '';
+    document.getElementById('inputWebsite').value = p.website || '';
+
+    // Photo
     if (p.photo) {
       profilePhotoBase64 = p.photo;
-      displayAvatar(p.photo);
-    }
-
-    // Career Objective
-    if (document.getElementById('careerObjective')) {
-      document.getElementById('careerObjective').value = data.careerObjective || '';
+      photoPreviewImg.src = profilePhotoBase64;
+      photoPreviewImg.classList.remove('d-none');
+      photoPlaceholderSvg.classList.add('d-none');
+      removePhotoBtn.classList.remove('d-none');
     }
 
     // Education
     educationContainer.innerHTML = '';
     if (Array.isArray(data.education) && data.education.length > 0) {
-      data.education.forEach(edu => window.addEducationEntry(edu));
+      data.education.forEach(edu => addEducationRow(edu));
     } else {
-      window.addEducationEntry();
+      addEducationRow();
     }
 
     // Skills
-    const sk = data.skills || {};
-    if (document.getElementById('skillProgLang')) document.getElementById('skillProgLang').value = sk.programmingLanguages || '';
-    if (document.getElementById('skillFrontend')) document.getElementById('skillFrontend').value = sk.frontend || '';
-    if (document.getElementById('skillBackend')) document.getElementById('skillBackend').value = sk.backend || '';
-    if (document.getElementById('skillFrameworks')) document.getElementById('skillFrameworks').value = sk.frameworks || '';
-    if (document.getElementById('skillDatabases')) document.getElementById('skillDatabases').value = sk.databases || '';
-    if (document.getElementById('skillTools')) document.getElementById('skillTools').value = sk.tools || '';
-    if (document.getElementById('skillSoftware')) document.getElementById('skillSoftware').value = sk.softwareSkills || '';
-    if (document.getElementById('skillSoft')) document.getElementById('skillSoft').value = sk.softSkills || '';
-    if (document.getElementById('skillOther')) document.getElementById('skillOther').value = sk.otherSkills || '';
+    selectedSkills = [];
+    if (Array.isArray(data.skills)) {
+      data.skills.forEach(s => {
+        const name = typeof s === 'string' ? s : s.name;
+        if (name && !selectedSkills.includes(name)) {
+          selectedSkills.push(name);
+        }
+      });
+    }
+    updateSelectedSkillsUI();
+    renderPredefinedSkills();
+
+    // Languages
+    selectedLanguages = [];
+    if (Array.isArray(data.languages)) {
+      data.languages.forEach(l => {
+        if (typeof l === 'string') {
+          selectedLanguages.push({ name: l, proficiency: 'Fluent' });
+        } else if (l && l.name) {
+          selectedLanguages.push({ name: l.name, proficiency: l.proficiency || 'Fluent' });
+        }
+      });
+    }
+    updateSelectedLanguagesUI();
 
     // Projects
     projectsContainer.innerHTML = '';
     if (Array.isArray(data.projects) && data.projects.length > 0) {
-      data.projects.forEach(proj => window.addProjectEntry(proj));
+      data.projects.forEach(proj => addProjectRow(proj));
     } else {
-      window.addProjectEntry();
+      addProjectRow();
     }
 
     // Experience
     experienceContainer.innerHTML = '';
     if (Array.isArray(data.experience) && data.experience.length > 0) {
-      data.experience.forEach(exp => window.addExperienceEntry(exp));
+      data.experience.forEach(exp => addExperienceRow(exp));
+    } else {
+      addExperienceRow();
     }
 
     // Certifications
     certsContainer.innerHTML = '';
     if (Array.isArray(data.certifications) && data.certifications.length > 0) {
-      data.certifications.forEach(c => window.addCertEntry(c));
-    }
-
-    // Achievements
-    achievementsContainer.innerHTML = '';
-    if (Array.isArray(data.achievements) && data.achievements.length > 0) {
-      data.achievements.forEach(a => window.addAchievementEntry(a));
-    }
-
-    // Workshops
-    workshopsContainer.innerHTML = '';
-    if (Array.isArray(data.workshops) && data.workshops.length > 0) {
-      data.workshops.forEach(w => window.addWorkshopEntry(w));
-    }
-
-    // Extracurriculars
-    extracurricularsContainer.innerHTML = '';
-    if (Array.isArray(data.extracurriculars) && data.extracurriculars.length > 0) {
-      data.extracurriculars.forEach(e => window.addExtracurricularEntry(e));
+      data.certifications.forEach(cert => addCertRow(cert));
     }
 
     // Additional Info
-    const ad = data.additionalInfo || {};
-    if (document.getElementById('addlLanguages')) document.getElementById('addlLanguages').value = ad.languages || '';
-    if (document.getElementById('addlHobbies')) document.getElementById('addlHobbies').value = ad.hobbies || '';
-    if (document.getElementById('addlPublications')) document.getElementById('addlPublications').value = ad.publications || '';
-    if (document.getElementById('addlReferences')) document.getElementById('addlReferences').value = ad.references || '';
+    const addl = data.additionalInfo || {};
+    document.getElementById('inputInterests').value = addl.interests || '';
+    document.getElementById('inputActivities').value = addl.activities || '';
+    document.getElementById('inputWorkshops').value = addl.workshops || '';
 
-    // Template
-    if (data.template) {
-      selectedTemplate = data.template;
-      const tCard = document.querySelector(`.template-picker-card[data-template="${data.template}"]`);
-      if (tCard) {
-        templateCards.forEach(c => c.classList.remove('selected'));
-        tCard.classList.add('selected');
-        const radio = tCard.querySelector('input[type="radio"]');
-        if (radio) radio.checked = true;
-      }
-    }
+    triggerAutoSave();
   }
 
   // =========================================================================
-  // 9. SAMPLE DEMO DATA (1-CLICK LOAD)
+  // 9. SAMPLE DATA & RESET BUTTONS
   // =========================================================================
   const fillDemoBtn = document.getElementById('fillDemoBtn');
   if (fillDemoBtn) {
     fillDemoBtn.addEventListener('click', async () => {
       try {
-        const resp = await fetch('/api/demo-data');
-        if (resp.ok) {
-          const res = await resp.json();
-          if (res.success && res.data) {
-            populateFormData(res.data);
-            PortfolioGenerator.saveDraft(res.data);
-            alert('Sample student portfolio loaded successfully! All 11 sections have been populated.');
-            return;
-          }
-        }
+        fillDemoBtn.disabled = true;
+        fillDemoBtn.textContent = 'Loading...';
+        const res = await fetch('/api/demo-data');
+        if (!res.ok) throw new Error('Failed to load demo data');
+        const demoData = await res.json();
+        populateForm(demoData);
+        fillDemoBtn.textContent = 'Sample Loaded!';
+        setTimeout(() => {
+          fillDemoBtn.disabled = false;
+          fillDemoBtn.textContent = 'Fill Sample Data';
+        }, 1500);
       } catch (err) {
-        console.warn('API error fetching demo data:', err);
+        console.error(err);
+        alert('Could not load sample data: ' + err.message);
+        fillDemoBtn.disabled = false;
+        fillDemoBtn.textContent = 'Fill Sample Data';
       }
     });
   }
 
-  // Clear Form Reset
   const clearFormBtn = document.getElementById('clearFormBtn');
   if (clearFormBtn) {
     clearFormBtn.addEventListener('click', () => {
-      if (confirm('Are you sure you want to reset the form? All entered information will be cleared.')) {
-        PortfolioGenerator.clearAll();
+      if (confirm('Are you sure you want to reset all form entries? This cannot be undone.')) {
+        localStorage.removeItem('student_portfolio_data');
+        localStorage.removeItem('student_portfolio_form_draft');
         window.location.reload();
       }
     });
   }
 
   // =========================================================================
-  // 10. GENERATE PORTFOLIO ACTION
+  // 10. GENERATE PORTFOLIO
   // =========================================================================
-  const generatePortfolioBtn = document.getElementById('generatePortfolioBtn');
   if (generatePortfolioBtn) {
     generatePortfolioBtn.addEventListener('click', () => {
-      // Validate Personal Information before final generation
-      if (!validateCurrentStep()) {
-        renderStep(1);
+      // Validate Step 1 minimum fields
+      const name = document.getElementById('inputFullName').value.trim();
+      const title = document.getElementById('inputTitle').value.trim();
+      const email = document.getElementById('inputEmail').value.trim();
+
+      if (!name || !title || !email) {
+        alert('Please fill in your Full Name, Professional Title, and Email in Step 1.');
+        goToStep(1);
         return;
       }
 
-      const finalData = collectFormData();
-      PortfolioGenerator.saveData(finalData);
-
-      // Loading dialog
-      const overlay = document.createElement('div');
-      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(20,36,58,0.85);backdrop-filter:blur(4px);z-index:9999;display:flex;align-items:center;justify-content:center;color:#FFFFFF;text-align:center;font-family:Inter,sans-serif;';
-      overlay.innerHTML = `
-        <div style="background:#FFFFFF; color:#14243A; padding:2rem 2.5rem; border-radius:8px; max-width:420px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
-          <div class="spinner-border text-primary mb-3" style="width:3rem; height:3rem;" role="status"></div>
-          <h4 style="font-weight:800; margin-bottom:0.5rem;">Generating Your Portfolio...</h4>
-          <p style="color:#64748B; font-size:0.9rem; margin:0;">Formatting academic sections and preparing live A4 preview...</p>
-        </div>
-      `;
-      document.body.appendChild(overlay);
-
-      setTimeout(() => {
-        window.location.href = '/preview';
-      }, 700);
+      const fullData = collectFormData();
+      localStorage.setItem('student_portfolio_data', JSON.stringify(fullData));
+      window.location.href = `/preview?template=${encodeURIComponent(selectedTemplate)}`;
     });
   }
 
-  // Attach auto-save to static inputs
-  document.querySelectorAll('.form-control, .form-select').forEach(input => {
-    input.addEventListener('input', saveDraft);
-    input.addEventListener('change', saveDraft);
-  });
+  // =========================================================================
+  // 11. INITIALIZATION: RESTORE DRAFT IF EXISTS
+  // =========================================================================
+  renderPredefinedSkills();
+  updateSelectedSkillsUI();
+  updateSelectedLanguagesUI();
 
-  // =========================================================================
-  // 11. INITIALIZATION ON LOAD
-  // =========================================================================
-  const existingData = PortfolioGenerator.getData() || PortfolioGenerator.getDraft();
-  if (existingData) {
-    populateFormData(existingData);
-  } else {
-    // Default initial rows
-    window.addEducationEntry();
-    window.addProjectEntry();
+  try {
+    const saved = localStorage.getItem('student_portfolio_data') || localStorage.getItem('student_portfolio_form_draft');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      populateForm(parsed);
+    } else {
+      // Initialize with default blank rows
+      addEducationRow();
+      addProjectRow();
+    }
+  } catch (e) {
+    console.error('Error loading stored portfolio data:', e);
+    addEducationRow();
+    addProjectRow();
   }
 
-  // Check URL query for step parameter
-  const qStep = parseInt(urlParams.get('step'), 10);
-  if (!isNaN(qStep) && qStep >= 0 && qStep <= totalSteps) {
-    renderStep(qStep, false);
-  } else {
-    renderStep(0, false);
+  // Helper Escapes
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function escapeAttr(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
   }
 });
