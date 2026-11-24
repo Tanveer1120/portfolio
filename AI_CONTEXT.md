@@ -150,3 +150,19 @@ Every template has a genuine layout, distinct CSS rules, and semantic hierarchy:
 - **Remote URL**: `https://github.com/Tanveer1120/portfolio.git`
 - **Primary Branch**: `main`
 - **Security Rule**: Personal Access Tokens (PATs) must **never** be saved in source files, git config, or committed documentation.
+
+---
+
+## 9. Critical Bug Fix: Generate Portfolio Button Execution Flow
+
+- **Root Cause Identified via Headless Chrome DevTools Protocol (CDP)**:
+  - During script load, `goToStep(1, false)` ran prematurely at line 796 before variable declarations and `populateForm` / `generatePortfolio` definitions were reached.
+  - `goToStep` called `triggerAutoSave()`, which accessed `autoSaveTimeout` before its `let` declaration at line 961, triggering an uncaught ES6 TDZ (Temporal Dead Zone) `ReferenceError: Cannot access 'autoSaveTimeout' before initialization`.
+  - This exception halted script execution mid-way during `DOMContentLoaded`, leaving `window.generatePortfolio` undefined and the `#generatePortfolioBtn` event listener unattached.
+  - Clicking the button triggered `ReferenceError: generatePortfolio is not defined`, making the button appear responsive to click CSS styles but performing no generation or navigation.
+- **Resolution**:
+  - Moved `let autoSaveTimeout = null;` to the top of `DOMContentLoaded` alongside other state variables.
+  - Moved initial `goToStep(1, false)` to the end of Section 11 after all functions and drafts are loaded.
+  - Unwrapped payload (`rawData.data || rawData`) in `populateForm` to ensure sample demo data populates smoothly.
+  - Confirmed 100% pass across all 4 mandatory verification tests (A: core fields, B: full fields with demo data, C: minimal/empty optional fields, D: back-and-edit re-generation) in a live Google Chrome browser instance via CDP.
+
