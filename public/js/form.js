@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalSteps = 4;
   let selectedTemplate = 'corporate';
   let profilePhotoBase64 = '';
+  let autoSaveTimeout = null;
 
   // Selected Skills and Languages sets
   let selectedSkills = [];
@@ -779,23 +780,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Check URL query parameters for template preselection or step
-  const urlParams = new URLSearchParams(window.location.search);
-  const tmplQuery = urlParams.get('template');
-  if (tmplQuery) {
-    const targetCard = Array.from(templateCards).find(c => c.getAttribute('data-template') === tmplQuery);
-    if (targetCard) {
-      targetCard.click();
-    }
-  }
-
-  const stepQuery = parseInt(urlParams.get('step'), 10);
-  if (stepQuery && stepQuery >= 1 && stepQuery <= totalSteps) {
-    goToStep(stepQuery, false);
-  } else {
-    goToStep(1, false);
-  }
-
   // =========================================================================
   // 7. DATA SERIALIZATION & AUTOSAVE
   // =========================================================================
@@ -957,7 +941,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   }
 
-  let autoSaveTimeout = null;
   function triggerAutoSave() {
     if (autoSaveTimeout) clearTimeout(autoSaveTimeout);
     autoSaveTimeout = setTimeout(() => {
@@ -986,8 +969,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // 8. POPULATE FORM FROM DATA OBJECT
   // =========================================================================
-  function populateForm(data) {
-    if (!data) return;
+  function populateForm(rawData) {
+    if (!rawData) return;
+    const data = rawData.data || rawData;
 
     // Template
     if (data.template) {
@@ -1100,7 +1084,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fillDemoBtn.textContent = 'Loading...';
         const res = await fetch('/api/demo-data');
         if (!res.ok) throw new Error('Failed to load demo data');
-        const demoData = await res.json();
+        const json = await res.json();
+        const demoData = json.data || json;
         populateForm(demoData);
         fillDemoBtn.textContent = 'Sample Loaded!';
         setTimeout(() => {
@@ -1185,6 +1170,23 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Error loading stored portfolio data:', e);
     addEducationRow();
     addProjectRow();
+  }
+
+  // Check URL query parameters for template preselection or step
+  const urlParams = new URLSearchParams(window.location.search);
+  const tmplQuery = urlParams.get('template');
+  if (tmplQuery) {
+    const targetCard = Array.from(templateCards).find(c => c.getAttribute('data-template') === tmplQuery);
+    if (targetCard) {
+      targetCard.click();
+    }
+  }
+
+  const stepQuery = parseInt(urlParams.get('step'), 10);
+  if (stepQuery && stepQuery >= 1 && stepQuery <= totalSteps) {
+    goToStep(stepQuery, false);
+  } else {
+    goToStep(1, false);
   }
 
   // Helper Escapes
