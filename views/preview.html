@@ -285,19 +285,35 @@
       const viewDesktopBtn = document.getElementById('viewDesktopBtn');
       const viewMobileBtn = document.getElementById('viewMobileBtn');
 
+      const urlParams = new URLSearchParams(window.location.search);
+      const templateFromUrl = urlParams.get('template');
+
       let currentData = PortfolioGenerator.getData() || PortfolioGenerator.getDraft();
 
       function renderCurrentPortfolio() {
-        if (!currentData || (!currentData.personal && !currentData.education)) {
+        if (!currentData) {
           if (viewportContainer) viewportContainer.style.display = 'none';
           if (emptyState) emptyState.style.display = 'block';
           return;
         }
 
+        // Ensure personal object exists with fallback
+        if (!currentData.personal) {
+          currentData.personal = { fullName: 'Student' };
+        }
+
         if (emptyState) emptyState.style.display = 'none';
         if (viewportContainer) viewportContainer.style.display = 'flex';
 
-        const activeTemplate = currentData.template || 'corporate-professional';
+        let activeTemplate = templateFromUrl || currentData.template || 'corporate';
+        if (activeTemplate === 'corporate-professional') activeTemplate = 'corporate';
+        if (activeTemplate === 'modern-minimal') activeTemplate = 'minimal';
+        if (activeTemplate === 'developer-portfolio') activeTemplate = 'developer';
+        if (activeTemplate === 'academic-portfolio') activeTemplate = 'academic';
+        if (activeTemplate === 'professional-creative') activeTemplate = 'modern-professional';
+
+        currentData.template = activeTemplate;
+
         if (templateSwitcher) {
           templateSwitcher.value = activeTemplate;
         }

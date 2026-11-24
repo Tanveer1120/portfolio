@@ -122,27 +122,26 @@ templates.forEach(tmpl => {
 // 2. UNIT TEST: Empty Optional Sections Graceful Handling
 console.log('\n🔹 [Test 2] Testing Graceful Omission of Empty Optional Sections...');
 const minimalData = {
-  template: 'corporate-professional',
+  template: 'corporate',
   personal: {
-    fullName: 'Minimal Candidate',
-    title: 'Student',
-    email: 'minimal@example.com'
+    fullName: 'Minimal Candidate'
   },
   education: [],
-  skills: {},
+  skills: [],
+  languages: [],
   projects: [],
   experience: [],
   certifications: [],
-  achievements: [],
-  workshops: [],
-  extracurriculars: []
+  additional: {}
 };
 
-const emptyHtml = PortfolioTemplates.render('corporate-professional', minimalData);
-assert(!emptyHtml.includes('Certifications</div>'), 'Should omit certifications section when empty');
-assert(!emptyHtml.includes('Internships &amp; Experience</div>'), 'Should omit experience section when empty');
-assert(!emptyHtml.includes('Achievements &amp; Honors</div>'), 'Should omit achievements section when empty');
-assert(emptyHtml.includes('Minimal Candidate'), 'Should render candidate name');
+['corporate', 'minimal', 'developer', 'academic', 'modern-professional'].forEach(tmpl => {
+  const html = PortfolioTemplates.render(tmpl, minimalData);
+  assert(html && html.includes('Minimal Candidate'), `Template ${tmpl} must render candidate name even with all optional fields empty`);
+  assert(!html.includes('Certifications</div>'), `${tmpl}: Should omit certifications section when empty`);
+  assert(!html.includes('Internships &amp; Experience</div>'), `${tmpl}: Should omit experience section when empty`);
+  console.log(`  ✅ Template '${tmpl}' generates successfully with all optional fields empty.`);
+});
 console.log('  ✅ Empty optional sections omitted smoothly without broken markup.');
 
 // 3. INTEGRATION TEST: HTTP Server Endpoints

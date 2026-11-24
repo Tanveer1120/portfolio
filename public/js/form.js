@@ -800,42 +800,54 @@ document.addEventListener('DOMContentLoaded', () => {
   // 7. DATA SERIALIZATION & AUTOSAVE
   // =========================================================================
   function collectFormData() {
+    const getVal = (id) => {
+      const el = document.getElementById(id);
+      return el && el.value ? el.value.trim() : '';
+    };
+    const getChildVal = (parent, selector) => {
+      if (!parent) return '';
+      const el = parent.querySelector(selector);
+      return el && el.value ? el.value.trim() : '';
+    };
+
     // 1. Personal & Contact
-    const fullName = document.getElementById('inputFullName').value.trim();
-    const title = document.getElementById('inputTitle').value.trim();
-    const summary = document.getElementById('inputSummary').value.trim();
-    const location = document.getElementById('inputLocation').value.trim();
-    const email = document.getElementById('inputEmail').value.trim();
-    const phone = document.getElementById('inputPhone').value.trim();
-    const linkedin = document.getElementById('inputLinkedIn').value.trim();
-    const github = document.getElementById('inputGitHub').value.trim();
-    const website = document.getElementById('inputWebsite').value.trim();
+    const fullName = getVal('inputFullName');
+    const title = getVal('inputTitle');
+    const summary = getVal('inputSummary');
+    const location = getVal('inputLocation');
+    const email = getVal('inputEmail');
+    const phone = getVal('inputPhone');
+    const linkedin = getVal('inputLinkedIn');
+    const github = getVal('inputGitHub');
+    const website = getVal('inputWebsite');
 
     // 2. Education
     const education = [];
-    educationContainer.querySelectorAll('.repeater-item-card').forEach(card => {
-      const institution = card.querySelector('.edu-institution').value.trim();
-      const degree = card.querySelector('.edu-degree').value.trim();
-      const department = card.querySelector('.edu-dept').value.trim();
-      const university = card.querySelector('.edu-univ').value.trim();
-      const studyPeriod = card.querySelector('.edu-period').value.trim();
-      const gradYear = card.querySelector('.edu-grad-year').value.trim();
-      const score = card.querySelector('.edu-score').value.trim();
-      const coursework = card.querySelector('.edu-highlights').value.trim();
+    if (educationContainer) {
+      educationContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+        const institution = getChildVal(card, '.edu-institution');
+        const degree = getChildVal(card, '.edu-degree');
+        const department = getChildVal(card, '.edu-dept');
+        const university = getChildVal(card, '.edu-univ');
+        const studyPeriod = getChildVal(card, '.edu-period');
+        const gradYear = getChildVal(card, '.edu-grad-year');
+        const score = getChildVal(card, '.edu-score');
+        const coursework = getChildVal(card, '.edu-highlights');
 
-      if (institution || degree) {
-        education.push({
-          institution,
-          degree,
-          department,
-          university,
-          studyPeriod,
-          gradYear,
-          score,
-          coursework
-        });
-      }
-    });
+        if (institution || degree || department || score) {
+          education.push({
+            institution,
+            degree,
+            department,
+            university,
+            studyPeriod,
+            gradYear,
+            score,
+            coursework
+          });
+        }
+      });
+    }
 
     // 3. Skills & Languages
     const skills = selectedSkills.map(s => ({ name: s }));
@@ -843,69 +855,79 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 4. Projects
     const projects = [];
-    projectsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
-      const name = card.querySelector('.proj-name').value.trim();
-      const technologies = card.querySelector('.proj-tech').value.trim();
-      const description = card.querySelector('.proj-desc').value.trim();
-      const githubUrl = card.querySelector('.proj-github').value.trim();
-      const liveUrl = card.querySelector('.proj-live').value.trim();
+    if (projectsContainer) {
+      projectsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+        const name = getChildVal(card, '.proj-name');
+        const technologies = getChildVal(card, '.proj-tech');
+        const description = getChildVal(card, '.proj-desc');
+        const githubUrl = getChildVal(card, '.proj-github');
+        const liveUrl = getChildVal(card, '.proj-live');
 
-      if (name) {
-        projects.push({
-          name,
-          technologies,
-          description,
-          githubUrl,
-          liveUrl
-        });
-      }
-    });
+        if (name || description || technologies) {
+          projects.push({
+            name,
+            technologies,
+            description,
+            githubUrl,
+            liveUrl
+          });
+        }
+      });
+    }
 
     // 5. Experience
     const experience = [];
-    experienceContainer.querySelectorAll('.repeater-item-card').forEach(card => {
-      const organization = card.querySelector('.exp-org').value.trim();
-      const position = card.querySelector('.exp-role').value.trim();
-      const duration = card.querySelector('.exp-duration').value.trim();
-      const responsibilities = card.querySelector('.exp-desc').value.trim();
+    if (experienceContainer) {
+      experienceContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+        const organization = getChildVal(card, '.exp-org');
+        const position = getChildVal(card, '.exp-role');
+        const duration = getChildVal(card, '.exp-duration');
+        const responsibilities = getChildVal(card, '.exp-desc');
 
-      if (organization || position) {
-        experience.push({
-          organization,
-          position,
-          duration,
-          responsibilities
-        });
-      }
-    });
+        if (organization || position || responsibilities) {
+          experience.push({
+            organization,
+            position,
+            duration,
+            responsibilities
+          });
+        }
+      });
+    }
 
     // 6. Certifications
     const certifications = [];
-    certsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
-      const name = card.querySelector('.cert-name').value.trim();
-      const organization = card.querySelector('.cert-org').value.trim();
-      const issueDate = card.querySelector('.cert-year').value.trim();
-      const url = card.querySelector('.cert-url').value.trim();
+    if (certsContainer) {
+      certsContainer.querySelectorAll('.repeater-item-card').forEach(card => {
+        const name = getChildVal(card, '.cert-name');
+        const organization = getChildVal(card, '.cert-org');
+        const issueDate = getChildVal(card, '.cert-year');
+        const url = getChildVal(card, '.cert-url');
 
-      if (name) {
-        certifications.push({
-          name,
-          organization,
-          issueDate,
-          url
-        });
-      }
-    });
+        if (name || organization) {
+          certifications.push({
+            name,
+            organization,
+            issueDate,
+            url
+          });
+        }
+      });
+    }
 
     // 7. Additional Info
-    const interests = document.getElementById('inputInterests').value.trim();
-    const activities = document.getElementById('inputActivities').value.trim();
-    const workshops = document.getElementById('inputWorkshops').value.trim();
+    const interests = getVal('inputInterests');
+    const activities = getVal('inputActivities');
+    const workshops = getVal('inputWorkshops');
+
+    // 8. Template
+    const checkedRadio = document.querySelector('input[name="selectedTemplateRadio"]:checked');
+    const template = (checkedRadio && checkedRadio.value) ? checkedRadio.value : (selectedTemplate || 'corporate');
 
     return {
-      template: selectedTemplate,
+      template,
       personal: {
-        fullName,
+        fullName: fullName || 'Student',
         title,
         photo: profilePhotoBase64,
         summary,
@@ -922,6 +944,11 @@ document.addEventListener('DOMContentLoaded', () => {
       projects,
       experience,
       certifications,
+      additional: {
+        interests,
+        activities,
+        workshops
+      },
       additionalInfo: {
         interests,
         activities,
@@ -1103,22 +1130,37 @@ document.addEventListener('DOMContentLoaded', () => {
   // =========================================================================
   // 10. GENERATE PORTFOLIO
   // =========================================================================
-  if (generatePortfolioBtn) {
-    generatePortfolioBtn.addEventListener('click', () => {
-      // Validate Step 1 minimum fields
-      const name = document.getElementById('inputFullName').value.trim();
-      const title = document.getElementById('inputTitle').value.trim();
-      const email = document.getElementById('inputEmail').value.trim();
+  window.generatePortfolio = function() {
+    try {
+      const fullData = collectFormData();
+      const templateToUse = fullData.template || selectedTemplate || 'corporate';
 
-      if (!name || !title || !email) {
-        alert('Please fill in your Full Name, Professional Title, and Email in Step 1.');
-        goToStep(1);
-        return;
+      // Store in localStorage safely
+      try {
+        localStorage.setItem('student_portfolio_data', JSON.stringify(fullData));
+        localStorage.setItem('student_portfolio_form_draft', JSON.stringify(fullData));
+      } catch (storageErr) {
+        console.warn('Storage quota issue, stripping photo fallback:', storageErr);
+        if (fullData.personal && fullData.personal.photo) {
+          fullData.personal.photo = '';
+          try {
+            localStorage.setItem('student_portfolio_data', JSON.stringify(fullData));
+          } catch (e2) {}
+        }
       }
 
-      const fullData = collectFormData();
-      localStorage.setItem('student_portfolio_data', JSON.stringify(fullData));
-      window.location.href = `/preview?template=${encodeURIComponent(selectedTemplate)}`;
+      // Navigate to the preview page with template query param
+      window.location.href = `/preview?template=${encodeURIComponent(templateToUse)}`;
+    } catch (err) {
+      console.error('Error generating portfolio:', err);
+      window.location.href = '/preview';
+    }
+  };
+
+  if (generatePortfolioBtn) {
+    generatePortfolioBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.generatePortfolio();
     });
   }
 
