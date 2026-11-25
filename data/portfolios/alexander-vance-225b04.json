@@ -1,0 +1,83 @@
+{
+  "id": "alexander-vance-225b04",
+  "slug": "alexander-vance-225b04",
+  "createdAt": "2026-11-25T09:49:52.527Z",
+  "updatedAt": "2026-11-25T09:49:52.565Z",
+  "name": "Alexander Vance",
+  "title": "",
+  "data": {
+    "personal": {
+      "fullName": "Alexander Vance",
+      "tagline": "Principal Systems Engineer",
+      "email": "alexander@example.com",
+      "phone": "+1 555-0199",
+      "location": "San Francisco, CA",
+      "github": "https://github.com/alexandervance",
+      "linkedin": "https://linkedin.com/in/alexandervance",
+      "about": "Passionate developer with 4+ years of experience building scalable distributed systems."
+    },
+    "skills": {
+      "technical": [
+        "JavaScript",
+        "TypeScript",
+        "Node.js",
+        "React",
+        "Docker",
+        "AWS"
+      ],
+      "soft": [
+        "Team Leadership",
+        "Agile Methodologies",
+        "Problem Solving"
+      ]
+    },
+    "projects": [
+      {
+        "title": "Distributed Analytics Pipeline",
+        "description": "Real-time telemetry aggregation processing 100k events/sec using Kafka & ClickHouse.",
+        "technologies": [
+          "Go",
+          "Kafka",
+          "ClickHouse",
+          "Docker"
+        ],
+        "link": "https://github.com/alexandervance/analytics-engine"
+      }
+    ],
+    "experience": [
+      {
+        "role": "Senior Software Engineer",
+        "company": "CloudScale Labs",
+        "location": "San Francisco, CA",
+        "period": "2022 - Present",
+        "description": "Architected serverless microservices improving throughput by 40%."
+      }
+    ],
+    "education": [
+      {
+        "degree": "B.S. in Computer Science",
+        "institution": "University of California, Berkeley",
+        "year": "2018 - 2022",
+        "gpa": "3.9"
+      }
+    ],
+    "certifications": [
+      {
+        "title": "AWS Certified Solutions Architect - Associate",
+        "issuer": "Amazon Web Services",
+        "year": "2023"
+      }
+    ],
+    "additional": {
+      "languages": [
+        "English (Native)",
+        "Spanish (Conversational)"
+      ],
+      "hobbies": [
+        "Open Source Contributing",
+        "Hiking",
+        "Photography"
+      ]
+    }
+  }
+}
