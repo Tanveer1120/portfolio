@@ -168,11 +168,13 @@ assert(pdfHtml.includes('Campus Resource Hub'), 'PDF main section must include p
 assert(pdfHtml.includes('Certifications &amp; Achievements'), 'PDF main section must include Certifications');
 console.log('  ✅ Executive Two-Column A4 PDF layout generated with all reference sections matching specifications.');
 
-// Test PortfolioGenerator.generate generates reference layout for on-screen preview
+// Test PortfolioGenerator.generate generates website layout for on-screen preview
 const previewHtml = PortfolioGenerator.generate(testData);
-assert(previewHtml.includes('executive-pdf-wrapper'), 'PortfolioGenerator.generate must produce reference executive layout for on-screen preview');
-assert(previewHtml.includes('executive-pdf-sidebar') && previewHtml.includes('executive-pdf-main'), 'Preview must have two-column structure');
-console.log('  ✅ PortfolioGenerator.generate produces synchronized reference two-column design for preview.');
+assert(previewHtml.includes('portfolio-site-wrapper'), 'PortfolioGenerator.generate must produce personal portfolio website for preview');
+assert(!previewHtml.includes('Open to Opportunities'), 'PortfolioGenerator.generate must not include unwanted Open to Opportunities label');
+assert(!previewHtml.includes('&#x20;'), 'PortfolioGenerator.generate must not include raw &#x20;');
+assert(!previewHtml.includes('&#xA0;'), 'PortfolioGenerator.generate must not include raw &#xA0;');
+console.log('  ✅ PortfolioGenerator.generate produces clean personal portfolio website without unwanted labels or artifacts.');
 
 // Test empty fields handling in PDF/preview template
 const minimalPdfHtml = PortfolioGenerator.renderExecutivePdfTemplate(minimalData);

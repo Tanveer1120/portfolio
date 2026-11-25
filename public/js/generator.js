@@ -171,14 +171,14 @@ const PortfolioGenerator = {
     if (Array.isArray(raw)) {
       return raw.map(l => {
         if (!l) return '';
-        if (typeof l === 'string') return l.trim();
-        const name = l.name || '';
-        const prof = l.proficiency ? ` (${l.proficiency})` : '';
+        if (typeof l === 'string') return this.cleanText(l.trim());
+        const name = this.cleanText(l.name || '');
+        const prof = l.proficiency ? ` (${this.cleanText(l.proficiency)})` : '';
         return (name + prof).trim();
       }).filter(Boolean);
     }
     if (typeof raw === 'string') {
-      return raw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+      return raw.split(/[,;\n]+/).map(s => this.cleanText(s.trim())).filter(Boolean);
     }
     return [];
   },
@@ -188,10 +188,10 @@ const PortfolioGenerator = {
     const raw = data.hobbies || (data.additionalInfo && data.additionalInfo.hobbies) || (data.additional && data.additional.hobbies) || (data.additional && data.additional.interests);
     if (!raw) return [];
     if (Array.isArray(raw)) {
-      return raw.map(h => typeof h === 'string' ? h.trim() : (h.name || '')).filter(Boolean);
+      return raw.map(h => typeof h === 'string' ? this.cleanText(h.trim()) : this.cleanText(h.name || '')).filter(Boolean);
     }
     if (typeof raw === 'string') {
-      return raw.split(/[,;\n]+/).map(s => s.trim()).filter(Boolean);
+      return raw.split(/[,;\n]+/).map(s => this.cleanText(s.trim())).filter(Boolean);
     }
     return [];
   },
@@ -203,10 +203,10 @@ const PortfolioGenerator = {
     if (!data) return '<div class="portfolio-site-wrapper"><p>No data</p></div>';
 
     const p = data.personal || {};
-    const fullName = p.fullName || 'Creator Portfolio';
-    const title = p.title || data.category || 'Student & Aspiring Professional';
-    const summary = p.summary || data.careerObjective || '';
-    const locationStr = [p.city, p.state].filter(Boolean).join(', ') || p.location || '';
+    const fullName = this.cleanText(p.fullName) || 'Creator Portfolio';
+    const title = this.cleanText(p.title) || this.cleanText(data.category) || 'Student & Aspiring Professional';
+    const summary = this.cleanText(p.summary || data.careerObjective || '');
+    const locationStr = this.cleanText([p.city, p.state].filter(Boolean).join(', ') || p.location || '');
 
     // Avatar
     let avatarUrl = p.photo;
@@ -239,7 +239,13 @@ const PortfolioGenerator = {
     const languages = this.normalizeLanguages(data);
     const hobbies = this.normalizeHobbies(data);
     const workshops = data.workshops || (data.additional && data.additional.workshops);
-    const hasWorkshops = !!workshops;
+    let workshopText = '';
+    if (typeof workshops === 'string') {
+      workshopText = this.escapeHtml(this.cleanText(workshops));
+    } else if (Array.isArray(workshops)) {
+      workshopText = workshops.map(w => typeof w === 'string' ? this.cleanText(w) : this.cleanText(w.name || '')).filter(Boolean).map(x => this.escapeHtml(x)).join(' &bull; ');
+    }
+    const hasWorkshops = !!workshopText;
     const hasAdditional = languages.length > 0 || hobbies.length > 0 || hasWorkshops;
 
     return `
@@ -275,10 +281,10 @@ const PortfolioGenerator = {
   <section id="hero" class="portfolio-hero-section">
     <div class="portfolio-hero-inner">
       <div class="portfolio-hero-content">
+        ${locationStr ? `
         <div class="portfolio-hero-tag">
-          <span>🚀 Open to Opportunities</span>
-          ${locationStr ? `<span>&bull;</span> <span>${this.escapeHtml(locationStr)}</span>` : ''}
-        </div>
+          <span>${this.escapeHtml(locationStr)}</span>
+        </div>` : ''}
         <h1 class="portfolio-hero-name">${this.escapeHtml(fullName)}</h1>
         <div class="portfolio-hero-title">${this.escapeHtml(title)}</div>
         ${summary ? `<p class="portfolio-hero-summary">${this.escapeHtml(summary)}</p>` : ''}
@@ -596,7 +602,7 @@ const PortfolioGenerator = {
               <span>Workshops &amp; Activities</span>
             </div>
             <div style="font-size:0.92rem; color:#475569; line-height:1.6;">
-              ${typeof workshops === 'string' ? this.escapeHtml(workshops) : (Array.isArray(workshops) ? workshops.map(w => typeof w === 'string' ? w : (w.name || '')).filter(Boolean).join(' &bull; ') : '')}
+              ${workshopText}
             </div>
           </div>` : ''}
       </div>
@@ -657,10 +663,10 @@ const PortfolioGenerator = {
     if (!data) return '<div class="ats-resume-document"><p>No resume data</p></div>';
 
     const p = data.personal || {};
-    const fullName = p.fullName || 'Candidate Name';
-    const title = p.title || data.category || 'Professional Candidate';
-    const summary = p.summary || data.careerObjective || '';
-    const locationStr = [p.city, p.state].filter(Boolean).join(', ') || p.location || '';
+    const fullName = this.cleanText(p.fullName) || 'Candidate Name';
+    const title = this.cleanText(p.title) || this.cleanText(data.category) || 'Professional Candidate';
+    const summary = this.cleanText(p.summary || data.careerObjective || '');
+    const locationStr = this.cleanText([p.city, p.state].filter(Boolean).join(', ') || p.location || '');
 
     // Contacts
     const contacts = [];
@@ -911,13 +917,49 @@ const PortfolioGenerator = {
       .replace(/'/g, '&#039;');
   },
 
+  // Targeted text cleaner: removes raw HTML entities, unwanted automatic badges, and stray markdown formatting
+  cleanText(str) {
+    if (!str) return '';
+    let s = String(str);
+
+    // 1. Remove unwanted raw HTML entities that might appear as raw strings
+    s = s.replace(/&#x20;/gi, ' ')
+         .replace(/&#xA0;/gi, ' ')
+         .replace(/&nbsp;/gi, ' ')
+         .replace(/&#160;/gi, ' ')
+         .replace(/&#32;/gi, ' ');
+
+    // 2. Remove unwanted 'Open to Opportunities' badge / text (and any adjacent bullets/dashes)
+    s = s.replace(/(?:🚀\s*)?Open\s+to\s+Opportunities(?:\s*[•·\-\|]\s*)?/gi, '')
+         .replace(/(?:[•·\-\|]\s*)?Open\s+to\s+Opportunities/gi, '');
+
+    // 3. Remove accidental raw markdown formatting characters (**bold**, *italic*, __underline__, `code`, # header)
+    s = s.replace(/\*\*(.*?)\*\*/g, '$1')
+         .replace(/\*(.*?)\*/g, '$1')
+         .replace(/__(.*?)__/g, '$1')
+         .replace(/_(.*?)_/g, '$1')
+         .replace(/`([^`]+)`/g, '$1')
+         .replace(/^#{1,6}\s+/gm, '');
+
+    // Remove stray standalone formatting marks
+    s = s.replace(/\*\*/g, '').replace(/###/g, '').replace(/##/g, '');
+
+    // 4. Clean up repeated whitespace and stray leading/trailing bullets left behind
+    s = s.replace(/^[•·\-\|\s]+/, '')
+         .replace(/[•·\-\|\s]+$/, '')
+         .replace(/[ \t]{2,}/g, ' ')
+         .trim();
+
+    return s;
+  },
+
   // Generates the reference executive two-column A4 PDF layout
   renderExecutivePdfTemplate(data) {
     if (!data) return '<div class="executive-pdf-wrapper"></div>';
 
     const p = data.personal || {};
-    const fullName = p.fullName || 'Student Portfolio';
-    const title = p.title || data.category || 'Professional Candidate';
+    const fullName = this.cleanText(p.fullName) || 'Student Portfolio';
+    const title = this.cleanText(p.title) || this.cleanText(data.category) || 'Professional Candidate';
 
     // Avatar
     let avatarUrl = p.photo;
@@ -953,17 +995,17 @@ const PortfolioGenerator = {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
           ${ICONS.phone}
-          <span>${this.escapeHtml(p.phone)}</span>
+          <span>${this.escapeHtml(this.cleanText(p.phone))}</span>
         </div>`);
     }
     if (p.email) {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
           ${ICONS.email}
-          <span>${this.escapeHtml(p.email)}</span>
+          <span>${this.escapeHtml(this.cleanText(p.email))}</span>
         </div>`);
     }
-    const locationStr = [p.city, p.state].filter(Boolean).join(', ') || p.location;
+    const locationStr = this.cleanText([p.city, p.state].filter(Boolean).join(', ') || p.location);
     if (locationStr) {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
@@ -975,21 +1017,21 @@ const PortfolioGenerator = {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
           ${ICONS.linkedin}
-          <span>${this.escapeHtml(p.linkedin)}</span>
+          <span>${this.escapeHtml(this.cleanText(p.linkedin))}</span>
         </div>`);
     }
     if (p.github) {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
           ${ICONS.github}
-          <span>${this.escapeHtml(p.github)}</span>
+          <span>${this.escapeHtml(this.cleanText(p.github))}</span>
         </div>`);
     }
     if (p.website) {
       contactItems.push(`
         <div class="executive-pdf-contact-item">
           ${ICONS.globe}
-          <span>${this.escapeHtml(p.website)}</span>
+          <span>${this.escapeHtml(this.cleanText(p.website))}</span>
         </div>`);
     }
 
@@ -998,14 +1040,15 @@ const PortfolioGenerator = {
     if (Array.isArray(data.education) && data.education.length > 0) {
       data.education.forEach(edu => {
         if (!edu || (!edu.institution && !edu.degree)) return;
-        const years = [edu.startYear, edu.gradYear || edu.endYear].filter(Boolean).join(' - ') || edu.gradYear || edu.duration || '';
-        const score = edu.score || edu.cgpa ? ` | ${edu.score || edu.cgpa}` : '';
+        const years = this.cleanText([edu.startYear, edu.gradYear || edu.endYear].filter(Boolean).join(' - ') || edu.gradYear || edu.duration || edu.studyPeriod || '');
+        const scoreVal = this.cleanText(edu.score || edu.cgpa || '');
+        const score = scoreVal ? ` | ${scoreVal}` : '';
         educationItems.push(`
           <div class="executive-pdf-edu-card pdf-page-break-avoid">
-            <div class="executive-pdf-edu-inst">${this.escapeHtml(edu.institution || '')}</div>
-            <div class="executive-pdf-edu-degree">${this.escapeHtml(edu.degree || '')}${edu.department ? ' &middot; ' + this.escapeHtml(edu.department) : ''}</div>
+            <div class="executive-pdf-edu-inst">${this.escapeHtml(this.cleanText(edu.institution || ''))}</div>
+            <div class="executive-pdf-edu-degree">${this.escapeHtml(this.cleanText(edu.degree || ''))}${edu.department ? ' &middot; ' + this.escapeHtml(this.cleanText(edu.department)) : ''}</div>
             ${years || score ? `<div class="executive-pdf-edu-meta">${this.escapeHtml(years)}${this.escapeHtml(score)}</div>` : ''}
-            ${edu.coursework ? `<div class="executive-pdf-edu-course">${this.escapeHtml(edu.coursework)}</div>` : ''}
+            ${edu.coursework ? `<div class="executive-pdf-edu-course">${this.escapeHtml(this.cleanText(edu.coursework))}</div>` : ''}
           </div>`);
       });
     }
@@ -1017,25 +1060,27 @@ const PortfolioGenerator = {
         data.skills.forEach(s => {
           if (!s) return;
           const val = typeof s === 'string' ? s.trim() : (s.name || '').trim();
-          if (val) skillList.push(val);
+          const cleanVal = this.cleanText(val);
+          if (cleanVal) skillList.push(cleanVal);
         });
       } else if (typeof data.skills === 'object') {
         Object.values(data.skills).forEach(val => {
           if (typeof val === 'string') {
             val.split(/[,;\n]+/).forEach(s => {
-              const t = s.trim();
+              const t = this.cleanText(s.trim());
               if (t) skillList.push(t);
             });
           } else if (Array.isArray(val)) {
             val.forEach(v => {
               const t = typeof v === 'string' ? v.trim() : (v.name || '').trim();
-              if (t) skillList.push(t);
+              const cleanT = this.cleanText(t);
+              if (cleanT) skillList.push(cleanT);
             });
           }
         });
       } else if (typeof data.skills === 'string') {
         data.skills.split(/[,;\n]+/).forEach(s => {
-          const t = s.trim();
+          const t = this.cleanText(s.trim());
           if (t) skillList.push(t);
         });
       }
@@ -1049,18 +1094,18 @@ const PortfolioGenerator = {
         rawLangs.forEach(l => {
           if (!l) return;
           if (typeof l === 'string') {
-            const t = l.trim();
+            const t = this.cleanText(l.trim());
             if (t) langList.push(t);
           } else {
-            const name = l.name || '';
-            const prof = l.proficiency ? ` (${l.proficiency})` : '';
+            const name = this.cleanText(l.name || '');
+            const prof = l.proficiency ? ` (${this.cleanText(l.proficiency)})` : '';
             const full = (name + prof).trim();
             if (full) langList.push(full);
           }
         });
       } else if (typeof rawLangs === 'string') {
         rawLangs.split(/[,;\n]+/).forEach(l => {
-          const t = l.trim();
+          const t = this.cleanText(l.trim());
           if (t) langList.push(t);
         });
       }
@@ -1074,29 +1119,30 @@ const PortfolioGenerator = {
         rawHobbies.forEach(h => {
           if (!h) return;
           const t = typeof h === 'string' ? h.trim() : (h.name || '').trim();
-          if (t) hobbyList.push(t);
+          const cleanT = this.cleanText(t);
+          if (cleanT) hobbyList.push(cleanT);
         });
       } else if (typeof rawHobbies === 'string') {
         rawHobbies.split(/[,;\n]+/).forEach(h => {
-          const t = h.trim();
+          const t = this.cleanText(h.trim());
           if (t) hobbyList.push(t);
         });
       }
     }
 
     // About Me / Professional Summary
-    const summaryText = p.summary || data.careerObjective || '';
+    const summaryText = this.cleanText(p.summary || data.careerObjective || '');
 
     // Experience / Internships
     const expItems = [];
     if (Array.isArray(data.experience) && data.experience.length > 0) {
       data.experience.forEach(exp => {
         if (!exp || (!exp.position && !exp.organization && !exp.role)) return;
-        const role = exp.position || exp.role || 'Role';
-        const org = exp.organization || exp.company || '';
-        const dates = exp.duration || [exp.startDate, exp.endDate].filter(Boolean).join(' - ') || '';
-        const desc = exp.description || exp.responsibilities || '';
-        const expType = exp.experienceType ? ` &middot; ${exp.experienceType}` : '';
+        const role = this.cleanText(exp.position || exp.role || 'Role');
+        const org = this.cleanText(exp.organization || exp.company || '');
+        const dates = this.cleanText(exp.duration || [exp.startDate, exp.endDate].filter(Boolean).join(' - ') || '');
+        const desc = this.cleanText(exp.description || exp.responsibilities || '');
+        const expType = exp.experienceType ? ` &middot; ${this.cleanText(exp.experienceType)}` : '';
 
         expItems.push(`
           <div class="executive-pdf-card pdf-page-break-avoid">
@@ -1114,24 +1160,30 @@ const PortfolioGenerator = {
     const projectItems = [];
     if (Array.isArray(data.projects) && data.projects.length > 0) {
       data.projects.forEach(proj => {
-        if (!proj || !proj.name) return;
+        if (!proj || (!proj.name && !proj.title)) return;
+        const projName = this.cleanText(proj.name || proj.title);
+        const projDuration = this.cleanText(proj.duration || '');
         const techs = proj.technologies ? (Array.isArray(proj.technologies) ? proj.technologies : proj.technologies.split(/[,;]+/)) : [];
+        const cleanTechs = techs.map(t => this.cleanText(t.trim())).filter(Boolean);
+        const projDesc = this.cleanText(proj.description || '');
+        const projProblem = this.cleanText(proj.problemStatement || '');
+        const projSolution = this.cleanText(proj.solution || '');
 
         projectItems.push(`
           <div class="executive-pdf-card pdf-page-break-avoid">
             <div class="executive-pdf-card-top">
-              <span class="executive-pdf-card-role">${this.escapeHtml(proj.name)}</span>
-              ${proj.duration ? `<span class="executive-pdf-card-date">${this.escapeHtml(proj.duration)}</span>` : ''}
+              <span class="executive-pdf-card-role">${this.escapeHtml(projName)}</span>
+              ${projDuration ? `<span class="executive-pdf-card-date">${this.escapeHtml(projDuration)}</span>` : ''}
             </div>
-            ${techs.length > 0 ? `
+            ${cleanTechs.length > 0 ? `
               <div style="margin: 3px 0 5px 0;">
-                ${techs.map(t => `<span class="executive-pdf-tech-pill">${this.escapeHtml(t.trim())}</span>`).join('')}
+                ${cleanTechs.map(t => `<span class="executive-pdf-tech-pill">${this.escapeHtml(t)}</span>`).join('')}
               </div>` : ''}
-            ${proj.description ? `<div class="executive-pdf-card-desc">${this.escapeHtml(proj.description)}</div>` : ''}
-            ${proj.problemStatement || proj.solution ? `
+            ${projDesc ? `<div class="executive-pdf-card-desc">${this.escapeHtml(projDesc)}</div>` : ''}
+            ${projProblem || projSolution ? `
               <div class="executive-pdf-card-desc" style="margin-top: 3px; font-size: 9px; color: #64748B;">
-                ${proj.problemStatement ? `<strong>Problem:</strong> ${this.escapeHtml(proj.problemStatement)} ` : ''}
-                ${proj.solution ? `<strong>Solution:</strong> ${this.escapeHtml(proj.solution)}` : ''}
+                ${projProblem ? `<strong>Problem:</strong> ${this.escapeHtml(projProblem)} ` : ''}
+                ${projSolution ? `<strong>Solution:</strong> ${this.escapeHtml(projSolution)}` : ''}
               </div>` : ''}
             ${(proj.githubUrl || proj.liveUrl) ? `
               <div style="margin-top: 5px;">
@@ -1147,9 +1199,9 @@ const PortfolioGenerator = {
     if (Array.isArray(data.certifications) && data.certifications.length > 0) {
       data.certifications.forEach(cert => {
         if (!cert || (!cert.name && !cert.title)) return;
-        const name = cert.name || cert.title;
-        const org = cert.organization || cert.issuer || '';
-        const yr = cert.year || cert.issueDate || cert.date || '';
+        const name = this.cleanText(cert.name || cert.title);
+        const org = this.cleanText(cert.organization || cert.issuer || '');
+        const yr = this.cleanText(cert.year || cert.issueDate || cert.date || '');
         certAchieveItems.push(`
           <div class="executive-pdf-card pdf-page-break-avoid">
             <div class="executive-pdf-card-top">
@@ -1164,9 +1216,9 @@ const PortfolioGenerator = {
     if (Array.isArray(data.achievements) && data.achievements.length > 0) {
       data.achievements.forEach(ach => {
         if (!ach || (!ach.title && !ach.name)) return;
-        const title = ach.title || ach.name;
-        const desc = ach.description || '';
-        const dt = ach.date || ach.year || '';
+        const title = this.cleanText(ach.title || ach.name);
+        const desc = this.cleanText(ach.description || '');
+        const dt = this.cleanText(ach.date || ach.year || '');
         certAchieveItems.push(`
           <div class="executive-pdf-card pdf-page-break-avoid">
             <div class="executive-pdf-card-top">
@@ -1186,21 +1238,27 @@ const PortfolioGenerator = {
         rawWorkshops.forEach(w => {
           if (!w) return;
           if (typeof w === 'string') {
-            workshopItems.push(`<div class="executive-pdf-card-desc pdf-page-break-avoid" style="margin-bottom: 4px;">&bull; ${this.escapeHtml(w)}</div>`);
+            const cleanW = this.cleanText(w);
+            if (cleanW) workshopItems.push(`<div class="executive-pdf-card-desc pdf-page-break-avoid" style="margin-bottom: 4px;">&bull; ${this.escapeHtml(cleanW)}</div>`);
           } else {
+            const wName = this.cleanText(w.name || w.title || '');
+            const wDate = this.cleanText(w.date || w.year || '');
+            const wOrg = this.cleanText(w.organization || '');
+            const wDesc = this.cleanText(w.description || '');
             workshopItems.push(`
               <div class="executive-pdf-card pdf-page-break-avoid">
                 <div class="executive-pdf-card-top">
-                  <span class="executive-pdf-card-role" style="font-size: 10.5px;">${this.escapeHtml(w.name || w.title || '')}</span>
-                  ${w.date || w.year ? `<span class="executive-pdf-card-date">${this.escapeHtml(w.date || w.year)}</span>` : ''}
+                  <span class="executive-pdf-card-role" style="font-size: 10.5px;">${this.escapeHtml(wName)}</span>
+                  ${wDate ? `<span class="executive-pdf-card-date">${this.escapeHtml(wDate)}</span>` : ''}
                 </div>
-                ${w.organization ? `<div class="executive-pdf-card-sub" style="font-size: 9.5px;">${this.escapeHtml(w.organization)}</div>` : ''}
-                ${w.description ? `<div class="executive-pdf-card-desc">${this.escapeHtml(w.description)}</div>` : ''}
+                ${wOrg ? `<div class="executive-pdf-card-sub" style="font-size: 9.5px;">${this.escapeHtml(wOrg)}</div>` : ''}
+                ${wDesc ? `<div class="executive-pdf-card-desc">${this.escapeHtml(wDesc)}</div>` : ''}
               </div>`);
           }
         });
       } else if (typeof rawWorkshops === 'string') {
-        workshopItems.push(`<div class="executive-pdf-card-desc pdf-page-break-avoid">${this.escapeHtml(rawWorkshops)}</div>`);
+        const cleanW = this.cleanText(rawWorkshops);
+        if (cleanW) workshopItems.push(`<div class="executive-pdf-card-desc pdf-page-break-avoid">${this.escapeHtml(cleanW)}</div>`);
       }
     }
 
@@ -1342,6 +1400,9 @@ const PortfolioGenerator = {
       tempContainer.style.zIndex = '1000';
       tempContainer.style.width = '794px'; // 210mm in 96 DPI CSS pixels
       tempContainer.style.backgroundColor = '#FFFFFF';
+      tempContainer.style.backgroundImage = 'linear-gradient(to right, #1E2228 0px, #1E2228 280px, #FFFFFF 280px, #FFFFFF 100%)';
+      tempContainer.style.backgroundRepeat = 'repeat-y';
+      tempContainer.style.backgroundSize = '794px 100%';
       tempContainer.innerHTML = this.renderExecutivePdfTemplate(data);
       document.body.appendChild(tempContainer);
       targetEl = tempContainer.firstElementChild || tempContainer;
@@ -1363,7 +1424,7 @@ const PortfolioGenerator = {
           useCORS: true,
           logging: false,
           letterRendering: true,
-          backgroundColor: '#FFFFFF',
+          backgroundColor: null, // Allow the two-column repeating gradient to shine through seamlessly on every page
           windowWidth: 794
         },
         jsPDF: {

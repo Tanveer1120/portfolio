@@ -810,7 +810,14 @@
   width: 100%;
   max-width: 794px;
   min-height: 1123px;
+  /* Seamless two-column linear gradient: Dark charcoal (#1E2228) precisely on the left 280px sidebar,
+     Clean white (#FFFFFF) across the remaining 514px main column.
+     Because this gradient repeats across the entire canvas height, EVERY page sliced during multi-page
+     rendering and printing has identical 100% background coverage! */
   background-color: #FFFFFF;
+  background-image: linear-gradient(to right, #1E2228 0px, #1E2228 280px, #FFFFFF 280px, #FFFFFF 100%);
+  background-repeat: repeat-y;
+  background-size: 794px 100%;
   display: flex;
   flex-direction: row;
   align-items: stretch;
@@ -823,7 +830,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Left Sidebar: 36% width, dark charcoal background */
+/* Left Sidebar: 36% width (280px), dark charcoal background */
 .executive-pdf-sidebar {
   width: 280px;
   min-width: 280px;
