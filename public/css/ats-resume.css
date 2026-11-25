@@ -1,0 +1,193 @@
+/**
+ * ATS-Friendly Resume Stylesheet
+ * Strict single-column, machine-readable, standard typography, clean margins.
+ * Optimized for Applicant Tracking Systems and recruiter scanning.
+ */
+
+.ats-resume-document {
+  width: 794px; /* Standard A4 width at 96 DPI: 210mm */
+  min-height: 1123px; /* Standard A4 height: 297mm */
+  background: #FFFFFF;
+  color: #111827;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  padding: 40px 48px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.ats-resume-document * {
+  box-sizing: border-box;
+}
+
+/* Header */
+.ats-resume-header {
+  text-align: center;
+  border-bottom: 2px solid #1F2937;
+  padding-bottom: 14px;
+  margin-bottom: 18px;
+}
+
+.ats-resume-name {
+  font-size: 22pt;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  margin-bottom: 4px;
+  text-transform: uppercase;
+}
+
+.ats-resume-title {
+  font-size: 11pt;
+  font-weight: 600;
+  color: #2563EB;
+  margin-bottom: 8px;
+}
+
+.ats-resume-contacts {
+  font-size: 9.5pt;
+  color: #4B5563;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  line-height: 1.4;
+}
+
+.ats-resume-contacts a {
+  color: #1F2937;
+  text-decoration: none;
+}
+
+.ats-resume-sep {
+  color: #9CA3AF;
+}
+
+/* Sections */
+.ats-resume-section {
+  margin-bottom: 16px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ats-resume-section-heading {
+  font-size: 11.5pt;
+  font-weight: 800;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #D1D5DB;
+  padding-bottom: 3px;
+  margin-bottom: 8px;
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
+/* Summary */
+.ats-resume-summary-text {
+  font-size: 10pt;
+  color: #374151;
+  line-height: 1.55;
+  text-align: justify;
+}
+
+/* Skills Line Format */
+.ats-resume-skills-block {
+  font-size: 9.8pt;
+  color: #374151;
+  line-height: 1.55;
+}
+
+.ats-resume-skill-row {
+  margin-bottom: 4px;
+}
+
+.ats-resume-skill-category {
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Entry Items (Education, Experience, Projects) */
+.ats-resume-item {
+  margin-bottom: 10px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.ats-resume-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 2px;
+}
+
+.ats-resume-item-title {
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #111827;
+}
+
+.ats-resume-item-date {
+  font-size: 9.5pt;
+  font-weight: 600;
+  color: #4B5563;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.ats-resume-item-sub {
+  font-size: 9.8pt;
+  font-weight: 600;
+  color: #4B5563;
+  margin-bottom: 3px;
+}
+
+.ats-resume-item-desc {
+  font-size: 9.8pt;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.ats-resume-bullets {
+  margin: 3px 0 0 18px;
+  padding: 0;
+  font-size: 9.8pt;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.ats-resume-bullets li {
+  margin-bottom: 3px;
+}
+
+/* Links */
+.ats-resume-link {
+  color: #2563EB;
+  text-decoration: underline;
+}
+
+/* Page Break Helpers */
+.ats-avoid-page-break {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+@page {
+  size: A4 portrait;
+  margin: 12mm;
+}
+
+@media print {
+  body {
+    background: #FFFFFF !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  .ats-resume-document {
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+}

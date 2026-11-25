@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
+const portfolioStore = require('./data/portfolio-store');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,68 @@ app.get('/templates', (req, res) => {
 
 app.get('/preview', (req, res) => {
   res.sendFile(path.join(__dirname, 'views', 'preview.html'));
+});
+
+// Public Shareable Portfolio Route
+app.get('/portfolio/:id', (req, res) => {
+  res.sendFile(path.join(__dirname, 'views', 'public-portfolio.html'));
+});
+
+// API: Publish or Update Portfolio
+app.post('/api/portfolios/publish', (req, res) => {
+  try {
+    const { data, publishedId } = req.body;
+    if (!data) {
+      return res.status(400).json({ success: false, message: 'Portfolio data is required' });
+    }
+    const result = portfolioStore.savePortfolio(data, publishedId);
+    
+    // Construct full shareable URL
+    const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'http';
+    const host = req.get('host') || `localhost:${PORT}`;
+    const fullShareUrl = `${protocol}://${host}${result.publicUrl}`;
+    
+    res.json({
+      success: true,
+      id: result.id,
+      slug: result.slug,
+      isUpdate: result.isUpdate,
+      publicUrl: result.publicUrl,
+      fullShareUrl: fullShareUrl,
+      message: result.isUpdate ? 'Portfolio updated successfully' : 'Portfolio published successfully'
+    });
+  } catch (err) {
+    console.error('Error publishing portfolio:', err);
+    res.status(500).json({ success: false, message: 'Failed to publish portfolio' });
+  }
+});
+
+// API: Retrieve Published Portfolio Data
+app.get('/api/portfolios/:id', (req, res) => {
+  try {
+    const portfolio = portfolioStore.getPortfolio(req.params.id);
+    if (!portfolio) {
+      return res.status(404).json({ success: false, message: 'Portfolio not found' });
+    }
+    res.json({ success: true, portfolio });
+  } catch (err) {
+    console.error('Error retrieving portfolio:', err);
+    res.status(500).json({ success: false, message: 'Failed to retrieve portfolio' });
+  }
+});
+
+// API: Unpublish / Delete Portfolio
+app.delete('/api/portfolios/:id', (req, res) => {
+  try {
+    const deleted = portfolioStore.deletePortfolio(req.params.id);
+    if (!deleted) {
+      return res.status(404).json({ success: false, message: 'Portfolio not found' });
+    }
+    res.json({ success: true, message: 'Portfolio unpublished successfully' });
+  } catch (err) {
+    console.error('Error deleting portfolio:', err);
+    res.status(500).json({ success: false, message: 'Failed to delete portfolio' });
+  }
 });
 
 // Streamlined Professional Student Demo Data

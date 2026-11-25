@@ -15,6 +15,8 @@
   
   <!-- Custom Stylesheets -->
   <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/portfolio-site.css">
+  <link rel="stylesheet" href="/css/ats-resume.css">
   <link rel="stylesheet" href="/css/templates.css">
 
   <style>
@@ -167,54 +169,70 @@
         <!-- Back to Edit Details Button -->
         <a href="/create" class="btn-back-corp" id="backToEditBtn" title="Return to edit your information with all data preserved">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
-          <span>Back to Edit Details</span>
+          <span>Back to Edit</span>
         </a>
 
-        <!-- Template Selector Dropdown -->
-        <div class="d-flex align-items-center gap-2">
-          <label for="templateSwitcher" class="small text-secondary fw-bold mb-0 d-none d-sm-inline">Template:</label>
-          <select id="templateSwitcher" class="preview-template-select">
-            <option value="corporate">Corporate</option>
-            <option value="minimal">Minimal</option>
-            <option value="developer">Developer</option>
-            <option value="academic">Academic</option>
-            <option value="modern-professional">Modern Professional</option>
-          </select>
-        </div>
+        <!-- Public Link Indicator Badge -->
+        <span id="publishedStatusBadge" class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 d-none d-lg-inline-flex align-items-center gap-1" style="font-size:0.8rem; font-weight:600;">
+          <span style="font-size: 8px;">●</span> Public Website Ready
+        </span>
       </div>
 
       <!-- Action Buttons Group -->
       <div class="preview-actions-group">
         <!-- Viewport Toggle -->
         <div class="d-none d-md-flex gap-1 me-2">
-          <button type="button" class="device-toggle-btn active" id="viewDesktopBtn">
+          <button type="button" class="device-toggle-btn active" id="viewDesktopBtn" title="Desktop View">
             <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
-            <span>A4 Document</span>
+            <span>Desktop</span>
           </button>
-          <button type="button" class="device-toggle-btn" id="viewMobileBtn">
+          <button type="button" class="device-toggle-btn" id="viewMobileBtn" title="Mobile View">
             <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
             <span>Mobile</span>
           </button>
         </div>
 
-        <!-- Download Portfolio PDF Button -->
-        <button type="button" id="downloadPdfBtn" class="btn-blue btn-sm-custom">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Download Portfolio PDF</span>
+        <!-- 1. Share Portfolio Button -->
+        <button type="button" id="sharePortfolioBtn" class="btn-outline-corp btn-sm-custom" title="Share your portfolio with a public link">
+          <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+          <span>Share Portfolio</span>
         </button>
 
-        <!-- Print Portfolio Button -->
-        <button type="button" id="printBtn" class="btn-outline-corp btn-sm-custom" title="Open print dialog">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/></svg>
-          <span>Print</span>
+        <!-- 2. Copy Link Button -->
+        <button type="button" id="quickCopyBtn" class="btn-outline-corp btn-sm-custom" title="Copy public link to clipboard">
+          <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <span id="quickCopyText">Copy Link</span>
         </button>
 
-        <!-- Additional Export Options -->
+        <!-- 3. View Live Public Website Button -->
+        <a href="#" target="_blank" id="viewLiveBtn" class="btn-outline-corp btn-sm-custom" title="Open live public portfolio in new tab" style="display: none;">
+          <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+          <span>View Live</span>
+        </a>
+
+        <!-- 4. Download ATS Resume Button -->
+        <button type="button" id="downloadAtsResumeBtn" class="btn-blue btn-sm-custom" title="Download separate machine-readable ATS resume PDF">
+          <svg style="width: 14px; height: 14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+          <span>Download ATS Resume</span>
+        </button>
+
+        <!-- 5. Additional Export Options Dropdown -->
         <div class="dropdown">
           <button class="btn-outline-corp btn-sm-custom dropdown-toggle" type="button" data-bs-toggle="dropdown">
             <span>Export</span>
           </button>
           <ul class="dropdown-menu dropdown-menu-end shadow">
+            <li>
+              <a class="dropdown-item" href="#" id="downloadPdfBtn">
+                Download Portfolio PDF (Executive)
+              </a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="#" id="printBtn">
+                Print Portfolio
+              </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
             <li>
               <a class="dropdown-item" href="#" id="exportHtmlBtn">
                 Export Standalone HTML
@@ -231,10 +249,68 @@
     </div>
   </header>
 
-  <!-- Live A4 Portfolio Canvas -->
-  <div class="a4-viewport-container" id="viewportContainer">
-    <div class="a4-page-canvas" id="portfolioRenderContainer">
-      <!-- Generated portfolio HTML injected here -->
+  <!-- Share Portfolio Modal -->
+  <div class="modal fade" id="sharePortfolioModal" tabindex="-1" aria-labelledby="shareModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow border-0" style="border-radius: 12px; overflow: hidden;">
+        <div class="modal-header bg-dark text-white p-3">
+          <h5 class="modal-title fw-bold" id="shareModalLabel" style="font-size: 1.05rem;">
+            🚀 Share Your Personal Portfolio
+          </h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-4">
+          <p class="text-secondary small mb-3">
+            Your personal portfolio website is live and shareable. Anyone with this link can view your projects, skills, education, and experience without logging in.
+          </p>
+
+          <label class="form-label fw-bold small text-dark mb-1">Permanent Shareable Link:</label>
+          <div class="input-group mb-3">
+            <input type="text" class="form-control" id="shareUrlInput" readonly style="background:#F8FAFC; font-family:'Roboto Mono',monospace; font-size:0.86rem;">
+            <button class="btn btn-primary" type="button" id="modalCopyBtn">
+              <span id="modalCopyBtnText">Copy Link</span>
+            </button>
+          </div>
+
+          <div id="copyAlertSuccess" class="alert alert-success py-2 small mb-3" style="display: none;">
+            ✅ Link copied to clipboard! You can paste and share it anywhere.
+          </div>
+
+          <div class="pt-2 border-top">
+            <div class="small text-secondary fw-bold mb-2">Share via:</div>
+            <div class="d-flex flex-wrap gap-2 mb-3">
+              <a href="#" id="shareWhatsAppBtn" target="_blank" rel="noopener" class="btn btn-sm btn-outline-success">
+                WhatsApp
+              </a>
+              <a href="#" id="shareLinkedInBtn" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary">
+                LinkedIn
+              </a>
+              <a href="#" id="shareTwitterBtn" target="_blank" rel="noopener" class="btn btn-sm btn-outline-dark">
+                X / Twitter
+              </a>
+              <a href="#" id="shareEmailBtn" class="btn btn-sm btn-outline-secondary">
+                Email
+              </a>
+              <button type="button" id="webShareBtn" class="btn btn-sm btn-outline-info" style="display: none;">
+                Share via Device
+              </button>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end pt-2 border-top">
+            <a href="#" target="_blank" id="modalOpenLiveBtn" class="btn btn-sm btn-dark">
+              Open Public Portfolio in New Tab &rarr;
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live Portfolio Website Canvas Wrapper -->
+  <div class="a4-viewport-container" id="viewportContainer" style="padding: 1.5rem 1rem 4rem 1rem;">
+    <div id="portfolioRenderContainer" style="width: 100%; max-width: 1140px; margin: 0 auto; background: #FFFFFF; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); overflow: hidden;">
+      <!-- Generated Personal Portfolio Website injected here -->
     </div>
   </div>
 
@@ -277,6 +353,11 @@
       const emptyState = document.getElementById('emptyState');
       const templateSwitcher = document.getElementById('templateSwitcher');
       const downloadPdfBtn = document.getElementById('downloadPdfBtn');
+      const downloadAtsResumeBtn = document.getElementById('downloadAtsResumeBtn');
+      const sharePortfolioBtn = document.getElementById('sharePortfolioBtn');
+      const quickCopyBtn = document.getElementById('quickCopyBtn');
+      const quickCopyText = document.getElementById('quickCopyText');
+      const viewLiveBtn = document.getElementById('viewLiveBtn');
       const printBtn = document.getElementById('printBtn');
       const exportHtmlBtn = document.getElementById('exportHtmlBtn');
       const exportJsonBtn = document.getElementById('exportJsonBtn');
@@ -285,10 +366,129 @@
       const viewDesktopBtn = document.getElementById('viewDesktopBtn');
       const viewMobileBtn = document.getElementById('viewMobileBtn');
 
+      // Modal elements
+      const shareModalEl = document.getElementById('sharePortfolioModal');
+      const shareModal = shareModalEl ? new bootstrap.Modal(shareModalEl) : null;
+      const shareUrlInput = document.getElementById('shareUrlInput');
+      const modalCopyBtn = document.getElementById('modalCopyBtn');
+      const modalCopyBtnText = document.getElementById('modalCopyBtnText');
+      const copyAlertSuccess = document.getElementById('copyAlertSuccess');
+      const modalOpenLiveBtn = document.getElementById('modalOpenLiveBtn');
+      const shareWhatsAppBtn = document.getElementById('shareWhatsAppBtn');
+      const shareLinkedInBtn = document.getElementById('shareLinkedInBtn');
+      const shareTwitterBtn = document.getElementById('shareTwitterBtn');
+      const shareEmailBtn = document.getElementById('shareEmailBtn');
+      const webShareBtn = document.getElementById('webShareBtn');
+      const publishedStatusBadge = document.getElementById('publishedStatusBadge');
+
       const urlParams = new URLSearchParams(window.location.search);
       const templateFromUrl = urlParams.get('template');
 
       let currentData = PortfolioGenerator.getData() || PortfolioGenerator.getDraft();
+      let currentPublishedInfo = PortfolioGenerator.getPublishedInfo();
+
+      function updateShareUi(publishResult) {
+        if (!publishResult || !publishResult.fullShareUrl) return;
+        const shareUrl = publishResult.fullShareUrl;
+        const publicUrl = publishResult.publicUrl || `/portfolio/${publishResult.slug || publishResult.id}`;
+
+        if (shareUrlInput) shareUrlInput.value = shareUrl;
+        if (viewLiveBtn) {
+          viewLiveBtn.href = publicUrl;
+          viewLiveBtn.style.display = 'inline-flex';
+        }
+        if (modalOpenLiveBtn) {
+          modalOpenLiveBtn.href = publicUrl;
+        }
+        if (publishedStatusBadge) {
+          publishedStatusBadge.innerHTML = `<span style="font-size:8px;">●</span> Public: <a href="${publicUrl}" target="_blank" class="text-success fw-bold text-decoration-underline ms-1">${publishResult.slug || publishResult.id}</a>`;
+        }
+
+        const name = (currentData && currentData.personal && currentData.personal.fullName) || 'My';
+        const shareTitle = `${name}'s Professional Portfolio`;
+        const shareText = `Check out ${name}'s verified personal portfolio website: ${shareUrl}`;
+
+        // WhatsApp
+        if (shareWhatsAppBtn) {
+          shareWhatsAppBtn.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+        }
+        // LinkedIn
+        if (shareLinkedInBtn) {
+          shareLinkedInBtn.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`;
+        }
+        // Twitter/X
+        if (shareTwitterBtn) {
+          shareTwitterBtn.href = `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`;
+        }
+        // Email
+        if (shareEmailBtn) {
+          shareEmailBtn.href = `mailto:?subject=${encodeURIComponent(shareTitle)}&body=${encodeURIComponent(shareText)}`;
+        }
+
+        // Web Share API
+        if (navigator.share && webShareBtn) {
+          webShareBtn.style.display = 'inline-flex';
+          webShareBtn.onclick = async () => {
+            try {
+              await navigator.share({
+                title: shareTitle,
+                text: shareText,
+                url: shareUrl
+              });
+            } catch (err) {
+              console.log('Share dismissed:', err);
+            }
+          };
+        }
+      }
+
+      async function syncPublishToBackend() {
+        if (!currentData) return;
+        try {
+          const res = await PortfolioGenerator.publishPortfolio(currentData);
+          if (res && res.success) {
+            currentPublishedInfo = res;
+            updateShareUi(res);
+          }
+        } catch (err) {
+          console.warn('Auto-publish note:', err);
+          // If offline or network error, fallback to local URL
+          if (currentPublishedInfo) {
+            updateShareUi(currentPublishedInfo);
+          }
+        }
+      }
+
+      function attachResumeTriggers() {
+        if (!container) return;
+        const triggers = container.querySelectorAll('.btn-download-resume-trigger');
+        triggers.forEach(btn => {
+          btn.addEventListener('click', async (e) => {
+            e.preventDefault();
+            await handleAtsResumeDownload();
+          });
+        });
+      }
+
+      async function handleAtsResumeDownload() {
+        if (!currentData) return;
+        if (pdfLoadingOverlay) {
+          const textEl = pdfLoadingOverlay.querySelector('h4');
+          if (textEl) textEl.textContent = 'Generating ATS-Friendly Resume PDF...';
+          pdfLoadingOverlay.style.display = 'flex';
+        }
+
+        const name = (currentData.personal && currentData.personal.fullName) ? currentData.personal.fullName.replace(/[^a-zA-Z0-9]/g, '_') : 'Student';
+        const filename = `${name}_ATS_Resume.pdf`;
+
+        try {
+          await PortfolioGenerator.downloadAtsResumePdf(filename, currentData);
+        } catch (e) {
+          console.error('ATS PDF download error:', e);
+        } finally {
+          if (pdfLoadingOverlay) pdfLoadingOverlay.style.display = 'none';
+        }
+      }
 
       function renderCurrentPortfolio() {
         if (!currentData) {
@@ -306,41 +506,84 @@
         if (viewportContainer) viewportContainer.style.display = 'flex';
 
         let activeTemplate = templateFromUrl || currentData.template || 'corporate';
-        if (activeTemplate === 'corporate-professional') activeTemplate = 'corporate';
-        if (activeTemplate === 'modern-minimal') activeTemplate = 'minimal';
-        if (activeTemplate === 'developer-portfolio') activeTemplate = 'developer';
-        if (activeTemplate === 'academic-portfolio') activeTemplate = 'academic';
-        if (activeTemplate === 'professional-creative') activeTemplate = 'modern-professional';
-
         currentData.template = activeTemplate;
 
         if (templateSwitcher) {
           templateSwitcher.value = activeTemplate;
         }
 
-        // Render HTML using generator
+        // Render the full Personal Portfolio Website
         container.innerHTML = PortfolioGenerator.generate(currentData, activeTemplate);
+        attachResumeTriggers();
 
         const name = (currentData.personal && currentData.personal.fullName) || 'Student';
-        document.title = `${name} — Professional Portfolio`;
+        document.title = `${name} — Personal Portfolio Website`;
       }
 
-      // Template Switcher (Instant In-Place Rendering)
-      if (templateSwitcher) {
-        templateSwitcher.addEventListener('change', (e) => {
-          if (currentData) {
-            currentData.template = e.target.value;
-            PortfolioGenerator.saveData(currentData);
-            renderCurrentPortfolio();
+      // 1. Download ATS Resume Button
+      if (downloadAtsResumeBtn) {
+        downloadAtsResumeBtn.addEventListener('click', async () => {
+          await handleAtsResumeDownload();
+        });
+      }
+
+      // 2. Share Portfolio Button (Opens Modal)
+      if (sharePortfolioBtn && shareModal) {
+        sharePortfolioBtn.addEventListener('click', async () => {
+          if (!currentPublishedInfo || !currentPublishedInfo.fullShareUrl) {
+            await syncPublishToBackend();
+          }
+          if (currentPublishedInfo) updateShareUi(currentPublishedInfo);
+          shareModal.show();
+        });
+      }
+
+      // 3. Quick Copy Link Button
+      function copyLinkToClipboard(inputElement, feedbackElement, successAlert) {
+        const urlToCopy = (inputElement && inputElement.value) ? inputElement.value : (currentPublishedInfo ? currentPublishedInfo.fullShareUrl : window.location.href);
+        navigator.clipboard.writeText(urlToCopy).then(() => {
+          if (feedbackElement) {
+            const orig = feedbackElement.textContent;
+            feedbackElement.textContent = 'Copied!';
+            setTimeout(() => { feedbackElement.textContent = orig; }, 2500);
+          }
+          if (successAlert) {
+            successAlert.style.display = 'block';
+            setTimeout(() => { successAlert.style.display = 'none'; }, 4000);
+          }
+        }).catch(err => {
+          console.error('Clipboard copy failed:', err);
+          if (inputElement) {
+            inputElement.select();
+            document.execCommand('copy');
           }
         });
       }
 
-      // Multi-Page A4 PDF Download
+      if (quickCopyBtn) {
+        quickCopyBtn.addEventListener('click', async () => {
+          if (!currentPublishedInfo || !currentPublishedInfo.fullShareUrl) {
+            await syncPublishToBackend();
+          }
+          copyLinkToClipboard(shareUrlInput, quickCopyText, null);
+        });
+      }
+
+      if (modalCopyBtn) {
+        modalCopyBtn.addEventListener('click', () => {
+          copyLinkToClipboard(shareUrlInput, modalCopyBtnText, copyAlertSuccess);
+        });
+      }
+
+      // 4. Download Executive Portfolio PDF Button (Preserved)
       if (downloadPdfBtn) {
         downloadPdfBtn.addEventListener('click', async () => {
           if (!container || !currentData) return;
-          pdfLoadingOverlay.style.display = 'flex';
+          if (pdfLoadingOverlay) {
+            const textEl = pdfLoadingOverlay.querySelector('h4');
+            if (textEl) textEl.textContent = 'Generating Executive Portfolio PDF...';
+            pdfLoadingOverlay.style.display = 'flex';
+          }
           const name = (currentData.personal && currentData.personal.fullName) ? currentData.personal.fullName.replace(/[^a-zA-Z0-9]/g, '_') : 'Student';
           const filename = `${name}_Portfolio.pdf`;
 
@@ -349,7 +592,7 @@
           } catch (e) {
             console.error('PDF generation error:', e);
           } finally {
-            pdfLoadingOverlay.style.display = 'none';
+            if (pdfLoadingOverlay) pdfLoadingOverlay.style.display = 'none';
           }
         });
       }
@@ -387,11 +630,13 @@
           viewDesktopBtn.classList.add('active');
           viewMobileBtn.classList.remove('active');
           viewportContainer.classList.remove('mobile-view');
+          if (container) container.style.maxWidth = '1140px';
         });
         viewMobileBtn.addEventListener('click', () => {
           viewMobileBtn.classList.add('active');
           viewDesktopBtn.classList.remove('active');
           viewportContainer.classList.add('mobile-view');
+          if (container) container.style.maxWidth = '420px';
         });
       }
 
@@ -406,6 +651,7 @@
                 currentData = res.data;
                 PortfolioGenerator.saveData(currentData);
                 renderCurrentPortfolio();
+                syncPublishToBackend();
                 return;
               }
             }
@@ -416,8 +662,12 @@
         });
       }
 
-      // Initial Render
+      // Initial Render & Backend Sync
       renderCurrentPortfolio();
+      if (currentPublishedInfo) {
+        updateShareUi(currentPublishedInfo);
+      }
+      syncPublishToBackend();
     });
   </script>
 </body>
